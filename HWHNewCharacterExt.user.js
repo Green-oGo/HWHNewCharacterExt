@@ -13,8 +13,8 @@
 // @match            https://www.hero-wars.com/*
 // @match            https://apps-1701433570146040.apps.fbsbx.com/*
 // @run-at           document-start
-// @downloadURL https://update.greasyfork.org/scripts/553713/HWHNewCharacterExt.user.js
-// @updateURL https://update.greasyfork.org/scripts/553713/HWHNewCharacterExt.meta.js
+// @downloadURL https://github.com/Green-oGo/HWHNewCharacterExt/raw/refs/heads/main/HWHNewCharacterExt.user.js
+// @updateURL https://github.com/Green-oGo/HWHNewCharacterExt/raw/refs/heads/main/HWHNewCharacterExt.user.js
 // ==/UserScript==
 
 (function () {
