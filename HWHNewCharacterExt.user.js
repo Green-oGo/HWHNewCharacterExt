@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.18
+// @version          2.19
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -392,6 +392,7 @@
                     await collectTitansAndTotemFragments();
                     setProgress(I18N('NT_LETS_CONTINUE'), false);
                     await new Promise((e) => setTimeout(e, 3000));
+                    await firstHeroicChapterRaid();
                     await collectHeroes();
                     setProgress('', true);
                     confShow(I18N('NHR_TASKS_COMPLETED'));
@@ -460,17 +461,20 @@
     //****************************************************************************************************
 
     async function firstHeroicChapterRaid() {
+        let titanOrHero = 'hero';
         let spendCoins = true;
         let missionRaid = true;
-        await completeChapter(spendCoins, missionRaid);
-    }
-    async function firstTitanChapterRaid() {
-        let spendCoins = false;
-        let missionRaid = true;
-        await completeChapter(spendCoins, missionRaid);
+        await completeChapter(spendCoins, missionRaid, titanOrHero);
     }
 
-    async function completeChapter(spendCoins = false, missionRaid = false) {
+    async function firstTitanChapterRaid() {
+        let titanOrHero = 'titan';
+        let spendCoins = false;
+        let missionRaid = true;
+        await completeChapter(spendCoins, missionRaid, titanOrHero);
+    }
+
+    async function completeChapter(spendCoins = false, missionRaid = false, titanOrHero = '') {
         //Получить состояние на карте
         let invasionInfo = await Caller.send('invasion_getInfo');
         let invasionInfoId = invasionInfo.id;
@@ -485,7 +489,7 @@
         console.log(chapters);
         let chapterId = 0;
         let invasionBuff = 0;
-        let titanOrHero = '';
+        //let titanOrHero = '';
         let chapterNumber = 0;
 
         if (chapters.length == farmedChapters.length) {
@@ -505,11 +509,16 @@
                 }
             }
         }
-        //Рейд первой мисси
+        //Рейд мисси
         if (missionRaid == true) {
-            chapterId = chapters[0].id;
-            titanOrHero = chapters[0].settings.unitType;
-            chapterNumber = 1;
+            for (let chapter of chapters) {
+                if (chapter.settings.unitType === titanOrHero) {
+                    chapterId = chapter.id;
+                    //titanOrHero = chapter.settings.unitType;
+                    chapterNumber = chapters.indexOf(chapter)+1;
+                    break;
+                }
+            }
         }
 
         console.log('chapterId ' + chapterId);
@@ -522,14 +531,14 @@
             return;
         }
         if (titanOrHero === 'hero' ) {
-            await completeHeroesChapter(chapters, chapterId, chapterNumber, spendCoins, missionRaid);
+            await completeHeroesChapter(chapters, chapterId, chapterNumber, farmedChapters, spendCoins, missionRaid);
         }
         if (titanOrHero === 'titan' ) {
-            await completeTitansChapter(chapters, chapterId, chapterNumber, missionRaid);
+            await completeTitansChapter(chapters, chapterId, chapterNumber, farmedChapters, missionRaid);
         }
     }
 
-    async function completeHeroesChapter(chapters, chapterId, chapterNumber, spendCoins = false, missionRaid = false) {
+    async function completeHeroesChapter(chapters, chapterId, chapterNumber, farmedChapters, spendCoins = false, missionRaid = false) {
         /*Питомцы
         6000 - Фенрис   //6005 - Альбрус
         6001 - Оливер	//6006 - Аксель
@@ -608,11 +617,12 @@
             //Текущая миссия босс или нет
             let boss = false;
 
-            //Произвести атаку босса
+            //Атаковать / не атаковать босса
             if (missionId == firstMissionId + 7) {
-                if (missionRaid == true) {
+                if (missionRaid == true && farmedChapters.includes(chapterId)) {
                     return;
                 }
+                //Произвести атаку босса, если его ни разу не убили
                 boss = true;
             }
 
@@ -697,7 +707,7 @@
 
 
 
-    async function completeTitansChapter(chapters, chapterId, chapterNumber, missionRaid = false) {
+    async function completeTitansChapter(chapters, chapterId, chapterNumber, farmedChapters, missionRaid = false) {
         //Атакующие титаны: Ияри, Солярис, Молох, Игнис, Араджи
         /*Навыки тотемов:
         elemental                  primal
@@ -773,8 +783,12 @@
             //Текущая миссия босс или нет
             let boss = false;
 
-            //Произвести атаку босса
+            //Атаковать / не атаковать босса
             if (missionId == firstMissionId + 7) {
+                if (missionRaid == true && farmedChapters.includes(chapterId)) {
+                    return;
+                }
+                //Произвести атаку босса, если его ни разу не убили
                 boss = true;
             }
 
@@ -1423,6 +1437,7 @@
         let result = await Caller.send({name:"lootBoxBuy",args:{box:boxName,offerId:offerId,price:"openCoin",amount:amount}})
         let sapphireMedallion = 0;
         let fragmentHero = 0;
+        let fragmentTitan = 0;
         if (result) {
             for (let r of result) {
                 if (r.coin?.[sapphireMedallionId]) {
@@ -1431,9 +1446,12 @@
                 if (r.fragmentHero) {
                     fragmentHero += Number(Object.values(r.fragmentHero)[0]);
                 }
+                if (r.fragmentTitan) {
+                    fragmentTitan += Number(Object.values(r.fragmentTitan)[0]);
+                }
             }
         }
-        confShow(I18N('NHR_SPEND_VALOR_COINS_RESULT', {sapphireMedallion:sapphireMedallion, fragmentHero:fragmentHero }));
+        confShow(I18N('NHR_SPEND_VALOR_COINS_RESULT', {sapphireMedallion:sapphireMedallion, fragmentHero: fragmentHero > fragmentTitan ? fragmentHero : fragmentTitan }));
         console.log(sapphireMedallion);
         console.log(fragmentHero);
     }
