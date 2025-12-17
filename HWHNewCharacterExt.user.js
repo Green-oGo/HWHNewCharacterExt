@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.19
+// @version          2.20
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -392,7 +392,13 @@
                     await collectTitansAndTotemFragments();
                     setProgress(I18N('NT_LETS_CONTINUE'), false);
                     await new Promise((e) => setTimeout(e, 3000));
-                    await firstHeroicChapterRaid();
+
+                    farmedChapters = await Caller.send('invasion_getInfo').then((e) => e.farmedChapters);
+                    if (farmedChapters.length == 1) {
+                        await firstHeroicChapterRaid();
+                        setProgress(I18N('NT_LETS_CONTINUE'), false);
+                        await new Promise((e) => setTimeout(e, 3000));
+                    }
                     await collectHeroes();
                     setProgress('', true);
                     confShow(I18N('NHR_TASKS_COMPLETED'));
