@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.20
+// @version          2.21
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -695,6 +695,8 @@
             if (boss) {
                 if (invasionInfo.farmedChapters.includes(chapterId)) {
                     confShow(I18N('NT_BOSS_WAS_KILLED', { chapterNumber: romanNumerals[chapterNumber]}));
+                    //Сбросить главу
+                    await Caller.send('invasion_resetChapter')
                 } else {
                     confShow(I18N('NT_BOSS_WAS_NOT_KILLED', { chapterNumber: romanNumerals[chapterNumber]}));
                 }
@@ -840,6 +842,8 @@
             if (boss) {
                 if (invasionInfo.farmedChapters.includes(chapterId)) {
                     confShow(I18N('NT_BOSS_WAS_KILLED', { chapterNumber: romanNumerals[chapterNumber]}));
+                    //Сбросить главу
+                    await Caller.send('invasion_resetChapter')
                 } else {
                     confShow(I18N('NT_BOSS_WAS_NOT_KILLED', { chapterNumber: romanNumerals[chapterNumber]}));
                 }
