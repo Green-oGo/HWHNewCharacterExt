@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.21
+// @version          2.22
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -1329,6 +1329,9 @@
         let haveFragments = Object.entries(await Caller.send('invasion_getInfo').then((e) => e.fragments)).map(e => ({id:e[0],count:e[1]})).sort((a, b) => b.count - a.count);
         console.log(haveFragments);
         for (let m of haveFragments) {
+            if(m.count == 0){
+                continue;
+            }
             //Отделяем питомцев и фрагменты тотемов
             if (Number(m.id) < 4400) {
                 allHeroes.push(Number(m.id));
