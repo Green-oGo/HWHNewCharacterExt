@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.24
+// @version          2.25
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -37,7 +37,9 @@
         NEW_CHARACTER: 'New Character',
         NEW_CHARACTER_TITLE: 'Complete quests for a new hero or titan',
         NEW_CHARACTER_NO_EVENT: 'The event is not active',
-        NEW_CHARACTER_SOMETHING_WENT_WRONG: '<span style="color: red;"> Something went wrong </span> <br> Please try again',
+        NEW_CHARACTER_SOMETHING_WENT_WRONG:`<span style="color: red;">Oops! Something went wrong</span>
+          <br> Please try again
+          <br> If you keep seeing this, wait for the next extension update`,
         NEW_CHARACTER_SELECT_ACTION: 'Select an action',
         NT_TITAN_EVENT: '<span style="color: White; font-size: 35px;"> The Titan Awakens </span> <br>',
         NT_COLLECT_TITANS: 'Сollect the Titans',
@@ -53,7 +55,7 @@
         NT_COLLECT_TOTEM_SKILLS_PROGRESS: '<span style="color: LimeGreen;"> {counter} </span> influence skills left to collect <br> Collecting...',
         NT_CHAPTER_NOT_AVAILABLE: '<span style="color: red;"> Chapter unavailable </span> <br> Complete the previous chapter',
         NT_COLLECT_HEROES_PROGRESS: '<span style="color: LimeGreen;"> {counter} </span> heroes left to collect <br> Collecting...',
-        NT_HEROES_COLLECTED: '<span style="color: LimeGreen;">All heroes have been collected</span>',
+        NT_HEROES_COLLECTED: 'All heroes have been collected',
         NT_COLLECT_EVERYTHING: 'Collect everything',
         NT_COLLECT_EVERYTHING_TITLE: 'Collect heroes, titans, totems, pets',
         NT_BOSS_WAS_KILLED: 'The Chapter <span style="color: LimeGreen; font-family: Times New Roman;"> {chapterNumber} </span> boss didn\'t appreciate our health-conscious approach... to his health.',
@@ -64,7 +66,7 @@
         NT_BOSS_WAS_KILLED_SET_PROGRESS_5: '<br><span style="color: LimeGreen;">Stand by.</span> Arrival in approximately seconds ',
         NT_BOSS_WAS_NOT_KILLED: 'The Chapter <span style="color: LimeGreen; font-family: Times New Roman;"> {chapterNumber} </span> boss was not killed <br> Reload the game and try to kill the boss yourself',
         NT_COMPLETE_CHAPTER: 'Complete the chapter',
-        NT_COMPLETE_CHAPTER_START: 'Start the magic',
+        NT_COMPLETE_CHAPTER_START: 'Kick off the Magic Vibe',
         NT_COMPLETE_CHAPTER_CANCEL: 'Hogwarts cancellation',
         NT_COMPLETE_CHAPTER_TITLE: 'Complete an available chapter',
         NT_ALL_CHAPTERS_COMPLETED: 'All chapters completed',
@@ -138,7 +140,9 @@
         NEW_CHARACTER: 'Новый персонаж',
         NEW_CHARACTER_TITLE: 'Выполнять задания для нового героя или титана',
         NEW_CHARACTER_NO_EVENT: 'Ивент не активен',
-        NEW_CHARACTER_SOMETHING_WENT_WRONG: '<span style="color: red;"> Что-то пошло не так </span> <br> Попробуйте заново',
+        NEW_CHARACTER_SOMETHING_WENT_WRONG: `<span style="color: red;">В процессе выполнения произошла ошибка</span>
+          <br> Повторите действие еще раз
+          <br> Если ошибка повторяется, подождите обновления расширения`,
         NEW_CHARACTER_SELECT_ACTION: 'Выберите действие',
         NT_TITAN_EVENT: '<span style="color: White; font-size: 35px;"> Пробуждение Титана </span> <br>',
         NT_COLLECT_TITANS: 'Собрать титанов',
@@ -154,7 +158,7 @@
         NT_COLLECT_TOTEM_SKILLS_PROGRESS: 'Осталось собрать навыков тотемов: <span style="color: LimeGreen;"> {counter} </span> шт. <br> Собираем...',
         NT_CHAPTER_NOT_AVAILABLE: '<span style="color: red;"> Глава не доступна </span> <br> Завершите предыдущую главу',
         NT_COLLECT_HEROES_PROGRESS: 'Осталось собрать героев: <span style="color: LimeGreen;"> {counter} </span> шт. <br> Собираем...',
-        NT_HEROES_COLLECTED: '<span style="color: LimeGreen;">Все герои собраны</span>',
+        NT_HEROES_COLLECTED: 'Все герои собраны',
         NT_COLLECT_EVERYTHING: 'Собрать все',
         NT_COLLECT_EVERYTHING_TITLE: 'Собрать героев, титанов, тотемы, питомцев',
         NT_BOSS_WAS_KILLED: 'Босс <span style="color: LimeGreen; font-family: Times New Roman;"> {chapterNumber} </span> главы не пережил нашего искреннего интереса к его здоровью',
@@ -165,7 +169,7 @@
         NT_BOSS_WAS_KILLED_SET_PROGRESS_5: '<br><span style="color: LimeGreen;">Ожидайте.</span> Прибытие, примерно секунд через ',
         NT_BOSS_WAS_NOT_KILLED: 'Босса <span style="color: LimeGreen; font-family: Times New Roman;"> {chapterNumber} </span> главы не убили <br> Перезагрузите игру, и попробуйте убить босса самостоятельно',
         NT_COMPLETE_CHAPTER: 'Пройти главу',
-        NT_COMPLETE_CHAPTER_START: 'Начать магию',
+        NT_COMPLETE_CHAPTER_START: 'Старт магического движняка',
         NT_COMPLETE_CHAPTER_CANCEL: 'Отмена Хогвартса',
         NT_COMPLETE_CHAPTER_TITLE: 'Пройти доступную главу',
         NT_ALL_CHAPTERS_COMPLETED: 'Все главы пройдены',
@@ -233,11 +237,11 @@
         NHR_SPEND_VALOR_COINS_MESSAGE: 'Потратить все имеющиеся монеты доблести?',
 
         NHR_APPLY: 'Потратить, пока не передумал',
-        NHR_NOT_APPLY: 'А нет, не успел, уже передумал',
+        NHR_NOT_APPLY: 'А нет, не успел. Уже передумал',
         NHR_COMPLETE_CHAPTER_N2: 'Проходим <span style="color: LimeGreen; font-family: Times New Roman;"> II </span> главу',
 
         NHR_COMPLETE_CHAPTER_N1_MESSAGE: 'Выполнить рейд <span style="color: LimeGreen; font-family: Times New Roman;"> I </span> главы?',
-        NHR_COMPLETE_CHAPTER_N1_APPLY: 'Нажми, если смелый',
+        NHR_COMPLETE_CHAPTER_N1_APPLY: 'Жми, если смелый',
         NHR_COMPLETE_CHAPTER_N1_NOT_APPLY: 'Нет, чёт я очкую',
     };
 
@@ -813,7 +817,12 @@
                 setProgress(I18N('NT_MISSION_PROGRESS_BOSS'), false);
             }
             await new Promise((e) => setTimeout(e, 2000));
-            await attackHeroMission(missionId, chapterId, heroes, pet, boss, petsFavor);
+
+            let error = await attackHeroMission(missionId, chapterId, heroes, pet, boss, petsFavor);
+            if (error) {
+                await popup.confirm(I18N('NEW_CHARACTER_SOMETHING_WENT_WRONG'));
+                return;
+            }
 
             //Результат атаки
             let invasionInfo = await Caller.send('invasion_getInfo');
@@ -963,7 +972,11 @@
                 setProgress(I18N('NT_MISSION_PROGRESS_BOSS'), false);
             }
             await new Promise((e) => setTimeout(e, 2000));
-            await attackTitanMission(missionId, chapterId, heroes, firstSpiritSkills, boss);
+            let error = await attackTitanMission(missionId, chapterId, heroes, firstSpiritSkills, boss);
+            if (error) {
+                await popup.confirm(I18N('NEW_CHARACTER_SOMETHING_WENT_WRONG'));
+                return;
+            }
 
             //Результат атаки
             let invasionInfo = await Caller.send('invasion_getInfo');
@@ -1127,8 +1140,11 @@
                     setProgress(I18N('NT_MISSION_PROGRESS_BOSS'), false);
                 }
                 await new Promise((e) => setTimeout(e, 2000));
-                await attackTitanMission(missionId, chapterId, heroes, firstSpiritSkills, boss);
-
+                let error = await attackTitanMission(missionId, chapterId, heroes, firstSpiritSkills, boss);
+                if (error) {
+                    await popup.confirm(I18N('NEW_CHARACTER_SOMETHING_WENT_WRONG'));
+                    return;
+                }
                 //Убили / не убили босса, вышли с "while"
                 if (boss == true) {
                     break;
@@ -1322,7 +1338,11 @@
                 }
                 await new Promise((e) => setTimeout(e, 2000));
 
-                await attackHeroMission(missionId, chapterId, heroes, pet, boss, petsFavor);
+                let error = await attackHeroMission(missionId, chapterId, heroes, pet, boss, petsFavor);
+                if (error) {
+                    await popup.confirm(I18N('NEW_CHARACTER_SOMETHING_WENT_WRONG'));
+                    return;
+                }
                 //Убили / не убили босса, вышли с "while"
                 if (boss == true) {
                     break;
@@ -1901,125 +1921,135 @@
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     async function attackTitanMission(missionId, chapterId, heroes, firstSpiritSkills, boss = false) {
-        if (boss == true) {
-            console.log('%cАтакуем босса ', 'color: green; font-weight: bold;');
-        }
-        const startBattle = await Caller.send({
-            name: 'invasion_bossStart',
-            args: {
-                id: missionId,
-                chapterId: chapterId,
-                heroes: heroes,
-                //firstSpiritElement: "earth",
-                firstSpiritSkills: firstSpiritSkills,
-                favor: {},
-            },
-        });
-        const calcBattle = await Calc(startBattle);
-
-        if (!calcBattle.result.win) {
-            const cloneBattle = structuredClone(startBattle);
-            const bFix = new WinFixBattle(cloneBattle);
-            let result = await bFix.start(cloneBattle.endTime, Infinity);
-            if (result.result?.win) {
-                calcBattle.result = result.result;
-                calcBattle.progress = result.progress;
-                calcBattle.battleTimer = result.battleTimer;
+        try {
+            if (boss == true) {
+                console.log('%cАтакуем босса ', 'color: green; font-weight: bold;');
             }
-        }
+            const startBattle = await Caller.send({
+                name: 'invasion_bossStart',
+                args: {
+                    id: missionId,
+                    chapterId: chapterId,
+                    heroes: heroes,
+                    //firstSpiritElement: "earth",
+                    firstSpiritSkills: firstSpiritSkills,
+                    favor: {},
+                },
+            });
+            const calcBattle = await Calc(startBattle);
 
-        if (!calcBattle.result.win && boss == true) {
-            //Босса не убили
-            console.log('%cБосса не убили ', 'color: red; font-weight: bold;');
-            return;
-        }
-        if (boss == true) {
-            let timer = calcBattle.battleTimer;
-            console.log('%cУбили босса', 'color: green; font-weight: bold;');
-            let message = I18N('NT_BOSS_WAS_KILLED_SET_PROGRESS_1');
-            setProgress(message, false);
-            await new Promise((e) => setTimeout(e, 1000));
-            message += I18N('NT_BOSS_WAS_KILLED_SET_PROGRESS_2');
-            setProgress(message, false);
-            await new Promise((e) => setTimeout(e, 1000));
-            message += I18N('NT_BOSS_WAS_KILLED_SET_PROGRESS_3');
-            setProgress(message, false);
-            await new Promise((e) => setTimeout(e, 1000));
-            message += I18N('NT_BOSS_WAS_KILLED_SET_PROGRESS_4');
-            setProgress(message, false);
-            await new Promise((e) => setTimeout(e, 1000));
-            message += I18N('NT_BOSS_WAS_KILLED_SET_PROGRESS_5');
-            await countdownTimer(timer, message);
-        }
+            if (!calcBattle.result.win) {
+                const cloneBattle = structuredClone(startBattle);
+                const bFix = new WinFixBattle(cloneBattle);
+                let result = await bFix.start(cloneBattle.endTime, Infinity);
+                if (result.result?.win) {
+                    calcBattle.result = result.result;
+                    calcBattle.progress = result.progress;
+                    calcBattle.battleTimer = result.battleTimer;
+                }
+            }
 
-        const endBattle = await Caller.send({
-            name: 'invasion_bossEnd',
-            args: {
-                id: missionId,
-                result: calcBattle.result,
-                progress: calcBattle.progress,
-            },
-        });
+            if (!calcBattle.result.win && boss == true) {
+                //Босса не убили
+                console.log('%cБосса не убили ', 'color: red; font-weight: bold;');
+                return;
+            }
+            if (boss == true) {
+                let timer = calcBattle.battleTimer;
+                console.log('%cУбили босса', 'color: green; font-weight: bold;');
+                let message = I18N('NT_BOSS_WAS_KILLED_SET_PROGRESS_1');
+                setProgress(message, false);
+                await new Promise((e) => setTimeout(e, 1000));
+                message += I18N('NT_BOSS_WAS_KILLED_SET_PROGRESS_2');
+                setProgress(message, false);
+                await new Promise((e) => setTimeout(e, 1000));
+                message += I18N('NT_BOSS_WAS_KILLED_SET_PROGRESS_3');
+                setProgress(message, false);
+                await new Promise((e) => setTimeout(e, 1000));
+                message += I18N('NT_BOSS_WAS_KILLED_SET_PROGRESS_4');
+                setProgress(message, false);
+                await new Promise((e) => setTimeout(e, 1000));
+                message += I18N('NT_BOSS_WAS_KILLED_SET_PROGRESS_5');
+                await countdownTimer(timer, message);
+            }
+
+            const endBattle = await Caller.send({
+                name: 'invasion_bossEnd',
+                args: {
+                    id: missionId,
+                    result: calcBattle.result,
+                    progress: calcBattle.progress,
+                },
+            });
+            return false;
+        } catch (e) {
+            return true;
+        }
     }
 
     async function attackHeroMission(missionId, chapterId, heroes, pet, boss = false, petsFavor) {
-        if (boss == true) {
-            console.log('%cАтакуем босса ', 'color: green; font-weight: bold;');
-        }
-        const startBattle = await Caller.send({
-            name: 'invasion_bossStart',
-            args: {
-                id: missionId,
-                chapterId: chapterId,
-                heroes: heroes,
-                pet: pet,
-                favor: petsFavor,
-            },
-        });
-        const calcBattle = await Calc(startBattle);
-
-        if (!calcBattle.result.win) {
-            const cloneBattle = structuredClone(startBattle);
-            const bFix = new WinFixBattle(cloneBattle);
-            let result = await bFix.start(cloneBattle.endTime, Infinity);
-            if (result.result?.win) {
-                calcBattle.result = result.result;
-                calcBattle.progress = result.progress;
-                calcBattle.battleTimer = result.battleTimer;
+        try {
+            if (boss == true) {
+                console.log('%cАтакуем босса ', 'color: green; font-weight: bold;');
             }
-        }
+            const startBattle = await Caller.send({
+                name: 'invasion_bossStart',
+                args: {
+                    id: missionId,
+                    chapterId: chapterId,
+                    heroes: heroes,
+                    pet: pet,
+                    favor: petsFavor,
+                },
+            });
+            const calcBattle = await Calc(startBattle);
 
-        if (!calcBattle.result.win && boss == true) {
-            //Босса не убили
-            console.log('%cБосса не убили ', 'color: red; font-weight: bold;');
-            return;
-        }
-        if (boss == true) {
-            let timer = calcBattle.battleTimer;
-            console.log('%cУбили босса', 'color: green; font-weight: bold;');
-            let message = I18N('NT_BOSS_WAS_KILLED_SET_PROGRESS_1');
-            setProgress(message, false);
-            await new Promise((e) => setTimeout(e, 1000));
-            message += I18N('NT_BOSS_WAS_KILLED_SET_PROGRESS_2');
-            setProgress(message, false);
-            await new Promise((e) => setTimeout(e, 1000));
-            message += I18N('NT_BOSS_WAS_KILLED_SET_PROGRESS_3');
-            setProgress(message, false);
-            await new Promise((e) => setTimeout(e, 1000));
-            message += I18N('NT_BOSS_WAS_KILLED_SET_PROGRESS_4');
-            setProgress(message, false);
-            await new Promise((e) => setTimeout(e, 1000));
-            message += I18N('NT_BOSS_WAS_KILLED_SET_PROGRESS_5');
-            await countdownTimer(timer, message);
-        }
+            if (!calcBattle.result.win) {
+                const cloneBattle = structuredClone(startBattle);
+                const bFix = new WinFixBattle(cloneBattle);
+                let result = await bFix.start(cloneBattle.endTime, Infinity);
+                if (result.result?.win) {
+                    calcBattle.result = result.result;
+                    calcBattle.progress = result.progress;
+                    calcBattle.battleTimer = result.battleTimer;
+                }
+            }
 
-        await Caller.send({
-            name: 'invasion_bossEnd',
-            args: {
-                id: missionId,
-                result: calcBattle.result,
-                progress: calcBattle.progress,
-            },
-        });
+            if (!calcBattle.result.win && boss == true) {
+                //Босса не убили
+                console.log('%cБосса не убили ', 'color: red; font-weight: bold;');
+                return;
+            }
+            if (boss == true) {
+                let timer = calcBattle.battleTimer;
+                console.log('%cУбили босса', 'color: green; font-weight: bold;');
+                let message = I18N('NT_BOSS_WAS_KILLED_SET_PROGRESS_1');
+                setProgress(message, false);
+                await new Promise((e) => setTimeout(e, 1000));
+                message += I18N('NT_BOSS_WAS_KILLED_SET_PROGRESS_2');
+                setProgress(message, false);
+                await new Promise((e) => setTimeout(e, 1000));
+                message += I18N('NT_BOSS_WAS_KILLED_SET_PROGRESS_3');
+                setProgress(message, false);
+                await new Promise((e) => setTimeout(e, 1000));
+                message += I18N('NT_BOSS_WAS_KILLED_SET_PROGRESS_4');
+                setProgress(message, false);
+                await new Promise((e) => setTimeout(e, 1000));
+                message += I18N('NT_BOSS_WAS_KILLED_SET_PROGRESS_5');
+                await countdownTimer(timer, message);
+            }
+
+            await Caller.send({
+                name: 'invasion_bossEnd',
+                args: {
+                    id: missionId,
+                    result: calcBattle.result,
+                    progress: calcBattle.progress,
+                },
+            });
+            return false;
+        } catch (e) {
+            return true;
+        }
     }
 })();
