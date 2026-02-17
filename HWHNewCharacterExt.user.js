@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.25
+// @version          2.26
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -13,8 +13,8 @@
 // @match            https://www.hero-wars.com/*
 // @match            https://apps-1701433570146040.apps.fbsbx.com/*
 // @run-at           document-start
-// @downloadURL https://github.com/Green-oGo/HWHNewCharacterExt/raw/refs/heads/main/HWHNewCharacterExt.user.js
-// @updateURL https://github.com/Green-oGo/HWHNewCharacterExt/raw/refs/heads/main/HWHNewCharacterExt.user.js
+// @downloadURL https://update.greasyfork.org/scripts/553713/HWHNewCharacterExt.user.js
+// @updateURL https://update.greasyfork.org/scripts/553713/HWHNewCharacterExt.meta.js
 // ==/UserScript==
 
 (function () {
@@ -699,10 +699,13 @@
         //let heroAttackingTeams = {heroes: [70, 13, 69, 33, 34], pets: [6005, 6001, 6002, 6003, 6006]};
 
         //Атакующие герои: Электра, Каскад, Криста + Ларс, Хайди.
-        let heroAttackingTeams = {heroes: [70, 69, 33, 34, 9], pets: [6005, 6001, 6002, 6003, 6006]};
+        //let heroAttackingTeams = {heroes: [70, 69, 33, 34, 9], pets: [6005, 6001, 6002, 6003, 6006]};
 
         //Атакующие герои: Электра, Каскад, Айрис, Хайди, Дориан.
         //let heroAttackingTeams = {heroes: [70, 69, 55, 9, 29], pets: [6005, 6001, 6002, 6003, 6006]};
+
+        //Атакующие герои: Лирия Измаил Себастьян Данте Марта
+        let heroAttackingTeams = {heroes: [67, 25, 48, 16, 46], pets: [6005,6000,6001,6006]};
 
         let titanOrHero = 'hero';
         let heroIds = heroAttackingTeams.heroes;
@@ -732,6 +735,8 @@
         //Id миссии
         let firstMissionId = chapterInfo.invasion.actions[0].payload.id;
         let missionId = firstMissionId;
+        let lastMissionId = chapterInfo.invasion.actions[7].payload.id;
+        let missionNumber = 1;
 
         //Жизни
         let lives = chapterInfo.invasion.lives;
@@ -753,7 +758,7 @@
         //Питомцы, что необходимо купить
         let pets = heroAttackingTeams.pets;
 
-        while (lives > 0 && missionId <= firstMissionId + 7) {
+        while (lives > 0) {
             //Купить героев
             setProgress(I18N('NHR_SHOPPING'), false);
             let result = await buyHeroesAndPets(shopId, heroIds, heroFragments, pets, spendCoins);
@@ -762,7 +767,7 @@
             let boss = false;
 
             //Атаковать / не атаковать босса
-            if (missionId == firstMissionId + 7) {
+            if (missionId == lastMissionId) {
                 if (missionRaid == true && farmedChapters.includes(chapterId)) {
                     return;
                 }
@@ -812,7 +817,7 @@
 
             //Проходим миссию
             if (!boss) {
-                setProgress(I18N('NT_MISSION_PROGRESS', {missionNumber: 1 + missionId - firstMissionId}), false);
+                setProgress(I18N('NT_MISSION_PROGRESS', {missionNumber: missionNumber}), false);
             } else {
                 setProgress(I18N('NT_MISSION_PROGRESS_BOSS'), false);
             }
@@ -826,13 +831,6 @@
 
             //Результат атаки
             let invasionInfo = await Caller.send('invasion_getInfo');
-            let missions = Object.values(invasionInfo.actions);
-            for (let mission of missions) {
-                if (mission.payload.wins == 0) {
-                    missionId = mission.payload.id;
-                    break;
-                }
-            }
 
             //Результат атаки босса
             if (boss) {
@@ -848,8 +846,16 @@
                 }
                 return;
             }
+
+            let missions = Object.values(invasionInfo.actions);
+            let nextMissionIndex = missions.findIndex(e => e.payload.wins === 0);
+            if (nextMissionIndex !== -1) {
+                missionId = missions[nextMissionIndex].payload.id;
+                missionNumber = nextMissionIndex + 1;
+                console.log('missionId ' + missionId);
+                console.log('missionNumber ' + missionNumber);
+            }
             lives = invasionInfo.lives;
-            console.log('missionId ' + missionId);
             console.log('lives ' + lives);
         }
         if (lives == 0) {
@@ -902,6 +908,8 @@
         //Id миссии
         let firstMissionId = chapterInfo.invasion.actions[0].payload.id;
         let missionId = firstMissionId;
+        let lastMissionId = chapterInfo.invasion.actions[7].payload.id;
+        let missionNumber = 1;
 
         //Жизни
         let lives = chapterInfo.invasion.lives;
@@ -929,7 +937,7 @@
             titanSkilFragments.push(0);
         }
 
-        while (lives > 0 && missionId <= firstMissionId + 7) {
+        while (lives > 0) {
             setProgress(I18N('NHR_SHOPPING'), false);
             //Купить титанов и фрагменты тотемов
             let result = await buyTitansAndTotemSkils(shopId, titanIds, titanFragments, titanSkilsIds, titanSkilFragments);
@@ -938,7 +946,7 @@
             let boss = false;
 
             //Атаковать / не атаковать босса
-            if (missionId == firstMissionId + 7) {
+            if (missionId == lastMissionId ) {
                 if (missionRaid == true && farmedChapters.includes(chapterId)) {
                     return;
                 }
@@ -967,7 +975,7 @@
 
             //Проходим миссию
             if (!boss) {
-                setProgress(I18N('NT_MISSION_PROGRESS', {missionNumber: 1 + missionId - firstMissionId}), false);
+                setProgress(I18N('NT_MISSION_PROGRESS', {missionNumber: missionNumber}), false);
             } else {
                 setProgress(I18N('NT_MISSION_PROGRESS_BOSS'), false);
             }
@@ -980,16 +988,12 @@
 
             //Результат атаки
             let invasionInfo = await Caller.send('invasion_getInfo');
-            let missions = Object.values(invasionInfo.actions);
-            for (let mission of missions) {
-                if (mission.payload.wins == 0) {
-                    missionId = mission.payload.id;
-                    break;
-                }
-            }
 
             //Результат атаки босса
             if (boss) {
+                if (missionRaid) {
+                    return;
+                }
                 if (invasionInfo.farmedChapters.includes(chapterId)) {
                     await popup.confirm(I18N('NT_BOSS_WAS_KILLED', { chapterNumber: romanNumerals[chapterNumber]}));
                     //Сбросить главу
@@ -999,8 +1003,16 @@
                 }
                 return;
             }
+
+            let missions = Object.values(invasionInfo.actions);
+            let nextMissionIndex = missions.findIndex(e => e.payload.wins === 0);
+            if (nextMissionIndex !== -1) {
+                missionId = missions[nextMissionIndex].payload.id;
+                missionNumber = nextMissionIndex + 1;
+                console.log('missionId ' + missionId);
+                console.log('missionNumber ' + missionNumber);
+            }
             lives = invasionInfo.lives;
-            console.log('missionId ' + missionId);
             console.log('lives ' + lives);
         }
         if (lives == 0) {
@@ -1056,6 +1068,8 @@
             //Id миссии
             let firstMissionId = chapterInfo.invasion.actions[0].payload.id;
             let missionId = firstMissionId;
+            let lastMissionId = chapterInfo.invasion.actions[7].payload.id;
+            let missionNumber = 1;
 
             //Жизни
             let lives = chapterInfo.invasion.lives;
@@ -1102,7 +1116,7 @@
             console.log(titanIds);
             console.log(titanFragments);
 
-            while (lives > 0 && missionId <= firstMissionId + 7) {
+            while (lives > 0) {
                 setProgress(I18N('NHR_SHOPPING'), false);
                 //Купить титанов и фрагменты тотемов
                 let result = await buyTitansAndTotemSkils(shopId, titanIds, titanFragments, titanSkilsIds, titanSkilFragments);
@@ -1116,13 +1130,13 @@
 
                 //Произвести атаку босса, если его ни разу не убили
                 if (!farmedChapters.includes(chapterId)) {
-                    if (missionId == firstMissionId + 7) {
+                    if (missionId == lastMissionId) {
                         boss = true;
                         console.log('%cАтакуем босса ', 'color: green; font-weight: bold;');
                     }
                 } else {
                     //Не атаковать босса, если его уже убили
-                    if (missionId == firstMissionId + 7) {
+                    if (missionId == lastMissionId) {
                         break;
                     }
                 }
@@ -1135,7 +1149,7 @@
 
                 //Проходим миссию
                 if (!boss) {
-                    setProgress(I18N('NT_MISSION_PROGRESS', {missionNumber: 1 + missionId - firstMissionId}), false);
+                    setProgress(I18N('NT_MISSION_PROGRESS', {missionNumber: missionNumber}), false);
                 } else {
                     setProgress(I18N('NT_MISSION_PROGRESS_BOSS'), false);
                 }
@@ -1153,14 +1167,14 @@
                 let invasionInfo = await Caller.send('invasion_getInfo');
                 farmedChapters = invasionInfo.farmedChapters;
                 let missions = Object.values(invasionInfo.actions);
-                for (let mission of missions) {
-                    if (mission.payload.wins == 0) {
-                        missionId = mission.payload.id;
-                        break;
-                    }
+                let nextMissionIndex = missions.findIndex(e => e.payload.wins === 0);
+                if (nextMissionIndex !== -1) {
+                    missionId = missions[nextMissionIndex].payload.id;
+                    missionNumber = nextMissionIndex + 1;
+                    console.log('missionId ' + missionId);
+                    console.log('missionNumber ' + missionNumber);
                 }
                 lives = invasionInfo.lives;
-                console.log('missionId ' + missionId);
                 console.log('lives ' + lives);
             }
         }
@@ -1224,6 +1238,8 @@
             //Id миссии
             let firstMissionId = chapterInfo.invasion.actions[0].payload.id;
             let missionId = firstMissionId;
+            let lastMissionId = chapterInfo.invasion.actions[7].payload.id;
+            let missionNumber = 1;
 
             //Жизни
             let lives = chapterInfo.invasion.lives;
@@ -1236,8 +1252,11 @@
             //Резервные герои, для добавления в покупки: Галахад, Тристан, Лирия
             //let reserveHeroes = [2, 54, 67];
 
-            //Резервные герои, для добавления в покупки: Электра, Каскад + Тея
-            let reserveHeroes = [70, 69, 7];
+            //Резервные герои, для добавления в покупки:
+            //Электра, Каскад + Тея
+            //let reserveHeroes = [70, 69, 7];
+            //Лирия Измаил Себастьян
+            let reserveHeroes = [67, 25, 48];
 
             //Собирать по 3 нужных героя
             if (heroIdsToBuy.length >= 3) {
@@ -1275,7 +1294,7 @@
             console.log(heroIds);
             console.log(heroFragments);
 
-            while (lives > 0 && missionId <= firstMissionId + 7) {
+            while (lives > 0) {
                 setProgress(I18N('NHR_SHOPPING'), false);
                 //Купить героев
                 let result = await buyHeroesAndPets(shopId, heroIds, heroFragments, pets, spendCoins);
@@ -1290,13 +1309,13 @@
 
                 //Произвести атаку босса, если его ни разу не убили
                 if (!farmedChapters.includes(chapterId)) {
-                    if (missionId == firstMissionId + 7) {
+                    if (missionId == lastMissionId) {
                         boss = true;
                         console.log('%cАтакуем босса ', 'color: green; font-weight: bold;');
                     }
                 } else {
                     //Не атаковать босса, если его уже убили
-                    if (missionId == firstMissionId + 7) {
+                    if (missionId == lastMissionId) {
                         break;
                     }
                 }
@@ -1332,7 +1351,7 @@
 
                 //Проходим миссию
                 if (!boss) {
-                    setProgress(I18N('NT_MISSION_PROGRESS', {missionNumber: 1 + missionId - firstMissionId}), false);
+                    setProgress(I18N('NT_MISSION_PROGRESS', {missionNumber: missionNumber}), false);
                 } else {
                     setProgress(I18N('NT_MISSION_PROGRESS_BOSS'), false);
                 }
@@ -1351,14 +1370,14 @@
                 let invasionInfo = await Caller.send('invasion_getInfo');
                 farmedChapters = invasionInfo.farmedChapters;
                 let missions = Object.values(invasionInfo.actions);
-                for (let mission of missions) {
-                    if (mission.payload.wins == 0) {
-                        missionId = mission.payload.id;
-                        break;
-                    }
+                let nextMissionIndex = missions.findIndex(e => e.payload.wins === 0);
+                if (nextMissionIndex !== -1) {
+                    missionId = missions[nextMissionIndex].payload.id;
+                    missionNumber = nextMissionIndex + 1;
+                    console.log('missionId ' + missionId);
+                    console.log('missionNumber ' + missionNumber);
                 }
                 lives = invasionInfo.lives;
-                console.log('missionId ' + missionId);
                 console.log('lives ' + lives);
             }
         }
@@ -1377,7 +1396,8 @@
         const quest = await Caller.send('questGetAll');
         const titanIds = quest
             .filter((e) => e.state == 1 && lib.data.quest.special[e.id]?.translationMethod === 'invasionStallFragmentsTitans')
-            .map((e) => lib.data.quest.special[e.id].farmCondition.eventFunc.args.fragmentId);
+            .map((e) => lib.data.quest.special[e.id].farmCondition.eventFunc.args.fragmentId)
+            .sort();
         return titanIds;
     }
 
