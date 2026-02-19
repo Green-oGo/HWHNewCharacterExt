@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.26
+// @version          2.27
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -705,7 +705,10 @@
         //let heroAttackingTeams = {heroes: [70, 69, 55, 9, 29], pets: [6005, 6001, 6002, 6003, 6006]};
 
         //Атакующие герои: Лирия Измаил Себастьян Данте Марта
-        let heroAttackingTeams = {heroes: [67, 25, 48, 16, 46], pets: [6005,6000,6001,6006]};
+        //let heroAttackingTeams = {heroes: [67, 25, 48, 16, 46], pets: [6005,6000,6001,6006]};
+
+        //Атакующие герои: Арахна Орион Август Электра Флафи
+        let heroAttackingTeams = {heroes: [12, 13, 64, 70, 71], pets: [6005, 6001, 6002, 6003, 6006]};
 
         let titanOrHero = 'hero';
         let heroIds = heroAttackingTeams.heroes;
