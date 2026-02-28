@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.27
+// @version          2.28
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -483,7 +483,7 @@
             await new Promise((e) => setTimeout(e, 3000));
 
             //Выполнить рейды I главы
-            for (let i = 1; i <= 3; i++) {
+            for (let i = 1; i <= 4; i++) {
                 setProgress(I18N('NHR_CHAPTER_N1_RAID', {raidNumber:i}), false);
                 await new Promise((e) => setTimeout(e, 2000));
                 await firstHeroicChapterRaid();
@@ -691,6 +691,8 @@
         6004 - Каин	    //6009 - Векс*/
         //Атакующие герои: Галахад, Тристан, Лирия, Кира, Себастьян.
         //let heroAttackingTeams = {heroes: [2, 54, 67, 3, 48], pets: [6005,6000,6001,6006]};
+        //Атакующие герои: Галахад, Тристан, Лирия, Измаил, Себастьян.
+        let heroAttackingTeams = {heroes: [2, 54, 67, 25, 48], pets: [6005,6000,6001,6006]};
 
         //Атакующие герои: Электра, Каскад + Тея, Криста + Ларс.
         //let heroAttackingTeams = {heroes: [70, 69, 7, 33, 34], pets: [6005, 6001, 6002, 6003, 6006]};
@@ -708,7 +710,7 @@
         //let heroAttackingTeams = {heroes: [67, 25, 48, 16, 46], pets: [6005,6000,6001,6006]};
 
         //Атакующие герои: Арахна Орион Август Электра Флафи
-        let heroAttackingTeams = {heroes: [12, 13, 64, 70, 71], pets: [6005, 6001, 6002, 6003, 6006]};
+        //let heroAttackingTeams = {heroes: [12, 13, 64, 70, 71], pets: [6005, 6001, 6002, 6003, 6006]};
 
         let titanOrHero = 'hero';
         let heroIds = heroAttackingTeams.heroes;
@@ -1751,7 +1753,8 @@
                     }
                 }
             } catch (e) {
-                console.log('%cПроизошла ошибка', 'color: red; font-weight: bold;');
+                console.log('%cПроизошла ошибка в магазине титанов', 'color: red; font-weight: bold;');
+                console.error(e);
                 coins = await Caller.send('inventoryGet').then((e) => e.coin[1080]);
             }
             //Обновить магазин
@@ -1921,7 +1924,8 @@
                     }
                 }
             } catch (e) {
-                console.log('%cПроизошла ошибка', 'color: red; font-weight: bold;');
+                console.log('%cПроизошла ошибка в магазине героев', 'color: red; font-weight: bold;');
+                console.error(e);
                 coins = await Caller.send('inventoryGet').then((e) => e.coin[1080]);
             }
 
