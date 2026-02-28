@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.28
+// @version          2.29
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -112,7 +112,7 @@
         NHR_COMPLETE_CHAPTER_N1: 'Raid for Chapter <span style="font-family: Times New Roman;">I</span>',
         NHR_COMPLETE_CHAPTER_N1_TITLE: 'Complete chapter I one time',
         NHR_COMPLETE_CHAPTER_N1_COMPLETED: 'Chapter <span style="color: LimeGreen; font-family: Times New Roman;">I</span> raid completed',
-        NHR_CHAPTER_N1_RAID: 'Starting <span style="color: LimeGreen;">{raidNumber}</span>/3 raid chapter I',
+        NHR_CHAPTER_N1_RAID: 'Starting <span style="color: LimeGreen;">{raidNumber}</span>/{numberOfRraids} raid chapter <span style="font-family: Times New Roman;">I</span>',
         NHR_MAKE_OTHER_TASKS: '<br>Moving on to other quests',
         NHR_GET_HERO_IDS: 'Hero IDs',
         NHR_GET_HERO_IDS_TITLE: 'Get a list of hero IDs',
@@ -221,7 +221,7 @@
         NHR_COMPLETE_CHAPTER_N1: 'Рейд <span style="font-family: Times New Roman;">I</span> главы',
         NHR_COMPLETE_CHAPTER_N1_TITLE: 'Пройти I главу 1 раз',
         NHR_COMPLETE_CHAPTER_N1_COMPLETED: 'Рейд <span style="color: LimeGreen; font-family: Times New Roman;">I</span> главы выполнен',
-        NHR_CHAPTER_N1_RAID: 'Выполняем <span style="color: LimeGreen;">{raidNumber}</span>/3 рейд I главы',
+        NHR_CHAPTER_N1_RAID: 'Выполняем <span style="color: LimeGreen;">{raidNumber}</span>/{numberOfRraids} рейд <span style="font-family: Times New Roman;">I</span> главы',
         NHR_MAKE_OTHER_TASKS: '<br> Приступаем к выполнению других заданий',
         NHR_GET_HERO_IDS: 'Id героев',
         NHR_GET_HERO_IDS_TITLE: 'Получить список Id героев',
@@ -483,8 +483,9 @@
             await new Promise((e) => setTimeout(e, 3000));
 
             //Выполнить рейды I главы
-            for (let i = 1; i <= 4; i++) {
-                setProgress(I18N('NHR_CHAPTER_N1_RAID', {raidNumber:i}), false);
+            let numberOfRraids = 4;
+            for (let i = 1; i <= numberOfRraids; i++) {
+                setProgress(I18N('NHR_CHAPTER_N1_RAID', {raidNumber:i, numberOfRraids: numberOfRraids}), false);
                 await new Promise((e) => setTimeout(e, 2000));
                 await firstHeroicChapterRaid();
             }
