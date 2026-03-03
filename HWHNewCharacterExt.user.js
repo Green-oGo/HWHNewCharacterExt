@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.29
+// @version          2.31
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -74,12 +74,14 @@
           `Not enough buff to complete Chapter <span style="color: LimeGreen; font-family: Times New Roman;"> {chapterNumber} </span>
           You have: <span style="color: red;"> {buffAmount} </span> <br>
           You need: <span style="color: LimeGreen;"> {invasionBuff} </span>`,
+
         NT_ENTER_TITAN_IDS:
-          `Chapter <span style="color: LimeGreen; font-family: Times New Roman;"> {chapterNumber} </span> is available for completion <br>
-          Enter <span style="color: red;"> 5 </span> titan IDs separated by commas or dashes`,
+          `To kick off the magic vibe in chapter <span style="color: LimeGreen; font-family: Times New Roman;"> {chapterNumber} </span>,
+          choose an attacking team or enter <span style="color: red;"> 5 </span> titan IDs using commas or dashes`,
         NT_ENTER_HERO_IDS:
-          `Chapter <span style="color: LimeGreen; font-family: Times New Roman;"> {chapterNumber} </span> is available for completion <br>
-          Enter <span style="color: red;"> 5 </span> hero IDs separated by commas or dashes`,
+          `To kick off the magic vibe in chapter <span style="color: LimeGreen; font-family: Times New Roman;"> {chapterNumber} </span>,
+          choose an attacking team or enter <span style="color: red;"> 5 </span> hero IDs using commas or dashes`,
+
         NT_MUST_FIVE_TITANS: 'There must be <span style="color: red;"> 5 </span> titans',
         NT_MUST_FIVE_HEROES: 'There must be <span style="color: red;"> 5 </span> heroes',
         NT_MUST_ONLY_NUMBERS: 'The list must contain only numbers and commas',
@@ -132,6 +134,17 @@
         NHR_COMPLETE_CHAPTER_N1_MESSAGE: 'Complete chapter <span style="color: LimeGreen; font-family: Times New Roman;"> I </span>?',
         NHR_COMPLETE_CHAPTER_N1_APPLY: 'Click if you\'re brave',
         NHR_COMPLETE_CHAPTER_N1_NOT_APPLY: 'Nah, I\'m losing my nerve',
+
+        NHR_TEAM_HERO_N0: 'You can enter it here. Or there. We\'re not picky',
+        NHR_TEAM_HERO_N1: 'Galahad Tristan Lyria Ishmael Sebastian',
+        NHR_TEAM_HERO_N2: 'Arachne Orion Augustus Electra Fluffy',
+
+        NT_TEAM_TITAN_N0: 'Type wherever you want. We\'ll figure it out',
+        NT_TEAM_TITAN_N1: '<span style="color: Black; text-shadow: none;">Brustar Keros Tenebris</span> <span style="color: Yellow; text-shadow: none;">Iyari Solaris</span>',
+        NT_TEAM_TITAN_N2: '<span style="color: Red; text-shadow: none;">Moloch Ignis Araji</span> <span style="color: Yellow; text-shadow: none;">Iyari Solaris</span>',
+
+        NHR_INCORRECT_TEAM: `You\'ve entered something cute and a bit confusing <br>
+          But we don't judge. Just do your best. You\'ve got this!`,
     };
 
     i18nLangData['en'] = Object.assign(i18nLangData['en'], i18nLangDataEn);
@@ -178,19 +191,19 @@
           У вас: <span style="color: red;"> {buffAmount} </span> <br>
           Необходимо: <span style="color: LimeGreen;"> {invasionBuff} </span>`,
         NT_ENTER_TITAN_IDS:
-          `Для прохождения доступна <span style="color: LimeGreen; font-family: Times New Roman;"> {chapterNumber} </span> глава <br>
-          Введите <span style="color: red;"> 5 </span> id <span style="color: LimeGreen;"> титанов </span> через запятые или дефисы`,
+          `Для старта магического движняка в <span style="color: LimeGreen; font-family: Times New Roman;"> {chapterNumber} </span> главе
+          выберите атакующую команду или введите <span style="color: red;"> 5 </span> id титанов  через запятые или дефисы`,
+
         NT_ENTER_HERO_IDS:
-          `Для прохождения доступна <span style="color: LimeGreen; font-family: Times New Roman;"> {chapterNumber} </span> глава <br>
-          Введите <span style="color: red;"> 5 </span> id <span style="color: LimeGreen;"> героев </span> через запятые или дефисы`,
+          `Для старта магического движняка в <span style="color: LimeGreen; font-family: Times New Roman;"> {chapterNumber} </span> главе
+          выберите атакующую команду или введите <span style="color: red;"> 5 </span> id героев  через запятые или дефисы`,
+
         NT_MUST_FIVE_TITANS:'Должно быть <span style="color: red;"> 5 </span> титанов',
         NT_MUST_FIVE_HEROES:'Должно быть <span style="color: red;"> 5 </span> героев',
         NT_MUST_ONLY_NUMBERS: 'Список должен содержать только цифры и запятые',
         NT_LETS_START: 'Начинаем начинать...',
-
         NT_LETS_CONTINUE: 'Продолжаем продолжать...',
         NT_COMPLETE_TITAN_TASKS_TITLE: 'Выполнить задания ивента: собрать героев, титанов, навыки тотемов, питомцев',
-
         NT_OUTDATED_VERSION_OF_SCRIPT:
           `<span style="color: red;"> Устаревшая версия HeroWarsHelper </span><br>
           Пожалуйста, обновите скрипт`,
@@ -243,6 +256,17 @@
         NHR_COMPLETE_CHAPTER_N1_MESSAGE: 'Выполнить рейд <span style="color: LimeGreen; font-family: Times New Roman;"> I </span> главы?',
         NHR_COMPLETE_CHAPTER_N1_APPLY: 'Жми, если смелый',
         NHR_COMPLETE_CHAPTER_N1_NOT_APPLY: 'Нет, чёт я очкую',
+
+        NHR_TEAM_HERO_N0: 'Вводить сюда. Или туда. Мы не настаиваем',
+        NHR_TEAM_HERO_N1: 'Галахад Тристан Лирия Измаил Себастьян',
+        NHR_TEAM_HERO_N2: 'Арахна Орион Август Электра Флафи',
+
+        NT_TEAM_TITAN_N0: 'Вводите где хотите. Мы потом сами разберёмся',
+        NT_TEAM_TITAN_N1: '<span style="color: Black; text-shadow: none;">Брустар Керос Тенебрис</span> <span style="color: Yellow; text-shadow: none;">Ияри Солярис</span>',
+        NT_TEAM_TITAN_N2: '<span style="color: Red; text-shadow: none;">Молох Игнис Араджи</span> <span style="color: Yellow; text-shadow: none;">Ияри Солярис</span>',
+
+        NHR_INCORRECT_TEAM: `Вы ввели что-то милое и слегка непонятное. <br>
+          Но мы не осуждаем. Постарайтесь. У Вас получится!`,
     };
 
     i18nLangData['ru'] = Object.assign(i18nLangData['ru'], i18nLangDataRu);
@@ -684,14 +708,10 @@
     }
 
     async function completeHeroesChapter(chapters, chapterId, chapterNumber, farmedChapters, spendCoins = false, missionRaid = false) {
-        /*Питомцы
-        6000 - Фенрис   //6005 - Альбрус
-        6001 - Оливер	//6006 - Аксель
-        6002 - Мерлин   //6007 - Бисквит
-        6003 - Мара	    //6008 - Хорус
-        6004 - Каин	    //6009 - Векс*/
+
         //Атакующие герои: Галахад, Тристан, Лирия, Кира, Себастьян.
         //let heroAttackingTeams = {heroes: [2, 54, 67, 3, 48], pets: [6005,6000,6001,6006]};
+
         //Атакующие герои: Галахад, Тристан, Лирия, Измаил, Себастьян.
         let heroAttackingTeams = {heroes: [2, 54, 67, 25, 48], pets: [6005,6000,6001,6006]};
 
@@ -707,18 +727,23 @@
         //Атакующие герои: Электра, Каскад, Айрис, Хайди, Дориан.
         //let heroAttackingTeams = {heroes: [70, 69, 55, 9, 29], pets: [6005, 6001, 6002, 6003, 6006]};
 
-        //Атакующие герои: Лирия Измаил Себастьян Данте Марта
-        //let heroAttackingTeams = {heroes: [67, 25, 48, 16, 46], pets: [6005,6000,6001,6006]};
-
         //Атакующие герои: Арахна Орион Август Электра Флафи
         //let heroAttackingTeams = {heroes: [12, 13, 64, 70, 71], pets: [6005, 6001, 6002, 6003, 6006]};
 
         let titanOrHero = 'hero';
         let heroIds = heroAttackingTeams.heroes;
 
+        /*Питомцы
+        6000 - Фенрис   //6005 - Альбрус
+        6001 - Оливер	//6006 - Аксель
+        6002 - Мерлин   //6007 - Бисквит
+        6003 - Мара	    //6008 - Хорус
+        6004 - Каин	    //6009 - Векс*/
+        let pets = [6000, 6001, 6003, 6005, 6006, 6007];
+
         if (missionRaid == false) {
             //Кнопка ввод Id героев, что необходимо собрать
-            console.log("chapterNumber chapterNumber" + chapterNumber);
+            console.log("chapterNumber: chapterNumber " + chapterNumber);
             heroIds = await getTeamButton(heroAttackingTeams.heroes, chapterNumber, titanOrHero);
             console.log('heroIds ', JSON.stringify(heroIds));
             if (!heroIds) {
@@ -760,9 +785,6 @@
         console.log('shopId ' + shopId);
         console.log(heroIds);
         console.log('heroFragments ', JSON.stringify(heroFragments));
-
-        //Питомцы, что необходимо купить
-        let pets = heroAttackingTeams.pets;
 
         while (lives > 0) {
             //Купить героев
@@ -1040,8 +1062,7 @@
         let chapterId = getChapterId(chapters, 'titan');
         console.log('chapterId ' + chapterId);
 
-        let cycle = true;
-        while (cycle) {
+        for (let attempt = 1; attempt <= 15; attempt++) {
             //Титаны, что необходимо собрать
             let titanIdsToBuy = await getTitanIdsToBuy();
 
@@ -1051,7 +1072,6 @@
             if (titanIdsToBuy.length == 0 && titanSkilsIds.length == 0) {
                 setProgress('', true);
                 confShow(I18N('NT_TITANS_AND_TOTEM_SKILLS_COLLECTED'));
-                cycle = false;
                 return;
             }
 
@@ -1184,6 +1204,8 @@
                 console.log('lives ' + lives);
             }
         }
+        await popup.confirm(I18N('NEW_CHARACTER_SOMETHING_WENT_WRONG'));
+        return;
     }
 
     async function collectHeroes(spendCoins = false) {
@@ -1212,8 +1234,7 @@
             }
         }
 
-        let cycle = true;
-        while (cycle) {
+        for (let attempt = 1; attempt <= 15; attempt++) {
             //Получить героев, которых нужно собрать
             let heroIdsToBuy = await getHeroIdsToBuy();
             if (heroIdsToBuy.length == 0) {
@@ -1221,7 +1242,6 @@
                     setProgress('', true);
                     confShow(I18N('NT_HEROES_COLLECTED'));
                 }
-                cycle = false;
                 return;
             }
             console.log(heroIdsToBuy);
@@ -1255,12 +1275,9 @@
 
             //Id героев, что будем покупить
             let heroIds = [0, 0, 0];
-            //Резервные герои, для добавления в покупки: Галахад, Тристан, Лирия
-            //let reserveHeroes = [2, 54, 67];
-
             //Резервные герои, для добавления в покупки:
-            //Электра, Каскад + Тея
-            //let reserveHeroes = [70, 69, 7];
+            //Галахад, Тристан, Лирия
+            //let reserveHeroes = [2, 54, 67];
             //Лирия Измаил Себастьян
             let reserveHeroes = [67, 25, 48];
 
@@ -1387,6 +1404,8 @@
                 console.log('lives ' + lives);
             }
         }
+        await popup.confirm(I18N('NEW_CHARACTER_SOMETHING_WENT_WRONG'));
+        return;
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1481,7 +1500,7 @@
     }
 
     async function getAllTitanIDs() {
-        let waterTitans = Object.values(lib.data.hero).filter(e => e.type === 'titan' && e.id < 4010);;
+        let waterTitans = Object.values(lib.data.hero).filter(e => e.type === 'titan' && e.id < 4010);
         let fireTitans = Object.values(lib.data.hero).filter(e => e.type === 'titan' && e.id >= 4010 && e.id < 4020);
         let earthTitans = Object.values(lib.data.hero).filter(e => e.type === 'titan' && e.id >= 4020 && e.id < 4030);
         let darknessTitans = Object.values(lib.data.hero).filter(e => e.type === 'titan' && e.id >= 4030 && e.id < 4040);
@@ -1532,56 +1551,121 @@
         }
     }
 
-    async function getTeamButton (titanAttackingTeams, chapterNumber, titanOrHero) {
-        let message = '';
-        if (titanOrHero === 'titan' ) {
-            message = I18N('NT_ENTER_TITAN_IDS', { chapterNumber: romanNumerals[chapterNumber] });
-        }
-        if (titanOrHero === 'hero' ) {
-            message = I18N('NT_ENTER_HERO_IDS', { chapterNumber: romanNumerals[chapterNumber] });
-        }
-        const answer = await popup.confirm(message, [
-            {
-                msg: I18N('NT_COMPLETE_CHAPTER_START'),
-                placeholder: '1,2,3,4,5,6',
-                isInput: true,
-                default: titanAttackingTeams,
-                color: 'green',
-            },
-            {
-                msg: I18N('NT_COMPLETE_CHAPTER_CANCEL'),
-                result: false,
-                isCancel: true,
-                color: 'red',
-            },
-        ]);
-        if (!answer) {
-            return false;
-        }
-
-        let team = answer.split(',');
-        if (team.length != 5) {
-            team = answer.split('-');
-        }
-
-        if (team.length != 5) {
-            if (titanOrHero === 'hero' ) {
-                confShow(I18N('NT_MUST_FIVE_HEROES'));
-            }
+    async function getTeamButton (attackingTeam, chapterNumber, titanOrHero) {
+        let cycle = true;
+        while (cycle) {
+            let answer = false;
             if (titanOrHero === 'titan' ) {
-                confShow(I18N('NT_MUST_FIVE_TITANS'));
+                let message = I18N('NT_ENTER_TITAN_IDS', { chapterNumber: romanNumerals[chapterNumber] });
+                answer = await popup.confirm(message, [
+                    {
+                        msg: I18N('NT_TEAM_TITAN_N0'),
+                        placeholder: '1,2,3,4,5',
+                        isInput: true,
+                        color: 'green',
+                    },
+                    {
+                        msg: I18N('NT_TEAM_TITAN_N1'),
+                        isInput: true,
+                        default: '4030,4031,4033,4042,4043',
+                        color: 'green',
+                    },
+                    {
+                        msg: I18N('NT_TEAM_TITAN_N2'),
+                        isInput: true,
+                        default: '4010,4012,4013,4042,4043',
+                        color: 'green',
+                    },
+                    {
+                        msg: I18N('NT_COMPLETE_CHAPTER_CANCEL'),
+                        result: false,
+                        isCancel: true,
+                        color: 'red',
+                    },
+                ]);
             }
-            return false;
-        }
-
-        for (let p in team) {
-            team[p] = +team[p].trim()
-            if (Number.isNaN(team[p])) {
-                confShow(I18N('NT_MUST_ONLY_NUMBERS'));
+            if (titanOrHero === 'hero' ) {
+                let message = I18N('NT_ENTER_HERO_IDS', { chapterNumber: romanNumerals[chapterNumber] });
+                answer = await popup.confirm(message, [
+                    {
+                        msg: I18N('NHR_TEAM_HERO_N0'),
+                        placeholder: '1,2,3,4,5',
+                        isInput: true,
+                        color: 'green',
+                    },
+                    {
+                        msg: I18N('NHR_TEAM_HERO_N1'),
+                        isInput: true,
+                        default: '2,54,67,25,48',
+                        color: 'green',
+                    },
+                    {
+                        msg: I18N('NHR_TEAM_HERO_N2'),
+                        isInput: true,
+                        default: '12,13,64,70,71',
+                        color: 'green',
+                    },
+                    {
+                        msg: I18N('NT_COMPLETE_CHAPTER_CANCEL'),
+                        result: false,
+                        isCancel: true,
+                        color: 'red',
+                    },
+                ]);
+            }
+            if (!answer) {
                 return false;
             }
+
+            let result = answer.split(',');
+            if (result.length != 5) {
+                result = answer.split('-');
+            }
+            let team = [...new Set(result)];
+
+            if (team.length != 5) {
+                if (titanOrHero === 'hero' ) {
+                    await popup.confirm(I18N('NHR_INCORRECT_TEAM'));
+                }
+                if (titanOrHero === 'titan' ) {
+                    await popup.confirm(I18N('NHR_INCORRECT_TEAM'));
+                }
+                continue;
+            }
+            let wrongTeam = false;
+            for (let p in team) {
+                team[p] = +team[p].trim()
+                if (Number.isNaN(team[p])) {
+                    await popup.confirm(I18N('NHR_INCORRECT_TEAM'));
+                    wrongTeam = true;
+                    break;
+                }
+            }
+            if (wrongTeam) {
+                continue;
+            }
+            if (titanOrHero === 'hero' ) {
+                let heroIds = Object.values(lib.data.hero).filter(e => e.type === 'hero' && !e.roleExtended.includes('boss')).map(e => e.id);
+                //Исключаем Лариску и Черепах
+                heroIds = heroIds.filter((e) => e != 63 && e != 65);
+
+                let isIncluded = team.every(hero => heroIds.includes(hero));
+                if(!isIncluded) {
+                    await popup.confirm(I18N('NHR_INCORRECT_TEAM'));
+                    continue;
+                }
+            }
+
+            if (titanOrHero === 'titan' ) {
+                let titanIds = Object.values(lib.data.hero).filter(e => e.type === 'titan').map(e => e.id);
+                let isIncluded = team.every(titan => titanIds.includes(titan));
+                if(!isIncluded) {
+                    await popup.confirm(I18N('NHR_INCORRECT_TEAM'));
+                    continue;
+                }
+            }
+            return team;
         }
-        return team;
     }
 
     async function spendValorCoins() {
