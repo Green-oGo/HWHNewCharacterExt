@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.32
+// @version          2.33
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -155,6 +155,7 @@
         NHR_NEXT: 'Next',
         NHR_NO_TALISMAN: '<span style="color: Red;"> The required talisman is missing </span>',
         NHR_BOUGHT_TALISMAN: '<span style="color: LimeGreen;"> A talisman has been purchased</span>',
+        NHR_ARCHDEMON_IS_PREPARED: 'We did what we could. Restart the game and attack the Archdemon.',
     };
 
     i18nLangData['en'] = Object.assign(i18nLangData['en'], i18nLangDataEn);
