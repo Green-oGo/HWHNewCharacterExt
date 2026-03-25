@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.35
+// @version          2.36
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -123,7 +123,8 @@
         NHR_SPEND_VALOR_COINS_TITLE: 'Spend all available Valor Coins',
         NHR_NOT_ENOUGH_COINS: '<span style="font-size: 30px;">Not enough coins</span><br> <span style="color: LimeGreen; font-size: 30px;">No money, no honey </span>',
         NHR_SPEND_VALOR_COINS_RESULT:
-          `<span style="font-size: 30px;">Valor Coin Exchange Result:</span><br><br>
+          `<span style="font-size: 30px;">Exchanged Valor Coin <span style="color: LimeGreen;">{numberOfExchanges}</span> times </span><br>
+          <span style="font-size: 30px;"> Result: <br><br>
           Sapphire Medallion: <span style="color: LimeGreen;">{sapphireMedallion}</span> <br>
           Soul stones: <span style="color: LimeGreen;">{fragmentHero}</span>`,
         NHR_SPEND_VALOR_COINS_MESSAGE: 'Exchange all available Coins of Valor?',
@@ -256,7 +257,8 @@
         NHR_SPEND_VALOR_COINS_TITLE: 'Потратить все имеющиеся монеты доблести',
         NHR_NOT_ENOUGH_COINS: '<span style="font-size: 30px;">Нэт Монэт</span><br> <span style="color: LimeGreen; font-size: 30px;">Ноу мани - ноу хани</span>',
         NHR_SPEND_VALOR_COINS_RESULT:
-          `<span style="font-size: 30px;">Результат обмена монет доблести: </span><br><br>
+          `<span style="font-size: 30px;">Обменяли монеты доблести <span style="color: LimeGreen;">{numberOfExchanges}</span> раз </span><br>
+          <span style="font-size: 30px;"> Получили: <br><br>
           <span style="color: LimeGreen;">3</span> магнитoфoна,  <span style="color: LimeGreen;">3</span> кинoкамеры заграничных,
           <span style="color: LimeGreen;">3</span> пoртсигара отечественных, куртка замшевая - <span style="color: LimeGreen;">три</span> куртки,
           сапфировый медальон - <span style="color: LimeGreen;">{sapphireMedallion}</span>, камни души - <span style="color: LimeGreen;">{fragmentHero}</span>`,
@@ -650,7 +652,7 @@
         //Получить id атакующих героев
         let heroIds = [];
         cycle = true;
-        let teams = [[13,17,60,68,72], [37,40,48,52,68], [31,40,48,52,68]];
+        let teams = [[13,17,60,68,72], [59,40,48,52,68], [31,40,48,52,68]];
         while (cycle) {
             let message = I18N('NT_ENTER_HERO_IDS', { chapterNumber: romanNumerals[chapterNumber] });
             let buttons = [];
@@ -829,6 +831,12 @@
 
             //Результат атаки
             let invasionInfo = await Caller.send('invasion_getInfo');
+            lives = invasionInfo.lives;
+            if (lives == 0) {
+                setProgress('', true);
+                await popup.confirm(I18N('NHR_LIVES_ARE_OVER', { chapterNumber: romanNumerals[chapterNumber]}));
+                return;
+            }
 
             //Результат атаки босса
             if (boss) {
@@ -838,7 +846,6 @@
             }
 
             const talismans = Object.values(await Caller.send('invasion_rollTalismans'));
-
             if (talismans.length > 0) {
                 if (talismans.includes(talismanId)){
                     await Caller.send({name: "invasion_selectTalisman", args: {talismanId: talismanId}});
@@ -859,20 +866,12 @@
             let missions = Object.values(invasionInfo.actions);
             let nextMissionIndex = missions.findIndex(e => e.payload.wins === 0);
             if (nextMissionIndex == -1) {
-                return;
-            }
-            missionId = missions[nextMissionIndex].payload.id;
-            missionNumber = nextMissionIndex + 1;
-            console.log('missionId ' + missionId);
-            console.log('missionNumber ' + missionNumber);
-
-            lives = invasionInfo.lives;
-            console.log('lives ' + lives);
-            if (lives == 0) {
                 setProgress('', true);
                 await popup.confirm(I18N('NHR_LIVES_ARE_OVER', { chapterNumber: romanNumerals[chapterNumber]}));
                 return;
             }
+            missionId = missions[nextMissionIndex].payload.id;
+            missionNumber = nextMissionIndex + 1;
         }
     }
 
@@ -2104,50 +2103,57 @@
                 sapphireMedallionId = coin;
             }
         }
-        console.log('valorCoinId ' + valorCoinId);
-
-        let valorCoins = 0;
-        if (inventoryGet.coin[valorCoinId]) {
-            valorCoins = inventoryGet.coin[valorCoinId];
-        }
-        console.log('valorCoins ' + valorCoins);
-
+        let valorCoins = inventoryGet.coin?.[valorCoinId] ?? 0;
         let grailId = Object.entries(lib.data.workshop.relic).find(([key, item]) => item.invasionId === invasionInfoId && item.effect?.type === "gachaReward_change")[0];
         let grailLvl = workshopBuffInfo.find(e => e.id == grailId ).level;
-        console.log('grailId ' + grailId);
-        console.log('grailLvl ' + grailLvl);
-
-        if (valorCoins < (2800 - grailLvl * 100)) {
+        let exchangeValue = 2800 - grailLvl * 100;
+        if (valorCoins < exchangeValue) {
             await popup.confirm(I18N('NHR_NOT_ENOUGH_COINS'));
             //Возврат в меню "Новый персонаж"
             returnToNewCharacterMenu();
             return;
         }
 
-        let amount = Math.floor(valorCoins/(2800 - grailLvl * 100));
-        console.log('amount ' + amount);
+        let numberOfExchanges = Math.floor(valorCoins/exchangeValue);
         let offerId = lib.data.invasion.list[invasionInfoId].clientData.festival.lootBoxSpecialOfferId;
         let boxName = Object.keys((await Caller.send('specialOffer_getAll')).find(e => e.id == offerId).offerData.lootBoxes)[0];
-        console.log('offerId ' + offerId);
-        console.log('boxName ' + boxName);
-        let result = await Caller.send({name:"lootBoxBuy",args:{box:boxName,offerId:offerId,price:"openCoin",amount:amount}})
+
         let sapphireMedallion = 0;
         let fragmentHero = 0;
         let fragmentTitan = 0;
-        if (result) {
-            for (let r of result) {
-                if (r.coin?.[sapphireMedallionId]) {
-                    sapphireMedallion += Number(r.coin[sapphireMedallionId]);
+        let counter = numberOfExchanges;
+        let cycle = true;
+        while (cycle) {
+            let amount = 10;
+            console.log(counter);
+            if (counter == 0) {
+                cycle = false;
+                break;
+            }
+            if (counter < 10) {
+                amount = counter;
+            }
+            console.log(amount);
+            let result = await Caller.send({ name: "lootBoxBuy", args:{ box:boxName, offerId:offerId, price:"openCoin", amount: amount}})
+            if (result) {
+                counter -= amount;
+                for (let r of result) {
+                    if (r.coin?.[sapphireMedallionId]) {
+                        sapphireMedallion += Number(r.coin[sapphireMedallionId]);
+                    }
+                    if (r.fragmentHero) {
+                        fragmentHero += Number(Object.values(r.fragmentHero)[0]);
+                    }
+                    if (r.fragmentTitan) {
+                        fragmentTitan += Number(Object.values(r.fragmentTitan)[0]);
+                    }
                 }
-                if (r.fragmentHero) {
-                    fragmentHero += Number(Object.values(r.fragmentHero)[0]);
-                }
-                if (r.fragmentTitan) {
-                    fragmentTitan += Number(Object.values(r.fragmentTitan)[0]);
-                }
+            } else {
+                cycle = false;
+                break;
             }
         }
-        await popup.confirm(I18N('NHR_SPEND_VALOR_COINS_RESULT', {sapphireMedallion:sapphireMedallion, fragmentHero: fragmentHero > fragmentTitan ? fragmentHero : fragmentTitan }));
+        await popup.confirm(I18N('NHR_SPEND_VALOR_COINS_RESULT', {numberOfExchanges: numberOfExchanges, sapphireMedallion:sapphireMedallion, fragmentHero: fragmentHero > fragmentTitan ? fragmentHero : fragmentTitan }));
         //Возврат в меню "Новый персонаж"
         returnToNewCharacterMenu();
     }
