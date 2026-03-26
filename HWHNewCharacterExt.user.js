@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.38
+// @version          2.39
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -661,10 +661,20 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
         //Получить id атакующих героев
+        let teams = [[13,17,60,68,72], [59,40,48,52,68]];
         let savedCommandForArchdemon = getSaveVal('savedCommandForArchdemon', '');
+        let savedCommand = [];
+        let teamExists = false;
+        if (savedCommandForArchdemon.length > 1) {
+            savedCommand = savedCommandForArchdemon.split(',').map(Number);
+            if (savedCommand.length != 5) {
+                savedCommand = savedCommandForArchdemon.split('-').map(Number);
+            }
+            teamExists = teams.some(arr => arr.every((val, i) => val === savedCommand[i]));
+        }
+
         let heroIds = [];
         cycle = true;
-        let teams = [[13,17,60,68,72], [59,40,48,52,68]];
         while (cycle) {
             let message = I18N('NT_ENTER_HERO_IDS', { chapterNumber: romanNumerals[chapterNumber] });
             let buttons = [];
@@ -677,7 +687,7 @@
                     color: 'green',
                 },
             );
-            if (savedCommandForArchdemon.length > 1) {
+            if (savedCommandForArchdemon.length > 1 && !teamExists) {
                 buttons.push(
                     {
                         msg: I18N('NHR_TEAM_HERO_MY_DARLING'),
