@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.37
+// @version          2.38
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -137,6 +137,7 @@
         NHR_COMPLETE_CHAPTER_N1_NOT_APPLY: 'Nah, I\'m losing my nerve',
 
         NHR_TEAM_HERO_N0: 'You can enter it here. Or there. We\'re not picky',
+        NHR_TEAM_HERO_MY_DARLING: `<span style="color: #FFB347; font-size: 25px; font-style: italic; font-family: 'Georgia';">My Precious</span>`,
         NHR_TEAM_HERO_N1: 'Galahad Tristan Lyria Ishmael Sebastian',
         NHR_TEAM_HERO_N2: 'Arachne Orion Augustus Electra Fluffy',
 
@@ -277,6 +278,7 @@
         NHR_COMPLETE_CHAPTER_N1_NOT_APPLY: 'Нет, чёт я очкую',
 
         NHR_TEAM_HERO_N0: 'Вводить сюда. Или туда. Мы не настаиваем',
+        NHR_TEAM_HERO_MY_DARLING: `<span style="color: #FFB347; font-size: 25px; font-style: italic; font-family: 'Georgia';">Моя Прелесть</span>`,
         NHR_TEAM_HERO_N1: 'Галахад Тристан Лирия Измаил Себастьян',
         NHR_TEAM_HERO_N2: 'Арахна Орион Август Электра Флафи',
 
@@ -662,7 +664,7 @@
         let savedCommandForArchdemon = getSaveVal('savedCommandForArchdemon', '');
         let heroIds = [];
         cycle = true;
-        let teams = [[13,17,60,68,72], [59,40,48,52,68], [31,40,48,52,68]];
+        let teams = [[13,17,60,68,72], [59,40,48,52,68]];
         while (cycle) {
             let message = I18N('NT_ENTER_HERO_IDS', { chapterNumber: romanNumerals[chapterNumber] });
             let buttons = [];
@@ -672,10 +674,19 @@
                     msg: I18N('NHR_TEAM_HERO_N0'),
                     placeholder: '1,2,3,4,5',
                     isInput: true,
-                    default: savedCommandForArchdemon,
                     color: 'green',
                 },
             );
+            if (savedCommandForArchdemon.length > 1) {
+                buttons.push(
+                    {
+                        msg: I18N('NHR_TEAM_HERO_MY_DARLING'),
+                        isInput: true,
+                        default: savedCommandForArchdemon,
+                        color: 'green',
+                    },
+                );
+            }
             for (let team of teams){
                 buttons.push(
                     {
