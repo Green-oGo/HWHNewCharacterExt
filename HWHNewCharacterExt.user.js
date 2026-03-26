@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.36
+// @version          2.37
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -159,6 +159,10 @@
         NHR_ARCHDEMON_IS_PREPARED: 'We tried our best. We did what we did. The game will be synced without your permission. Go to the chapter and attack the Archdemon.',
         NHR_SELECT_TALISMAN: 'Choose a talisman',
         NHR_SELECT_PETS: 'Select pets',
+        NHR_SPEND_VALOR_COINS_PROGRESS: 'Eyes closed, deal sealed: <span style="color: LimeGreen;">{exchangeCounter}</span> / {maximumCounter}',
+        NHR_SPEND_VALOR_COINS_PROGRESS_2: 'And throw in a little extra',
+        NHR_SPEND_VALOR_COINS_PROGRESS_3: 'Just pocket change',
+
     };
 
     i18nLangData['en'] = Object.assign(i18nLangData['en'], i18nLangDataEn);
@@ -294,6 +298,11 @@
         NHR_ARCHDEMON_IS_PREPARED: 'Старались, как могли. Сделали, что сделали. Игра будет синхронизирована без вашего разрешения. Зайдите в главу, и атакуйте Архидемона.',
         NHR_SELECT_TALISMAN: 'Выберите талисман',
         NHR_SELECT_PETS: 'Выберите питомцев',
+        NHR_SPEND_VALOR_COINS_PROGRESS: 'Меняю, не глядя: <span style="color: LimeGreen;">{exchangeCounter}</span> / {maximumCounter}',
+        NHR_SPEND_VALOR_COINS_PROGRESS_2: 'Ну, и на помидорчики',
+        NHR_SPEND_VALOR_COINS_PROGRESS_3: 'Тут ток на помидорчики',
+
+
     };
 
     i18nLangData['ru'] = Object.assign(i18nLangData['ru'], i18nLangDataRu);
@@ -650,6 +659,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
         //Получить id атакующих героев
+        let savedCommandForArchdemon = getSaveVal('savedCommandForArchdemon', '');
         let heroIds = [];
         cycle = true;
         let teams = [[13,17,60,68,72], [59,40,48,52,68], [31,40,48,52,68]];
@@ -662,6 +672,7 @@
                     msg: I18N('NHR_TEAM_HERO_N0'),
                     placeholder: '1,2,3,4,5',
                     isInput: true,
+                    default: savedCommandForArchdemon,
                     color: 'green',
                 },
             );
@@ -727,6 +738,7 @@
                 continue;
             }
             heroIds = team;
+            setSaveVal('savedCommandForArchdemon', answer);
             cycle = false;
         }
         console.log(heroIds);
@@ -2123,6 +2135,7 @@
         let fragmentTitan = 0;
         let counter = numberOfExchanges;
         let cycle = true;
+        let exchangeCounter = 1;
         while (cycle) {
             let amount = 10;
             console.log(counter);
@@ -2134,9 +2147,22 @@
                 amount = counter;
             }
             console.log(amount);
+            if (amount == 10) {
+                setProgress(I18N('NHR_SPEND_VALOR_COINS_PROGRESS', { exchangeCounter: exchangeCounter, maximumCounter: Math.floor(numberOfExchanges/10) }), false);
+                await new Promise((e) => setTimeout(e, 1000));
+            } else {
+                if (exchangeCounter > 1) {
+                    setProgress(I18N('NHR_SPEND_VALOR_COINS_PROGRESS_2'), false);
+                    await new Promise((e) => setTimeout(e, 2000));
+                } else {
+                    setProgress(I18N('NHR_SPEND_VALOR_COINS_PROGRESS_3'), false);
+                    await new Promise((e) => setTimeout(e, 2000));
+                }
+            }
             let result = await Caller.send({ name: "lootBoxBuy", args:{ box:boxName, offerId:offerId, price:"openCoin", amount: amount}})
             if (result) {
                 counter -= amount;
+                exchangeCounter++;
                 for (let r of result) {
                     if (r.coin?.[sapphireMedallionId]) {
                         sapphireMedallion += Number(r.coin[sapphireMedallionId]);
@@ -2153,9 +2179,11 @@
                 break;
             }
         }
+        setProgress('');
         await popup.confirm(I18N('NHR_SPEND_VALOR_COINS_RESULT', {numberOfExchanges: numberOfExchanges, sapphireMedallion:sapphireMedallion, fragmentHero: fragmentHero > fragmentTitan ? fragmentHero : fragmentTitan }));
+        cheats.refreshGame();
         //Возврат в меню "Новый персонаж"
-        returnToNewCharacterMenu();
+        //returnToNewCharacterMenu();
     }
 
     async function buyTitansAndTotemSkils (shopId, titanIds, titanFragments, titanSkilsIds, titanSkilFragments) {
