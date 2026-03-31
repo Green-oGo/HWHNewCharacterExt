@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.41
+// @version          2.42
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -335,7 +335,6 @@
         }
         console.log(scriptInfo.version);
         let invasionInfo = await Caller.send('invasion_getInfo');
-//if (true) {
         if (invasionInfo) {
             invasionInfoId = invasionInfo.id;
             let chapters = Object.values(lib.data.invasion.chapter).filter((e) => e.invasionId === invasionInfoId);
@@ -357,7 +356,7 @@
             }
 
             if (titanIvent) {
-//if (true) {
+//if (false) {
                 await onClickNewTitanButton();
             } else {
                 await onClickNewHeroButton();
@@ -393,7 +392,7 @@
                 },
                 color: 'blue',
             },
-            {
+            /*{
                 get msg() {
                     return I18N('NHR_ARCHDEMON');
                 },
@@ -404,7 +403,7 @@
                     await attackArchdemon();
                 },
                 color: 'red',
-            },
+            },*/
             {
                 get msg() {
                     return I18N('NHR_COMPLETE_CHAPTER_N1');
@@ -768,12 +767,6 @@
 
         //Активировать главу
         let chapterInfo = await Caller.send({ name: 'invasion_setActiveChapter', args: { chapterId: chapterId } });
-        //let haveHeroFragments = chapterInfo.invasion.fragments;
-        //console.log('haveHeroFragments ', JSON.stringify(haveHeroFragments));
-
-        //Получить id магазина
-        //let shopId = await getShopId(chapters, titanOrHero); //2020 Магазин титанов
-        //console.log('Id магазина ' + shopId);
 
         //Id миссии
         let firstMissionId = chapterInfo.invasion.actions[0].payload.id;
@@ -786,14 +779,6 @@
         console.log('firstMissionId ' + firstMissionId);
         console.log('missionId ' + missionId);
         console.log('lives ' + lives);
-
-        //Фрагменты героев
-        /*let heroFragments = [0, 0, 0, 0, 0];
-        for (let i = 0; i < 5; i++) {
-            if (haveHeroFragments[heroIds[i]]) {
-                heroFragments[i] = haveHeroFragments[heroIds[i]];
-            }
-        }*/
 
         let spendCoins = false;
         while (lives > 0) {
@@ -1066,7 +1051,6 @@
     async function completeChapter(spendCoins = false, missionRaid = false, titanOrHero = '', secondHeroicChapter = false) {
         //Получить состояние на карте
         let invasionInfo = await Caller.send('invasion_getInfo');
-        //let invasionInfoId = invasionInfo.id;
         let farmedChapters = invasionInfo.farmedChapters;
         let buffAmount = invasionInfo.buffAmount;
         console.log('invasionInfoId ' + invasionInfoId);
@@ -1140,28 +1124,12 @@
     async function completeHeroesChapter(chapters, chapterId, chapterNumber, farmedChapters, spendCoins = false, missionRaid = false) {
 
         //Атакующие герои: Галахад, Тристан, Лирия, Кира, Себастьян.
-        //let heroAttackingTeams = {heroes: [2, 54, 67, 3, 48], pets: [6005,6000,6001,6006]};
-
-        //Атакующие герои: Галахад, Тристан, Лирия, Измаил, Себастьян.
-        let heroAttackingTeams = {heroes: [2, 54, 67, 25, 48], pets: [6005,6000,6001,6006]};
-
-        //Атакующие герои: Электра, Каскад + Тея, Криста + Ларс.
-        //let heroAttackingTeams = {heroes: [70, 69, 7, 33, 34], pets: [6005, 6001, 6002, 6003, 6006]};
-
-        //Атакующие герои: Электра + Орион, Каскад, Криста + Ларс.
-        //let heroAttackingTeams = {heroes: [70, 13, 69, 33, 34], pets: [6005, 6001, 6002, 6003, 6006]};
-
-        //Атакующие герои: Электра, Каскад, Криста + Ларс, Хайди.
-        //let heroAttackingTeams = {heroes: [70, 69, 33, 34, 9], pets: [6005, 6001, 6002, 6003, 6006]};
-
-        //Атакующие герои: Электра, Каскад, Айрис, Хайди, Дориан.
-        //let heroAttackingTeams = {heroes: [70, 69, 55, 9, 29], pets: [6005, 6001, 6002, 6003, 6006]};
-
-        //Атакующие герои: Арахна Орион Август Электра Флафи
-        //let heroAttackingTeams = {heroes: [12, 13, 64, 70, 71], pets: [6005, 6001, 6002, 6003, 6006]};
+        //Каскад Орион Август Электра Флафи
+        let heroAttackingTeams = {heroes: [[2, 54, 67, 3, 48], [13, 64, 69, 70, 71]],
+                                  pets: [[6005,6000,6001,6007,6009], [6005,6001,6002,6006,6007]]};
 
         let titanOrHero = 'hero';
-        let heroIds = heroAttackingTeams.heroes;
+        let heroIds = heroAttackingTeams.heroes[0];
 
         /*Питомцы
         6000 - Фенрис   //6005 - Альбрус
@@ -1169,16 +1137,22 @@
         6002 - Мерлин   //6007 - Бисквит
         6003 - Мара	    //6008 - Хорус
         6004 - Каин	    //6009 - Векс*/
-        let pets = [6000, 6001, 6003, 6005, 6006, 6007];
+        let pets = heroAttackingTeams.pets[0];
+        console.log('Герои для рейдов ', JSON.stringify(heroIds));
+        console.log('Питомци для рейдов ', JSON.stringify(pets));
 
         if (missionRaid == false) {
             //Кнопка ввод Id героев, что необходимо собрать
             console.log("chapterNumber: chapterNumber " + chapterNumber);
-            heroIds = await getTeamButton(heroAttackingTeams.heroes, chapterNumber, titanOrHero);
+            let resultGetTeamButton = await getTeamButton(heroAttackingTeams.heroes, chapterNumber, titanOrHero);
+            heroIds = resultGetTeamButton.team;
+            let teamIndex = resultGetTeamButton.teamIndex;
             console.log('heroIds ', JSON.stringify(heroIds));
-            if (!heroIds) {
-                return;
-            }
+            console.log('teamIndex ', JSON.stringify(teamIndex));
+
+            pets = await selectPets(heroAttackingTeams.pets?.[teamIndex] ?? null);
+            console.log('pets ', JSON.stringify(pets));
+
         }
 
         setProgress(I18N('NT_LETS_START'), false);
@@ -1186,12 +1160,6 @@
 
         //Активировать главу
         let chapterInfo = await Caller.send({ name: 'invasion_setActiveChapter', args: { chapterId: chapterId } });
-        let haveHeroFragments = chapterInfo.invasion.fragments;
-        console.log('haveHeroFragments ', JSON.stringify(haveHeroFragments));
-
-        //Получить id магазина
-        let shopId = await getShopId(chapters, titanOrHero); //1078; // Магазин титанов
-        console.log('Id магазина ' + shopId);
 
         //Id миссии
         let firstMissionId = chapterInfo.invasion.actions[0].payload.id;
@@ -1204,22 +1172,12 @@
         console.log('firstMissionId ' + firstMissionId);
         console.log('missionId ' + missionId);
         console.log('lives ' + lives);
-
-        //Фрагменты героев
-        let heroFragments = [0, 0, 0, 0, 0];
-        for (let i = 0; i < 5; i++) {
-            if (haveHeroFragments[heroIds[i]]) {
-                heroFragments[i] = haveHeroFragments[heroIds[i]];
-            }
-        }
-        console.log('shopId ' + shopId);
         console.log(heroIds);
-        console.log('heroFragments ', JSON.stringify(heroFragments));
 
         while (lives > 0) {
             //Купить героев
             setProgress(I18N('NHR_SHOPPING'), false);
-            let result = await buyHeroesAndPets(shopId, heroIds, heroFragments, pets, spendCoins);
+            let result = await buyHeroesAndPets2(missionNumber, lives, heroIds, pets, spendCoins);
 
             //Текущая миссия босс или нет
             let boss = false;
@@ -1481,7 +1439,6 @@
     async function collectTitansAndTotemFragments() {
         //Получить состояние на карте
         let invasionInfo = await Caller.send('invasion_getInfo');
-        //let invasionInfoId = invasionInfo.id;
         let farmedChapters = invasionInfo.farmedChapters;
         console.log('invasionInfoId ' + invasionInfoId);
         console.log('farmedChapters ', JSON.stringify(farmedChapters));
@@ -1641,8 +1598,6 @@
     async function collectHeroes(spendCoins = false) {
         //Получить состояние на карте
         let invasionInfo = await Caller.send('invasion_getInfo');
-
-        //let invasionInfoId = invasionInfo.id;
         let farmedChapters = invasionInfo.farmedChapters;
         console.log('invasionInfoId ' + invasionInfoId);
         console.log('farmedChapters ', JSON.stringify(farmedChapters));
@@ -1685,11 +1640,6 @@
 
             //Активировать главу
             let chapterInfo = await Caller.send({ name: 'invasion_setActiveChapter', args: { chapterId: chapterId } });
-            let haveHeroFragments = chapterInfo.invasion.fragments;
-
-            //Получить id магазина
-            let shopId = await getShopId(chapters, 'hero'); //1078; // Магазин героев
-            console.log('Id магазина героев ' + shopId);
 
             //Id миссии
             let firstMissionId = chapterInfo.invasion.actions[0].payload.id;
@@ -1736,21 +1686,11 @@
                 }
             }
 
-            //Фрагменты героев
-            let heroFragments = [0, 0, 0];
-            for (let i = 0; i < heroFragments.length; i++){
-                if (haveHeroFragments[heroIds[i]]) {
-                    heroFragments[i] = haveHeroFragments[heroIds[i]];
-                }
-            }
-
             console.log(heroIds);
-            console.log(heroFragments);
-
             while (lives > 0) {
                 setProgress(I18N('NHR_SHOPPING'), false);
                 //Купить героев
-                let result = await buyHeroesAndPets(shopId, heroIds, heroFragments, pets, spendCoins);
+                let result = await buyHeroesAndPets2(missionNumber, lives, heroIds, pets, spendCoins);
 
                 //Выйти, если босс побежден и полностью собрали три героя
                 if (result && farmedChapters.includes(chapterId)) {
@@ -1987,7 +1927,8 @@
         return allWeHave;
     }
 
-    async function getTeamButton (attackingTeam, chapterNumber, titanOrHero) {
+    async function getTeamButton (attackingTeams, chapterNumber, titanOrHero) {
+        console.log('attackingTeams ', JSON.stringify(attackingTeams));
         let cycle = true;
         while (cycle) {
             let answer = false;
@@ -2021,8 +1962,18 @@
                 ]);
             }
             if (titanOrHero === 'hero' ) {
+                //buyHeroesAndPets2
+                let savedCommandForHeroesChapter = getSaveVal('savedCommandForHeroesChapter', '');
+                let savedCommand = [];
+                let teamExists = false;
+                if (savedCommandForHeroesChapter.length > 1) {
+                    savedCommand = savedCommandForHeroesChapter.split(',').map(Number);
+                    if (savedCommand.length != 5) {
+                        savedCommand = savedCommandForHeroesChapter.split('-').map(Number);
+                    }
+                    teamExists = attackingTeams.some(arr => arr.every((val, i) => val === savedCommand[i]));
+                }
                 let message = I18N('NT_ENTER_HERO_IDS', { chapterNumber: romanNumerals[chapterNumber] });
-                let teams = [[2,54,67,25,48], [12,13,64,70,71], [1,29,60,62,72]];
                 let buttons = [];
                 buttons.push(
                     {
@@ -2032,7 +1983,17 @@
                         color: 'green',
                     },
                 );
-                for (let team of teams){
+                if (savedCommandForHeroesChapter.length > 1 && !teamExists) {
+                    buttons.push(
+                        {
+                            msg: I18N('NHR_TEAM_HERO_MY_DARLING'),
+                            isInput: true,
+                            default: savedCommandForHeroesChapter,
+                            color: 'green',
+                        },
+                    );
+                }
+                for (let team of attackingTeams){
                     buttons.push(
                         {
                             msg: team.map(e => cheats.translate(`LIB_HERO_NAME_${e}`)).join(', '),
@@ -2051,9 +2012,9 @@
                         color: 'red',
                     },
                 );
-
-            answer = await popup.confirm(message, buttons);
+                answer = await popup.confirm(message, buttons);
             }
+
             if (!answer) {
                 return false;
             }
@@ -2086,15 +2047,22 @@
                 continue;
             }
             if (titanOrHero === 'hero' ) {
-                let heroIds = Object.values(lib.data.hero).filter(e => e.type === 'hero' && !e.roleExtended.includes('boss')).map(e => e.id);
+                let allHeros = Object.values(lib.data.hero).filter(e => e.type === 'hero' && !e.roleExtended.includes('boss')).map(e => e.id);
                 //Исключаем Лариску и Черепах
-                heroIds = heroIds.filter((e) => e != 63 && e != 65);
-
-                let isIncluded = team.every(hero => heroIds.includes(hero));
+                allHeros = allHeros.filter((e) => e != 63 && e != 65);
+                let isIncluded = team.every(hero => allHeros.includes(hero));
                 if(!isIncluded) {
                     await popup.confirm(I18N('NHR_INCORRECT_TEAM'));
                     continue;
                 }
+                let teamExists = false;
+                let teamIndex = null;
+                teamExists = attackingTeams.some(arr => arr.every((val, i) => val === team[i]));
+                if (teamExists) {
+                    teamIndex = attackingTeams.findIndex(arr => arr.every((val, i) => val === team[i]));
+                }
+                setSaveVal('savedCommandForHeroesChapter', answer);
+                return {team:team, teamIndex: teamIndex}
             }
 
             if (titanOrHero === 'titan' ) {
@@ -2104,8 +2072,8 @@
                     await popup.confirm(I18N('NHR_INCORRECT_TEAM'));
                     continue;
                 }
+                return team;
             }
-            return team;
         }
     }
 
@@ -2124,7 +2092,6 @@
         }
 
         let [invasionInfo, inventoryGet, workshopBuffInfo] = await Caller.send(['invasion_getInfo', 'inventoryGet', 'workshopBuff_getInfo']);
-        //let invasionInfoId = invasionInfo.id;
         let chapters = Object.values(lib.data.invasion.chapter).filter((e) => e.invasionId === invasionInfoId);
         let coins = chapters[0].completeReward.coin;
         let valorCoinId = 0;
@@ -2323,7 +2290,7 @@
         return false;
     }
 
-    async function buyHeroesAndPets (shopId, heroIds, heroFragments, pets, spendCoins = false) {
+    /*async function buyHeroesAndPets (shopId, heroIds, heroFragments, pets, spendCoins = false) {
         console.log('Зашли в магазин');
         console.log('heroIds ', JSON.stringify(heroIds));
         console.log('heroFragments ', JSON.stringify(heroFragments));
@@ -2493,7 +2460,7 @@
             }
         }
         return false;
-    }
+    }*/
 
     async function buyHeroesAndPets2 (missionNumber, lives, heroIds, pets, spendCoins = false) {
         let chapters = Object.values(lib.data.invasion.chapter).filter((e) => e.invasionId === invasionInfoId);
@@ -2533,8 +2500,10 @@
 
         let shopSlots = null;
         let boughtAllHeroes = false;
-
+        let purchaseNumber = 0;
         while (coins.value >= 12) {
+            purchaseNumber++;
+            console.log('%cЗакупки ' + purchaseNumber, 'color: green; font-weight: bold;');
             //Получить состояние магазина
             if (!shopSlots) {
                 shopSlots = await Caller.send({ name: 'shopGet', args: { shopId: shopId } }).then((e) => Object.values(e.slots));
@@ -2567,9 +2536,7 @@
                 }
             }
             if (missionNumber == 1 && heroIds.length == 5) {
-                console.log("Зашли+++++++++++++++++++++++++++++++++++++++");
-                console.log('missionNumber ', JSON.stringify(missionNumber));
-                console.log('heroFragments ', JSON.stringify(heroFragments));
+                console.log('%cЗашли закупиться героями для 1 миссии ', 'color: green; font-weight: bold;');
                 let numberOfHeroes = heroFragments.filter(item => item !== 0).length;
                 console.log('numberOfHeroes ', JSON.stringify(numberOfHeroes));
                 if (numberOfHeroes < 5) {
@@ -2578,9 +2545,9 @@
                 return;
             }
 
-            if (missionNumber < 4 && lives >=2){
-                console.log("Зашли//////////////////////////////////////////////");
-                return;
+            if (missionNumber > 1 && missionNumber < 4 && lives >=2 && purchaseNumber >= 2){
+                console.log('%cЗашли, чтобы пораньше выйти с закупок ', 'color: green; font-weight: bold;');
+                return false;
             }
 
             //Купить питомцев
@@ -2890,7 +2857,52 @@
             coins.value = await Caller.send('inventoryGet').then((e) => e.coin[1080]);
         }
     }
+    async function selectPets(petTeam) {
+        console.log('Команда питомцев ', JSON.stringify(petTeam));
+        //Получить id питомцев
+        let allPets = Object.values(lib.data.pet).map(e => e.id)
 
+        let savedPetsToCompleteChapter = petTeam ?? getSaveVal('savedPetsToCompleteChapter', []);
+
+        console.log('savedPetsToCompleteChapter ', JSON.stringify(savedPetsToCompleteChapter));
+        let chekPets = [];
+        let pets = [];
+        for (let pet of allPets) {
+            chekPets.push({
+                name:pet,
+                label: cheats.translate(`LIB_HERO_NAME_${pet}`),
+                checked: savedPetsToCompleteChapter.includes(pet),
+            });
+        }
+        chekPets.sort((a, b) => a.label.localeCompare(b.label));
+
+        let answer = await popup.confirm(
+            I18N('NHR_SELECT_PETS'),
+            [
+                { msg: I18N('NHR_NEXT'), result: true, color: 'green' },
+                { msg: I18N('BTN_CANCEL'), result: false, isCancel: true, color: 'red' },
+            ],
+            chekPets
+        );
+        if (!answer) {
+            await returnToNewCharacterMenu();
+            return;
+        }
+        const taskList = popup.getCheckBoxes();
+        for (let pet of taskList) {
+            if (pet.checked) {
+                pets.push(Number(pet.name));
+            }
+        }
+        if (pets.length > 0) {
+            if (!petTeam){
+                savedPetsToCompleteChapter = [...pets];
+                setSaveVal('savedPetsToCompleteChapter', savedPetsToCompleteChapter);
+            }
+
+        }
+        return pets;
+    }
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     async function attackTitanMission(missionId, chapterId, heroes, firstSpiritSkills, boss = false) {
         try {
