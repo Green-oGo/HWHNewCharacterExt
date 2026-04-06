@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.42
+// @version          2.44
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -138,12 +138,7 @@
 
         NHR_TEAM_HERO_N0: 'You can enter it here. Or there. We\'re not picky',
         NHR_TEAM_HERO_MY_DARLING: `<span style="color: #FFB347; font-size: 25px; font-style: italic; font-family: 'Georgia';">My Precious</span>`,
-        NHR_TEAM_HERO_N1: 'Galahad Tristan Lyria Ishmael Sebastian',
-        NHR_TEAM_HERO_N2: 'Arachne Orion Augustus Electra Fluffy',
-
         NT_TEAM_TITAN_N0: 'Type wherever you want. We\'ll figure it out',
-        NT_TEAM_TITAN_N1: '<span style="color: Black; text-shadow: none;">Brustar Keros Tenebris</span> <span style="color: Yellow; text-shadow: none;">Iyari Solaris</span>',
-        NT_TEAM_TITAN_N2: '<span style="color: Red; text-shadow: none;">Moloch Ignis Araji</span> <span style="color: Yellow; text-shadow: none;">Iyari Solaris</span>',
 
         NHR_INCORRECT_TEAM: `You\'ve entered something cute and a bit confusing <br>
           But we don't judge. Just do your best. You\'ve got this!`,
@@ -163,7 +158,10 @@
         NHR_SPEND_VALOR_COINS_PROGRESS: 'Eyes closed, deal sealed: <span style="color: LimeGreen;">{exchangeCounter}</span> / {maximumCounter}',
         NHR_SPEND_VALOR_COINS_PROGRESS_2: 'And throw in a little extra',
         NHR_SPEND_VALOR_COINS_PROGRESS_3: 'Just pocket change',
-
+        NHR_WARNING_MESSAGE: `<span style="color: Red;"> Attention, attention! Hear ye, hear ye! </span> <br>
+          You're using an untested version of the extension.
+          If something goes wrong, just wait until the author deigns to wake up, reads every single message saying the script isn't working,
+          scratches his ass, and finally fixes where he screwed up.`,
     };
 
     i18nLangData['en'] = Object.assign(i18nLangData['en'], i18nLangDataEn);
@@ -206,15 +204,15 @@
         NT_COMPLETE_CHAPTER_TITLE: 'Пройти доступную главу',
         NT_ALL_CHAPTERS_COMPLETED: 'Все главы пройдены',
         NT_NOT_ENOUGH_BUFF:
-          `Недостаточно усиления для прохождения <span style="color: LimeGreen; font-family: Times New Roman;"> {chapterNumber} </span> главы <br>
+          `Недостаточно усиления для прохождения <span style="color: LimeGreen; font-family: 'Times New Roman';"> {chapterNumber} </span> главы <br>
           У вас: <span style="color: red;"> {buffAmount} </span> <br>
           Необходимо: <span style="color: LimeGreen;"> {invasionBuff} </span>`,
         NT_ENTER_TITAN_IDS:
-          `Для старта магического движняка в <span style="color: LimeGreen; font-family: Times New Roman;"> {chapterNumber} </span> главе
+          `Для старта магического движняка в <span style="color: LimeGreen; font-family: 'Times New Roman';"> {chapterNumber} </span> главе
           выберите атакующую команду или введите <span style="color: red;"> 5 </span> id титанов  через запятые или дефисы`,
 
         NT_ENTER_HERO_IDS:
-          `Для старта магического движняка в <span style="color: LimeGreen; font-family: Times New Roman;"> {chapterNumber} </span> главе
+          `Для старта магического движняка в <span style="color: LimeGreen; font-family: 'Times New Roman';"> {chapterNumber} </span> главе
           выберите атакующую команду или введите <span style="color: red;"> 5 </span> id героев  через запятые или дефисы`,
 
         NT_MUST_FIVE_TITANS:'Должно быть <span style="color: red;"> 5 </span> титанов',
@@ -279,12 +277,7 @@
 
         NHR_TEAM_HERO_N0: 'Вводить сюда. Или туда. Мы не настаиваем',
         NHR_TEAM_HERO_MY_DARLING: `<span style="color: #FFB347; font-size: 25px; font-style: italic; font-family: 'Georgia';">Моя Прелесть</span>`,
-        NHR_TEAM_HERO_N1: 'Галахад Тристан Лирия Измаил Себастьян',
-        NHR_TEAM_HERO_N2: 'Арахна Орион Август Электра Флафи',
-
         NT_TEAM_TITAN_N0: 'Вводите где хотите. Мы потом сами разберёмся',
-        NT_TEAM_TITAN_N1: '<span style="color: Black; text-shadow: none;">Брустар Керос Тенебрис</span> <span style="color: Yellow; text-shadow: none;">Ияри Солярис</span>',
-        NT_TEAM_TITAN_N2: '<span style="color: Red; text-shadow: none;">Молох Игнис Араджи</span> <span style="color: Yellow; text-shadow: none;">Ияри Солярис</span>',
 
         NHR_INCORRECT_TEAM: `Вы ввели что-то милое и слегка непонятное. <br>
           Но мы не осуждаем. Постарайтесь. У Вас получится!`,
@@ -303,8 +296,10 @@
         NHR_SPEND_VALOR_COINS_PROGRESS: 'Меняю, не глядя: <span style="color: LimeGreen;">{exchangeCounter}</span> / {maximumCounter}',
         NHR_SPEND_VALOR_COINS_PROGRESS_2: 'Ну, и на помидорчики',
         NHR_SPEND_VALOR_COINS_PROGRESS_3: 'Тут ток на помидорчики',
-
-
+        NHR_WARNING_MESSAGE: `<span style="color: Red;"> Внимание, внимание! </span> <br>
+          Вы используете не протестированную версию расширения.
+          Если что-то пойдет не так, просто дождитесь, пока афтор, тобишь я, соизволит проснуться, прочитает все до единого сообщения, что скрипт не работает.
+          Почешет жопу, и наконец то исправит где накосячил.`,
     };
 
     i18nLangData['ru'] = Object.assign(i18nLangData['ru'], i18nLangDataRu);
@@ -323,6 +318,8 @@
             return I18N('NEW_CHARACTER_TITLE');
         },
         result: async function () {
+            //getTeamButton2
+            await popup.confirm(I18N('NHR_WARNING_MESSAGE'));
             await onClickNewCharacterButton();
         },
         color: 'pink',
@@ -726,12 +723,7 @@
             let team = [...new Set(result)];
 
             if (team.length != 5) {
-                if (titanOrHero === 'hero' ) {
-                    await popup.confirm(I18N('NHR_INCORRECT_TEAM'));
-                }
-                if (titanOrHero === 'titan' ) {
-                    await popup.confirm(I18N('NHR_INCORRECT_TEAM'));
-                }
+                await popup.confirm(I18N('NHR_INCORRECT_TEAM'));
                 continue;
             }
             let wrongTeam = false;
@@ -1295,10 +1287,10 @@
 
         const elementalSkils = [4500,4502,4503,4509,4510,4511];
         const primalSkils = [4506,4507,4508,4514,4515];
-        let titanAttackingTeams = {heroes: [4042, 4043, 4010, 4012, 4013], titanSkilsIds: [4500, 4507]};
+        let titanAttackingTeams = {heroes: [[4030,4031,4033,4042,4043], [4010,4012,4013,4042,4043]], titanSkilsIds: [4500, 4507]};
 
         let titanOrHero = 'titan';
-        let titanIds = titanAttackingTeams.heroes;
+        let titanIds = titanAttackingTeams.heroes[0];
 
         if (missionRaid == false) {
             //Id титанов, что необходимо собрать
@@ -1317,7 +1309,7 @@
         console.log('haveTitanFragments ', JSON.stringify(haveTitanFragments));
 
         //Получить id магазина
-        let shopId = await getShopId(chapters, titanOrHero); //1073; // Магазин титанов
+        let shopId = getShopId(titanOrHero); //1073; // Магазин титанов
         console.log('Id магазина ' + shopId);
 
         //Id миссии
@@ -1474,7 +1466,7 @@
             let haveTitanFragments = chapterInfo.invasion.fragments;
 
             //Получить id магазина
-            let shopId = await getShopId(chapters, 'titan'); //1073; // Магазин титанов
+            let shopId = getShopId('titan'); //1073; // Магазин титанов
             console.log('Id магазина титанов ' + shopId);
 
             //Id миссии
@@ -1804,7 +1796,12 @@
         return titanSkillIds;
     }
 
-    async function getShopId(chapters, titanOrHero) {
+    function getShopId(titanOrHero) {
+        let shops = Object.values(lib.data.shop).filter(e => e.requirements?.invasion?.id === invasionInfoId);
+        if (shops.length == 1){
+            return shops[0].id;
+        }
+        let chapters = Object.values(lib.data.invasion.chapter).filter((e) => e.invasionId === invasionInfoId);
         if (chapters[0].settings?.stallShopId) {
             for (let chapter of chapters) {
                 if (chapter.settings.unitType === titanOrHero) {
@@ -1812,13 +1809,13 @@
                 }
             }
         }
-        const result = await Caller.send('shopGetAll');
+        /*const result = await Caller.send('shopGetAll');
         const shops = Object.values(result).filter(e => e.slots[1].cost?.coin);
         for (let shop of shops){
             if (shop.slots[1].cost.coin[1080]){
                 return shop.id;
             }
-        }
+        }*/
         return false;
     }
 
@@ -1928,92 +1925,73 @@
     }
 
     async function getTeamButton (attackingTeams, chapterNumber, titanOrHero) {
+        titanOrHero = titanOrHero.toLowerCase();
+        //getTeamButton2
         console.log('attackingTeams ', JSON.stringify(attackingTeams));
         let cycle = true;
         while (cycle) {
-            let answer = false;
-            if (titanOrHero === 'titan' ) {
-                let message = I18N('NT_ENTER_TITAN_IDS', { chapterNumber: romanNumerals[chapterNumber] });
-                answer = await popup.confirm(message, [
-                    {
-                        msg: I18N('NT_TEAM_TITAN_N0'),
-                        placeholder: '1,2,3,4,5',
-                        isInput: true,
-                        color: 'green',
-                    },
-                    {
-                        msg: I18N('NT_TEAM_TITAN_N1'),
-                        isInput: true,
-                        default: '4030,4031,4033,4042,4043',
-                        color: 'green',
-                    },
-                    {
-                        msg: I18N('NT_TEAM_TITAN_N2'),
-                        isInput: true,
-                        default: '4010,4012,4013,4042,4043',
-                        color: 'green',
-                    },
-                    {
-                        msg: I18N('NT_COMPLETE_CHAPTER_CANCEL'),
-                        result: false,
-                        isCancel: true,
-                        color: 'red',
-                    },
-                ]);
-            }
-            if (titanOrHero === 'hero' ) {
-                //buyHeroesAndPets2
-                let savedCommandForHeroesChapter = getSaveVal('savedCommandForHeroesChapter', '');
-                let savedCommand = [];
-                let teamExists = false;
-                if (savedCommandForHeroesChapter.length > 1) {
-                    savedCommand = savedCommandForHeroesChapter.split(',').map(Number);
-                    if (savedCommand.length != 5) {
-                        savedCommand = savedCommandForHeroesChapter.split('-').map(Number);
-                    }
-                    teamExists = attackingTeams.some(arr => arr.every((val, i) => val === savedCommand[i]));
+            let savedCommandForChapter = titanOrHero === 'hero' ? getSaveVal('savedCommandForHeroesChapter', '') : getSaveVal('savedCommandForTitansChapter', '');
+            let savedCommand = [];
+            let teamExists = false;
+            if (savedCommandForChapter.length > 1) {
+                savedCommand = savedCommandForChapter.split(',').map(Number);
+                if (savedCommand.length != 5) {
+                    savedCommand = savedCommandForChapter.split('-').map(Number);
                 }
-                let message = I18N('NT_ENTER_HERO_IDS', { chapterNumber: romanNumerals[chapterNumber] });
-                let buttons = [];
+                teamExists = attackingTeams.some(arr => arr.every((val, i) => val === savedCommand[i]));
+            }
+            let buttons = [];
+            buttons.push(
+                {
+                    msg: `<span style="font-size: 16px;">${I18N(titanOrHero === 'hero' ? 'NHR_TEAM_HERO_N0' : 'NT_TEAM_TITAN_N0' )}</span>`,
+                    placeholder: '1,2,3,4,5',
+                    isInput: true,
+                    color: 'green',
+                },
+            );
+            if (savedCommandForChapter.length > 1 && !teamExists) {
                 buttons.push(
                     {
-                        msg: I18N('NHR_TEAM_HERO_N0'),
-                        placeholder: '1,2,3,4,5',
+                        msg: I18N('NHR_TEAM_HERO_MY_DARLING'),
                         isInput: true,
+                        default: savedCommandForChapter,
                         color: 'green',
                     },
                 );
-                if (savedCommandForHeroesChapter.length > 1 && !teamExists) {
-                    buttons.push(
-                        {
-                            msg: I18N('NHR_TEAM_HERO_MY_DARLING'),
-                            isInput: true,
-                            default: savedCommandForHeroesChapter,
-                            color: 'green',
-                        },
-                    );
-                }
-                for (let team of attackingTeams){
-                    buttons.push(
-                        {
-                            msg: team.map(e => cheats.translate(`LIB_HERO_NAME_${e}`)).join(', '),
-                            isInput: true,
-                            default: team,
-                            color: 'green',
-                        },
-                    );
+            }
+            for (let team of attackingTeams){
+                let msg = titanOrHero === 'hero' ? `<span style="font-size: 16px;">${team.map(e => cheats.translate(`LIB_HERO_NAME_${e}`)).join(', ')}</span>`
+                :team.map((e, index) => {
+                    let color = e >= 4040 ? 'Yellow'
+                              : e >= 4030 ? '#1A1A1A'
+                              : e >= 4020 ? 'Lime'
+                              : e >= 4010 ? 'red'
+                              : e >= 4000 ? 'MediumBlue'
+                              : '#FFFFFF';
+                    let comma = index !== team.length - 1 ? ', ' : '';
+                    return `<span style="color: ${color}; text-shadow: none; font-size: 18px;">${cheats.translate(`LIB_HERO_NAME_${e}`)}${comma}</span>`;
+                }).join('');
 
-                }
                 buttons.push(
                     {
-                        msg: I18N('NT_COMPLETE_CHAPTER_CANCEL'),
-                        result: false,
-                        isCancel: true,
-                        color: 'red',
+                        msg: msg,
+                        isInput: true,
+                        default: team,
+                        color: 'green',
                     },
                 );
-                answer = await popup.confirm(message, buttons);
+
             }
+            buttons.push(
+                {
+                    msg: I18N('NT_COMPLETE_CHAPTER_CANCEL'),
+                    result: false,
+                    isCancel: true,
+                    color: 'red',
+                },
+            );
+            let message = I18N(titanOrHero === 'hero' ? 'NT_ENTER_HERO_IDS' : 'NT_ENTER_TITAN_IDS', { chapterNumber: romanNumerals[chapterNumber] });
+            let answer = await popup.confirm(message, buttons);
 
             if (!answer) {
                 return false;
@@ -2026,12 +2004,7 @@
             let team = [...new Set(result)];
 
             if (team.length != 5) {
-                if (titanOrHero === 'hero' ) {
-                    await popup.confirm(I18N('NHR_INCORRECT_TEAM'));
-                }
-                if (titanOrHero === 'titan' ) {
-                    await popup.confirm(I18N('NHR_INCORRECT_TEAM'));
-                }
+                await popup.confirm(I18N('NHR_INCORRECT_TEAM'));
                 continue;
             }
             let wrongTeam = false;
@@ -2072,6 +2045,7 @@
                     await popup.confirm(I18N('NHR_INCORRECT_TEAM'));
                     continue;
                 }
+                setSaveVal('savedCommandForTitansChapter', answer);
                 return team;
             }
         }
@@ -2463,11 +2437,11 @@
     }*/
 
     async function buyHeroesAndPets2 (missionNumber, lives, heroIds, pets, spendCoins = false) {
-        let chapters = Object.values(lib.data.invasion.chapter).filter((e) => e.invasionId === invasionInfoId);
+        //let chapters = Object.values(lib.data.invasion.chapter).filter((e) => e.invasionId === invasionInfoId);
         let titanOrHero = 'hero';
         let shopPinSlot = false;
         //Получить id магазина
-        let shopId = await getShopId(chapters, titanOrHero); //2020 Магазин титанов
+        let shopId = getShopId(titanOrHero); //2020 Магазин
         console.log('Зашли в магазин');
         console.log('Id магазина ' + shopId);
         console.log('heroIds ', JSON.stringify(heroIds));
@@ -2475,17 +2449,20 @@
 
         //Получить атакующую команду
         let haveFragments = await getAttackingTeam();
-        //let heroes = haveFragments.heroes;
         let allHeroes = haveFragments.allHeroes;
         let allAvailableFragments = haveFragments.allAvailableFragments;
 
         //Фрагменты героев
-        let heroFragments = [0, 0, 0, 0, 0];
-        for (let i = 0; i < 5; i++) {
+        let heroFragments = heroIds.length === 5 ? [0, 0, 0, 0, 0]
+                          : heroIds.length === 3 ? [0, 0, 0]
+                          : [];
+
+        for (let i = 0; i < heroFragments.length; i++) {
             if (allAvailableFragments[heroIds[i]]) {
                 heroFragments[i] = allAvailableFragments[heroIds[i]];
             }
         }
+
         //Продать героев
         if (missionNumber >= 4 && heroIds.length == 5) {
             //Продать героев
