@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.44
+// @version          2.45
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -58,28 +58,28 @@
         NT_HEROES_COLLECTED: 'All heroes have been collected',
         NT_COLLECT_EVERYTHING: 'Collect everything',
         NT_COLLECT_EVERYTHING_TITLE: 'Collect heroes, titans, totems, pets',
-        NT_BOSS_WAS_KILLED: 'The Chapter <span style="color: LimeGreen; font-family: Times New Roman;"> {chapterNumber} </span> boss didn\'t appreciate our health-conscious approach... to his health.',
+        NT_BOSS_WAS_KILLED: `The Chapter <span style="color: LimeGreen; font-family: 'Times New Roman';"> {chapterNumber} </span> boss didn\'t appreciate our health-conscious approach... to his health.`,
         NT_BOSS_WAS_KILLED_SET_PROGRESS_1: 'All done. <span style="color: LimeGreen;">Boss defeated</span>. Collecting trophies...',
         NT_BOSS_WAS_KILLED_SET_PROGRESS_2: '<br>Oh no, our loot is too much for this humble bag\'s capacity.',
         NT_BOSS_WAS_KILLED_SET_PROGRESS_3: '<br>Urgently calling the porters guild.',
         NT_BOSS_WAS_KILLED_SET_PROGRESS_4: '<br>All of it!',
         NT_BOSS_WAS_KILLED_SET_PROGRESS_5: '<br><span style="color: LimeGreen;">Stand by.</span> Arrival in approximately seconds ',
-        NT_BOSS_WAS_NOT_KILLED: 'The Chapter <span style="color: LimeGreen; font-family: Times New Roman;"> {chapterNumber} </span> boss was not killed <br> Reload the game and try to kill the boss yourself',
+        NT_BOSS_WAS_NOT_KILLED: `The Chapter <span style="color: LimeGreen; font-family: 'Times New Roman';"> {chapterNumber} </span> boss was not killed <br> Reload the game and try to kill the boss yourself`,
         NT_COMPLETE_CHAPTER: 'Complete the chapter',
         NT_COMPLETE_CHAPTER_START: 'Kick off the Magic Vibe',
         NT_COMPLETE_CHAPTER_CANCEL: 'Hogwarts cancellation',
         NT_COMPLETE_CHAPTER_TITLE: 'Complete an available chapter',
         NT_ALL_CHAPTERS_COMPLETED: 'All chapters completed',
         NT_NOT_ENOUGH_BUFF:
-          `Not enough buff to complete Chapter <span style="color: LimeGreen; font-family: Times New Roman;"> {chapterNumber} </span>
+          `Not enough buff to complete Chapter <span style="color: LimeGreen; font-family: 'Times New Roman';"> {chapterNumber} </span>
           You have: <span style="color: red;"> {buffAmount} </span> <br>
           You need: <span style="color: LimeGreen;"> {invasionBuff} </span>`,
 
         NT_ENTER_TITAN_IDS:
-          `To kick off the magic vibe in chapter <span style="color: LimeGreen; font-family: Times New Roman;"> {chapterNumber} </span>,
+          `To kick off the magic vibe in chapter <span style="color: LimeGreen; font-family: 'Times New Roman';"> {chapterNumber} </span>,
           choose an attacking team or enter <span style="color: red;"> 5 </span> titan IDs using commas or dashes`,
         NT_ENTER_HERO_IDS:
-          `To kick off the magic vibe in chapter <span style="color: LimeGreen; font-family: Times New Roman;"> {chapterNumber} </span>,
+          `To kick off the magic vibe in chapter <span style="color: LimeGreen; font-family: 'Times New Roman';"> {chapterNumber} </span>,
           choose an attacking team or enter <span style="color: red;"> 5 </span> hero IDs using commas or dashes`,
 
         NT_MUST_FIVE_TITANS: 'There must be <span style="color: red;"> 5 </span> titans',
@@ -105,16 +105,16 @@
         NHR_COMPLETE_TASKS: 'Complete the tasks',
         NHR_COMPLETE_TASKS_TITLE: 'Complete event tasks: collect heroes, buy pets, spend coins',
         NHR_TASKS_COMPLETED: 'The tasks have been completed',
-        NHR_LIVES_ARE_OVER: 'Failed to complete chapter <span style="color: LimeGreen; font-family: Times New Roman;"> {chapterNumber} </span>. Lives are over. Try again',
+        NHR_LIVES_ARE_OVER: `Failed to complete chapter <span style="color: LimeGreen; font-family: 'Times New Roman';"> {chapterNumber} </span>. Lives are over. Try again`,
         NHR_SHOPPING: 'Make purchases...',
         NHR_NOTHING_HERE_1: 'What\'s this? Where is it? When? Booooooooooosss...',
         NHR_NOTHING_HERE_2: 'Nobody\'s heeere! ',
         NHR_NOTHING_HERE_3: 'And nobody here either.',
         NHR_NOTHING_HERE_4: 'If he\'s not there, then what\'s supposed to be here?',
-        NHR_COMPLETE_CHAPTER_N1: 'Raid for Chapter <span style="font-family: Times New Roman;">I</span>',
+        NHR_COMPLETE_CHAPTER_N1: `Raid for Chapter <span style="font-family: 'Times New Roman';">I</span>`,
         NHR_COMPLETE_CHAPTER_N1_TITLE: 'Complete chapter I one time',
-        NHR_COMPLETE_CHAPTER_N1_COMPLETED: 'Chapter <span style="color: LimeGreen; font-family: Times New Roman;">I</span> raid completed',
-        NHR_CHAPTER_N1_RAID: 'Starting <span style="color: LimeGreen;">{raidNumber}</span>/{numberOfRraids} raid chapter <span style="font-family: Times New Roman;">I</span>',
+        NHR_COMPLETE_CHAPTER_N1_COMPLETED: `Chapter <span style="color: LimeGreen; font-family: 'Times New Roman';">I</span> raid completed`,
+        NHR_CHAPTER_N1_RAID: `Starting <span style="color: LimeGreen;">{raidNumber}</span>/{numberOfRraids} raid chapter <span style="font-family: 'Times New Roman';">I</span>`,
         NHR_MAKE_OTHER_TASKS: '<br>Moving on to other quests',
         NHR_GET_HERO_IDS: 'Hero IDs',
         NHR_GET_HERO_IDS_TITLE: 'Get a list of hero IDs',
@@ -131,8 +131,8 @@
 
         NHR_APPLY: 'Spend it before I change my mind',
         NHR_NOT_APPLY: 'Oh no, I\'ve already changed my mind',
-        NHR_COMPLETE_CHAPTER_N2: 'Let\'s begin to complete <span style="color: LimeGreen; font-family: Times New Roman;"> II </span> chapter',
-        NHR_COMPLETE_CHAPTER_N1_MESSAGE: 'Complete chapter <span style="color: LimeGreen; font-family: Times New Roman;"> I </span>?',
+        NHR_COMPLETE_CHAPTER_N2: `Let\'s begin to complete <span style="color: LimeGreen; font-family: 'Times New Roman';"> II </span> chapter`,
+        NHR_COMPLETE_CHAPTER_N1_MESSAGE: `Complete chapter <span style="color: LimeGreen; font-family: 'Times New Roman';"> I </span>?`,
         NHR_COMPLETE_CHAPTER_N1_APPLY: 'Click if you\'re brave',
         NHR_COMPLETE_CHAPTER_N1_NOT_APPLY: 'Nah, I\'m losing my nerve',
 
@@ -147,7 +147,7 @@
         NHR_ATTACK_ARCHDEMON: 'Attack the Archdemon',
         NHR_NO_CHAPTER: 'The Archdemon is unavailable. Complete at least one chapter.',
 
-        NHR_CHAPTER:'Chapter_ <span style= "font-family: Times New Roman;">{chapterNumber}</span>',
+        NHR_CHAPTER:`Chapter_ <span style= "font-family: 'Times New Roman';">{chapterNumber}</span>`,
         NHR_SELECT_CHAPTER: 'Select a chapter',
         NHR_NEXT: 'Next',
         NHR_NO_TALISMAN: '<span style="color: Red;"> The required talisman is missing </span>',
@@ -162,6 +162,7 @@
           You're using an untested version of the extension.
           If something goes wrong, just wait until the author deigns to wake up, reads every single message saying the script isn't working,
           scratches his ass, and finally fixes where he screwed up.`,
+        NHR_ANY_OF_THE_TALISMANS: `<span style="color: LimeGreen;"> Oh wow, a choice? Eh, just take whatever they throw at you </span>`,
     };
 
     i18nLangData['en'] = Object.assign(i18nLangData['en'], i18nLangDataEn);
@@ -191,13 +192,13 @@
         NT_HEROES_COLLECTED: 'Все герои собраны',
         NT_COLLECT_EVERYTHING: 'Собрать все',
         NT_COLLECT_EVERYTHING_TITLE: 'Собрать героев, титанов, тотемы, питомцев',
-        NT_BOSS_WAS_KILLED: 'Босс <span style="color: LimeGreen; font-family: Times New Roman;"> {chapterNumber} </span> главы не пережил нашего искреннего интереса к его здоровью',
+        NT_BOSS_WAS_KILLED: `Босс <span style="color: LimeGreen; font-family: 'Times New Roman';"> {chapterNumber} </span> главы не пережил нашего искреннего интереса к его здоровью`,
         NT_BOSS_WAS_KILLED_SET_PROGRESS_1: 'Готовенько. <span style="color: LimeGreen;">Босс повержен</span>. Собираем трофеи...',
         NT_BOSS_WAS_KILLED_SET_PROGRESS_2: '<br>О нет, размеры добычи превосходят скромные возможности этого мешка.',
         NT_BOSS_WAS_KILLED_SET_PROGRESS_3: '<br>Срочно вызываем гильдию носильщиков!',
         NT_BOSS_WAS_KILLED_SET_PROGRESS_4: '<br>Всю!',
         NT_BOSS_WAS_KILLED_SET_PROGRESS_5: '<br><span style="color: LimeGreen;">Ожидайте.</span> Прибытие, примерно секунд через ',
-        NT_BOSS_WAS_NOT_KILLED: 'Босса <span style="color: LimeGreen; font-family: Times New Roman;"> {chapterNumber} </span> главы не убили <br> Перезагрузите игру, и попробуйте убить босса самостоятельно',
+        NT_BOSS_WAS_NOT_KILLED: `Босса <span style="color: LimeGreen; font-family: 'Times New Roman';"> {chapterNumber} </span> главы не убили <br> Перезагрузите игру, и попробуйте убить босса самостоятельно`,
         NT_COMPLETE_CHAPTER: 'Пройти главу',
         NT_COMPLETE_CHAPTER_START: 'Старт магического движняка',
         NT_COMPLETE_CHAPTER_CANCEL: 'Отмена Хогвартса',
@@ -239,7 +240,7 @@
         NHR_COMPLETE_TASKS_TITLE: 'Выполнить задания ивента: собрать героев, купить питомцев, потратить монеты',
         NHR_TASKS_COMPLETED: 'Задания выполнены',
         NHR_LIVES_ARE_OVER:
-          `Дорогой дневник, мне не подобрать слов, чтобы описать боль и унижение, которые были получены при походе на босса <span style="color: LimeGreen; font-family: Times New Roman;"> {chapterNumber} </span> главы.
+          `Дорогой дневник, мне не подобрать слов, чтобы описать боль и унижение, которые были получены при походе на босса <span style="color: LimeGreen; font-family: 'Times New Roman';"> {chapterNumber} </span> главы.
           Наши богатыри были втянуты в яростный бой, точнее не бой, а именно пиздилку, мочилово, где всё равнялось, даже морды с асфальтом.
           И после нескольких дней этого хаоса и резни наступил бесславный и постыдный конец нашему походу.<br> <br>
           Конец. Конец. Концы в воду! Давай по новой!`,
@@ -248,10 +249,10 @@
         NHR_NOTHING_HERE_2: 'Здеся никого нет!',
         NHR_NOTHING_HERE_3: 'И здесь тоже нет.',
         NHR_NOTHING_HERE_4: 'Если там нет, то чё здесь должно быть?',
-        NHR_COMPLETE_CHAPTER_N1: 'Рейд <span style="font-family: Times New Roman;">I</span> главы',
+        NHR_COMPLETE_CHAPTER_N1: `Рейд <span style="font-family: 'Times New Roman';">I</span> главы`,
         NHR_COMPLETE_CHAPTER_N1_TITLE: 'Пройти I главу 1 раз',
-        NHR_COMPLETE_CHAPTER_N1_COMPLETED: 'Рейд <span style="color: LimeGreen; font-family: Times New Roman;">I</span> главы выполнен',
-        NHR_CHAPTER_N1_RAID: 'Выполняем <span style="color: LimeGreen;">{raidNumber}</span>/{numberOfRraids} рейд <span style="font-family: Times New Roman;">I</span> главы',
+        NHR_COMPLETE_CHAPTER_N1_COMPLETED: `Рейд <span style="color: LimeGreen; font-family: 'Times New Roman';">I</span> главы выполнен`,
+        NHR_CHAPTER_N1_RAID: `Выполняем <span style="color: LimeGreen;">{raidNumber}</span>/{numberOfRraids} рейд <span style="font-family: 'Times New Roman';">I</span> главы`,
         NHR_MAKE_OTHER_TASKS: '<br> Приступаем к выполнению других заданий',
         NHR_GET_HERO_IDS: 'Id героев',
         NHR_GET_HERO_IDS_TITLE: 'Получить список Id героев',
@@ -269,9 +270,9 @@
 
         NHR_APPLY: 'Потратить, пока не передумал',
         NHR_NOT_APPLY: 'А нет, не успел. Уже передумал',
-        NHR_COMPLETE_CHAPTER_N2: 'Проходим <span style="color: LimeGreen; font-family: Times New Roman;"> II </span> главу',
+        NHR_COMPLETE_CHAPTER_N2: `Проходим <span style="color: LimeGreen; font-family: 'Times New Roman';"> II </span> главу`,
 
-        NHR_COMPLETE_CHAPTER_N1_MESSAGE: 'Выполнить рейд <span style="color: LimeGreen; font-family: Times New Roman;"> I </span> главы?',
+        NHR_COMPLETE_CHAPTER_N1_MESSAGE: `Выполнить рейд <span style="color: LimeGreen; font-family: 'Times New Roman';"> I </span> главы?`,
         NHR_COMPLETE_CHAPTER_N1_APPLY: 'Жми, если смелый',
         NHR_COMPLETE_CHAPTER_N1_NOT_APPLY: 'Нет, чёт я очкую',
 
@@ -285,7 +286,7 @@
         NHR_ARCHDEMON: 'Архидемон',
         NHR_ATTACK_ARCHDEMON: 'Атаковать Архидемона',
         NHR_NO_CHAPTER: 'Архидемон недоступен. Пройдите хотя бы одну главу.',
-        NHR_CHAPTER:'Глава_ <span style= "font-family: Times New Roman;">{chapterNumber}</span>',
+        NHR_CHAPTER:`Глава_ <span style= "font-family: 'Times New Roman';">{chapterNumber}</span>`,
         NHR_SELECT_CHAPTER: 'Выберите главу',
         NHR_NEXT: 'Дальше',
         NHR_NO_TALISMAN: '<span style="color: Red;"> Нет необходимого талисмана </span>',
@@ -300,6 +301,7 @@
           Вы используете не протестированную версию расширения.
           Если что-то пойдет не так, просто дождитесь, пока афтор, тобишь я, соизволит проснуться, прочитает все до единого сообщения, что скрипт не работает.
           Почешет жопу, и наконец то исправит где накосячил.`,
+        NHR_ANY_OF_THE_TALISMANS: `<span style="color: LimeGreen;"> Мне выбирать штоли? Неее. Что дадут — то и бери </span>`,
     };
 
     i18nLangData['ru'] = Object.assign(i18nLangData['ru'], i18nLangDataRu);
@@ -319,7 +321,9 @@
         },
         result: async function () {
             //getTeamButton2
-            await popup.confirm(I18N('NHR_WARNING_MESSAGE'));
+            //await popup.confirm(I18N('NHR_WARNING_MESSAGE'));
+            //let talismanId = await chooseTalisman();
+            //console.log(talismanId);
             await onClickNewCharacterButton();
         },
         color: 'pink',
@@ -515,370 +519,7 @@
             answer();
         }
     }
-    //****************************************************************************************************
-    //****************************************************************************************************
-    //****************************************************************************************************
-    //****************************************************************************************************
-    async function attackArchdemon() {
-        //Получить состояние на карте
-        let invasionInfo = await Caller.send('invasion_getInfo');
-        let farmedChapters = invasionInfo.farmedChapters.sort();
-        let buffAmount = invasionInfo.buffAmount;
-        //let chapters = Object.values(lib.data.invasion.chapter).filter((e) => e.invasionId === invasionInfoId);
-        let titanOrHero = 'hero';
-        let missionRaid = false;
-        console.log('invasionInfoId ', JSON.stringify(invasionInfoId));
 
-        if (farmedChapters.length == 0){
-            confShow(I18N('NHR_NO_CHAPTER'));
-        }
-
-        //Получить id главы для атаки
-        let savedChapter = getSaveVal('savedChapter', 0);
-        let chapterId = 0;
-        let chapterNumber = 0;
-        let completedChapters = [];
-        let counter = 1;
-        for (let chapter of farmedChapters) {
-            completedChapters.push({
-                name:chapter,
-                label: I18N('NHR_CHAPTER', {chapterNumber: romanNumerals[counter]}),
-                checked: chapter == savedChapter,
-            });
-            counter ++;
-        }
-        let cycle = true;
-        while (cycle) {
-            let answer = await popup.confirm(
-                I18N('NHR_SELECT_CHAPTER'),
-                [
-                    { msg: I18N('NHR_NEXT'), result: true, color: 'green' },
-                    { msg: I18N('BTN_CANCEL'), result: false, isCancel: true, color: 'red' },
-                ],
-                completedChapters
-            );
-            if (!answer) {
-                await returnToNewCharacterMenu();
-                return;
-            }
-            const taskList = popup.getCheckBoxes();
-            chapterNumber = 0;
-            for (let chapter of taskList) {
-                chapterNumber++;
-                if (chapter.checked) {
-                    chapterId = Number(chapter.name);
-                    setSaveVal('savedChapter', chapterId);
-                    cycle = false;
-                    break;
-                }
-            }
-        }
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-        //Получить id талисмана
-        let allTalismans = Object.values(lib.data.invasion.talismans).map(e => e.id)
-        let savedTalismanId = getSaveVal('savedTalismanId', 0);
-        let chekTalismans = [];
-        let talismanId = 0;
-
-        for (let talisman of allTalismans) {
-            chekTalismans.push({
-                name:talisman,
-                label: cheats.translate(`LIB_TALISMAN_NAME_${talisman}`),
-                checked: talisman == savedTalismanId,
-            });
-        }
-        cycle = true;
-        while (cycle) {
-            let answer = await popup.confirm(
-                I18N('NHR_SELECT_TALISMAN'),
-                [
-                    { msg: I18N('NHR_NEXT'), result: true, color: 'green' },
-                    { msg: I18N('BTN_CANCEL'), result: false, isCancel: true, color: 'red' },
-                ],
-                chekTalismans
-            );
-            if (!answer) {
-                await returnToNewCharacterMenu();
-                return;
-            }
-            const taskList = popup.getCheckBoxes();
-            for (let talisman of taskList) {
-                if (talisman.checked) {
-                    talismanId = Number(talisman.name);
-                    setSaveVal('savedTalismanId', talismanId);
-                    cycle = false;
-                    break;
-                }
-            }
-        }
-///////////////////////////////////////////////////////////////////////////////////////////////////
-        //Получить id питомцев
-        let allPets = Object.values(lib.data.pet).map(e => e.id)
-        let savedPetIds = getSaveVal('savedPetIds', []);
-        console.log(savedPetIds);
-        let chekPets = [];
-        let pets = [];
-        for (let pet of allPets) {
-            chekPets.push({
-                name:pet,
-                label: cheats.translate(`LIB_HERO_NAME_${pet}`),
-                checked: savedPetIds.includes(pet),
-            });
-        }
-        chekPets.sort((a, b) => a.label.localeCompare(b.label));
-        cycle = true;
-        while (cycle) {
-            let answer = await popup.confirm(
-                I18N('NHR_SELECT_PETS'),
-                [
-                    { msg: I18N('NHR_NEXT'), result: true, color: 'green' },
-                    { msg: I18N('BTN_CANCEL'), result: false, isCancel: true, color: 'red' },
-                ],
-                chekPets
-            );
-            if (!answer) {
-                await returnToNewCharacterMenu();
-                return;
-            }
-            const taskList = popup.getCheckBoxes();
-            for (let pet of taskList) {
-                if (pet.checked) {
-                    pets.push(Number(pet.name));
-                }
-            }
-            if (pets.length > 0) {
-                savedPetIds = [...pets];
-                setSaveVal('savedPetIds', savedPetIds);
-                cycle = false;
-            }
-        }
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-        //Получить id атакующих героев
-        let teams = [[13,17,60,68,72], [59,40,48,52,68]];
-        let savedCommandForArchdemon = getSaveVal('savedCommandForArchdemon', '');
-        let savedCommand = [];
-        let teamExists = false;
-        if (savedCommandForArchdemon.length > 1) {
-            savedCommand = savedCommandForArchdemon.split(',').map(Number);
-            if (savedCommand.length != 5) {
-                savedCommand = savedCommandForArchdemon.split('-').map(Number);
-            }
-            teamExists = teams.some(arr => arr.every((val, i) => val === savedCommand[i]));
-        }
-
-        let heroIds = [];
-        cycle = true;
-        while (cycle) {
-            let message = I18N('NT_ENTER_HERO_IDS', { chapterNumber: romanNumerals[chapterNumber] });
-            let buttons = [];
-
-            buttons.push(
-                {
-                    msg: I18N('NHR_TEAM_HERO_N0'),
-                    placeholder: '1,2,3,4,5',
-                    isInput: true,
-                    color: 'green',
-                },
-            );
-            if (savedCommandForArchdemon.length > 1 && !teamExists) {
-                buttons.push(
-                    {
-                        msg: I18N('NHR_TEAM_HERO_MY_DARLING'),
-                        isInput: true,
-                        default: savedCommandForArchdemon,
-                        color: 'green',
-                    },
-                );
-            }
-            for (let team of teams){
-                buttons.push(
-                    {
-                        msg: team.map(e => cheats.translate(`LIB_HERO_NAME_${e}`)).join(', '),
-                        isInput: true,
-                        default: team,
-                        color: 'green',
-                    },
-                );
-
-            }
-            buttons.push(
-                {
-                    msg: I18N('NT_COMPLETE_CHAPTER_CANCEL'),
-                    result: false,
-                    isCancel: true,
-                    color: 'red',
-                },
-            );
-            let answer = await popup.confirm(message, buttons);
-
-            if (!answer) {
-                return false;
-            }
-            let result = answer.split(',');
-            if (result.length != 5) {
-                result = answer.split('-');
-            }
-            let team = [...new Set(result)];
-
-            if (team.length != 5) {
-                await popup.confirm(I18N('NHR_INCORRECT_TEAM'));
-                continue;
-            }
-            let wrongTeam = false;
-            for (let p in team) {
-                team[p] = +team[p].trim()
-                if (Number.isNaN(team[p])) {
-                    await popup.confirm(I18N('NHR_INCORRECT_TEAM'));
-                    wrongTeam = true;
-                    break;
-                }
-            }
-            if (wrongTeam) {
-                continue;
-            }
-
-            let allHeros = Object.values(lib.data.hero).filter(e => e.type === 'hero' && !e.roleExtended.includes('boss')).map(e => e.id);
-            //Исключаем Лариску и Черепах
-            allHeros = allHeros.filter((e) => e != 63 && e != 65);
-
-            let isIncluded = team.every(hero => allHeros.includes(hero));
-            if(!isIncluded) {
-                await popup.confirm(I18N('NHR_INCORRECT_TEAM'));
-                continue;
-            }
-            heroIds = team;
-            setSaveVal('savedCommandForArchdemon', answer);
-            cycle = false;
-        }
-        console.log(heroIds);
-/////////////////////////////////////////////////////////////////////////////////////////
-        setProgress(I18N('NT_LETS_START'), false);
-        await new Promise((e) => setTimeout(e, 3000));
-
-        //Активировать главу
-        let chapterInfo = await Caller.send({ name: 'invasion_setActiveChapter', args: { chapterId: chapterId } });
-
-        //Id миссии
-        let firstMissionId = chapterInfo.invasion.actions[0].payload.id;
-        let missionId = firstMissionId;
-        let lastMissionId = chapterInfo.invasion.actions[7].payload.id;
-        let missionNumber = 1;
-
-        //Жизни
-        let lives = chapterInfo.invasion.lives;
-        console.log('firstMissionId ' + firstMissionId);
-        console.log('missionId ' + missionId);
-        console.log('lives ' + lives);
-
-        let spendCoins = false;
-        while (lives > 0) {
-            //Купить героев
-            setProgress(I18N('NHR_SHOPPING'), false);
-            let result = await buyHeroesAndPets2(missionNumber, lives, heroIds, pets, spendCoins);
-
-            //Текущая миссия босс или нет
-            let boss = false;
-
-            //Атаковать / не атаковать босса
-            if (missionId == lastMissionId) {
-                //Произвести атаку босса, если его ни разу не убили
-                boss = true;
-            }
-
-            //Получить атакующую команду
-            let have = await getAttackingTeam();
-            let heroes = have.heroes;
-            let havePets = have.other;
-            let allHeroes = have.allHeroes;
-            let pet;
-            let petsFavor = {};
-
-            const haveAllAttackingTeams = (arr, values) => {
-                return values.every(v => arr.includes(v));
-            };
-            if (haveAllAttackingTeams(allHeroes, heroIds)) {
-                heroes = heroIds;
-            }
-            console.log('allHeroes ', JSON.stringify(allHeroes));
-            console.log('heroes ', JSON.stringify(heroes));
-
-            if (havePets.length > 0) {
-                pet = havePets[0];
-                //Покровительство
-                const petLib = lib.getData('pet');
-                for (let heroId of heroes) {
-                    /** Поиск питомца для героя */
-                    for (let petId of havePets) {
-                        if (petLib[petId].favorHeroes.includes(heroId)) {
-                            petsFavor[heroId] = petId;
-                            havePets = havePets.filter((e) => e != petId);
-                            break;
-                        };
-                    }
-                }
-            }
-
-            //Проходим миссию
-            if (!boss) {
-                setProgress(I18N('NT_MISSION_PROGRESS', {missionNumber: missionNumber}), false);
-            } else {
-                setProgress(I18N('NT_MISSION_PROGRESS_BOSS'), false);
-            }
-            await new Promise((e) => setTimeout(e, 2000));
-
-            let error = await attackHeroMission(missionId, chapterId, heroes, pet, boss, petsFavor);
-            if (error) {
-                await popup.confirm(I18N('NEW_CHARACTER_SOMETHING_WENT_WRONG'));
-                return;
-            }
-
-            //Результат атаки
-            let invasionInfo = await Caller.send('invasion_getInfo');
-            lives = invasionInfo.lives;
-            if (lives == 0) {
-                setProgress('', true);
-                await popup.confirm(I18N('NHR_LIVES_ARE_OVER', { chapterNumber: romanNumerals[chapterNumber]}));
-                return;
-            }
-
-            //Результат атаки босса
-            if (boss) {
-                await popup.confirm(I18N('NHR_ARCHDEMON_IS_PREPARED'));
-                cheats.refreshGame();
-                return;
-            }
-
-            const talismans = Object.values(await Caller.send('invasion_rollTalismans'));
-            if (talismans.length > 0) {
-                if (talismans.includes(talismanId)){
-                    await Caller.send({name: "invasion_selectTalisman", args: {talismanId: talismanId}});
-                    setProgress(I18N('NHR_BOUGHT_TALISMAN'), false);
-                    await new Promise((e) => setTimeout(e, 2000));
-                } else {
-                    setProgress(I18N('NHR_NO_TALISMAN'), false);
-                    await new Promise((e) => setTimeout(e, 2000));
-                    //Сбросить главу
-                    await Caller.send('invasion_resetChapter');
-                    //Активировать главу
-                    await Caller.send({ name: 'invasion_setActiveChapter', args: { chapterId: chapterId } });
-                    //Получить информацию
-                    invasionInfo = await Caller.send('invasion_getInfo');
-                }
-            }
-
-            let missions = Object.values(invasionInfo.actions);
-            let nextMissionIndex = missions.findIndex(e => e.payload.wins === 0);
-            if (nextMissionIndex == -1) {
-                setProgress('', true);
-                await popup.confirm(I18N('NHR_LIVES_ARE_OVER', { chapterNumber: romanNumerals[chapterNumber]}));
-                return;
-            }
-            missionId = missions[nextMissionIndex].payload.id;
-            missionNumber = nextMissionIndex + 1;
-        }
-    }
 
     async function completeHerosTasks() {
         //Получить список героев, которых нужно собрать
@@ -1064,6 +705,9 @@
         if (missionRaid == false) {
             for (let chapter of chapters) {
                 if (!farmedChapters.includes(chapter.id)) {
+//2022000024 первая глава
+//2022000025 вторая глава
+//if (chapter.id == 2022000025) {
                     chapterId = chapter.id;
                     if (chapter.requirements?.invasionBuff) {
                         invasionBuff = chapter.requirements.invasionBuff;
@@ -1114,7 +758,12 @@
     }
 
     async function completeHeroesChapter(chapters, chapterId, chapterNumber, farmedChapters, spendCoins = false, missionRaid = false) {
-
+        /*Питомцы
+        6000 - Фенрис   //6005 - Альбрус
+        6001 - Оливер	//6006 - Аксель
+        6002 - Мерлин   //6007 - Бисквит
+        6003 - Мара	    //6008 - Хорус
+        6004 - Каин	    //6009 - Векс*/
         //Атакующие герои: Галахад, Тристан, Лирия, Кира, Себастьян.
         //Каскад Орион Август Электра Флафи
         let heroAttackingTeams = {heroes: [[2, 54, 67, 3, 48], [13, 64, 69, 70, 71]],
@@ -1122,29 +771,36 @@
 
         let titanOrHero = 'hero';
         let heroIds = heroAttackingTeams.heroes[0];
-
-        /*Питомцы
-        6000 - Фенрис   //6005 - Альбрус
-        6001 - Оливер	//6006 - Аксель
-        6002 - Мерлин   //6007 - Бисквит
-        6003 - Мара	    //6008 - Хорус
-        6004 - Каин	    //6009 - Векс*/
         let pets = heroAttackingTeams.pets[0];
+        let talismanId = 0;
+        let boughtTalisman = false;
         console.log('Герои для рейдов ', JSON.stringify(heroIds));
         console.log('Питомци для рейдов ', JSON.stringify(pets));
+
 
         if (missionRaid == false) {
             //Кнопка ввод Id героев, что необходимо собрать
             console.log("chapterNumber: chapterNumber " + chapterNumber);
             let resultGetTeamButton = await getTeamButton(heroAttackingTeams.heroes, chapterNumber, titanOrHero);
+            if (resultGetTeamButton === 'cancel'){
+                return;
+            }
             heroIds = resultGetTeamButton.team;
             let teamIndex = resultGetTeamButton.teamIndex;
             console.log('heroIds ', JSON.stringify(heroIds));
             console.log('teamIndex ', JSON.stringify(teamIndex));
-
+            //Получить id питомцев
             pets = await selectPets(heroAttackingTeams.pets?.[teamIndex] ?? null);
+            if (pets === 'cancel'){
+                return;
+            }
             console.log('pets ', JSON.stringify(pets));
-
+            //Получить id талисмана
+            talismanId = await chooseTalisman();
+            if (talismanId === 'cancel'){
+                return;
+            }
+            console.log('talismanId ', JSON.stringify(talismanId));
         }
 
         setProgress(I18N('NT_LETS_START'), false);
@@ -1169,7 +825,7 @@
         while (lives > 0) {
             //Купить героев
             setProgress(I18N('NHR_SHOPPING'), false);
-            let result = await buyHeroesAndPets2(missionNumber, lives, heroIds, pets, spendCoins);
+            let result = await buyHeroesAndPets(missionNumber, lives, heroIds, pets, spendCoins);
 
             //Текущая миссия босс или нет
             let boss = false;
@@ -1254,6 +910,15 @@
                 return;
             }
 
+            //Купить талисман
+            if (boughtTalisman === false){
+                boughtTalisman = await buyTalisman(talismanId, missionRaid);
+                //Перезапустить главу если нет нужного талисмана
+                if (boughtTalisman === false){
+                    invasionInfo = await resetChapter(chapterId);
+                }
+            }
+
             let missions = Object.values(invasionInfo.actions);
             let nextMissionIndex = missions.findIndex(e => e.payload.wins === 0);
             if (nextMissionIndex !== -1) {
@@ -1295,10 +960,10 @@
         if (missionRaid == false) {
             //Id титанов, что необходимо собрать
             titanIds = await getTeamButton(titanAttackingTeams.heroes, chapterNumber, titanOrHero);
-            console.log('titanIds ', JSON.stringify(titanIds));
-            if (!titanIds) {
+            if (titanIds === 'cancel') {
                 return;
             }
+            console.log('titanIds ', JSON.stringify(titanIds));
         }
         setProgress(I18N('NT_LETS_START'), false);
         await new Promise((e) => setTimeout(e, 3000));
@@ -1612,6 +1277,7 @@
         }
 
         for (let attempt = 1; attempt <= 15; attempt++) {
+            let boughtTalisman = false;
             //Получить героев, которых нужно собрать
             let heroIdsToBuy = await getHeroIdsToBuy();
             if (heroIdsToBuy.length == 0) {
@@ -1682,7 +1348,7 @@
             while (lives > 0) {
                 setProgress(I18N('NHR_SHOPPING'), false);
                 //Купить героев
-                let result = await buyHeroesAndPets2(missionNumber, lives, heroIds, pets, spendCoins);
+                let result = await buyHeroesAndPets(missionNumber, lives, heroIds, pets, spendCoins);
 
                 //Выйти, если босс побежден и полностью собрали три героя
                 if (result && farmedChapters.includes(chapterId)) {
@@ -1751,6 +1417,10 @@
                 if (boss == true) {
                     break;
                 }
+                //Купить талисман
+                if (boughtTalisman === false){
+                    boughtTalisman = await buyTalisman();
+                }
                 //Результат атаки
                 let invasionInfo = await Caller.send('invasion_getInfo');
                 farmedChapters = invasionInfo.farmedChapters;
@@ -1817,6 +1487,85 @@
             }
         }*/
         return false;
+    }
+
+    async function chooseTalisman() {
+        //Получить id талисмана
+        let allTalismans = Object.values(lib.data.invasion.talismans).map(e => e.id)
+        let savedTalismanId = getSaveVal('savedTalismanId', 0);
+        let chekTalismans = [];
+
+        chekTalismans.push({
+            name: 0,
+            label: I18N('NHR_ANY_OF_THE_TALISMANS'),
+            //title: cheats.translate(`LIB_TALISMAN_NAME_${talisman}`),
+            radio: 'test',
+            checked: savedTalismanId == 0,
+        });
+
+        for (let talisman of allTalismans) {
+            chekTalismans.push({
+                name: talisman,
+                label: cheats.translate(`LIB_TALISMAN_NAME_${talisman}`),
+                //title: cheats.translate(`LIB_TALISMAN_NAME_${talisman}`),
+                radio: 'test',
+                checked: talisman == savedTalismanId,
+            });
+        }
+        let cycle = true;
+        while (cycle) {
+            let answer = await popup.confirm(
+                I18N('NHR_SELECT_TALISMAN'),
+                [
+                    { msg: I18N('NHR_NEXT'), result: true, color: 'green' },
+                    { msg: I18N('BTN_CANCEL'), result: false, isCancel: true, color: 'red' },
+                ],
+                chekTalismans
+            );
+            if (!answer) {
+                return 'cancel';
+            }
+            const taskList = popup.getCheckBoxes();
+            for (let talisman of taskList) {
+                if (talisman.checked) {
+                    let talismanId = Number(talisman.name);
+                    setSaveVal('savedTalismanId', talismanId);
+                    cycle = false;
+                    return talismanId;
+                }
+            }
+        }
+    }
+
+    async function buyTalisman(talismanId = 0, missionRaid = false) {
+        const talismans = Object.values(await Caller.send('invasion_rollTalismans'));
+        if (talismans.length === 0) return 0;
+        if (missionRaid || talismanId == 0){
+            await Caller.send({name: "invasion_selectTalisman", args: {talismanId: talismans[0]}});
+            if (!missionRaid){
+                setProgress(I18N('NHR_BOUGHT_TALISMAN'), false);
+                await new Promise((e) => setTimeout(e, 2000));
+            }
+            return true;
+        }
+        if (talismans.includes(talismanId)){
+            await Caller.send({name: "invasion_selectTalisman", args: {talismanId: talismanId}});
+            setProgress(I18N('NHR_BOUGHT_TALISMAN'), false);
+            await new Promise((e) => setTimeout(e, 2000));
+            return true;
+        }
+        return false;
+    }
+
+    async function resetChapter(chapterId) {
+        setProgress(I18N('NHR_NO_TALISMAN'), false);
+        await new Promise((e) => setTimeout(e, 2000));
+        //Сбросить главу
+        await Caller.send('invasion_resetChapter');
+        //Активировать главу
+        await Caller.send({ name: 'invasion_setActiveChapter', args: { chapterId: chapterId } });
+        //Получить информацию
+        return await Caller.send('invasion_getInfo');
     }
 
     function getChapterId(chapters, titanOrHero) {
@@ -1994,7 +1743,7 @@
             let answer = await popup.confirm(message, buttons);
 
             if (!answer) {
-                return false;
+                return 'cancel';
             }
 
             let result = answer.split(',');
@@ -2264,179 +2013,7 @@
         return false;
     }
 
-    /*async function buyHeroesAndPets (shopId, heroIds, heroFragments, pets, spendCoins = false) {
-        console.log('Зашли в магазин');
-        console.log('heroIds ', JSON.stringify(heroIds));
-        console.log('heroFragments ', JSON.stringify(heroFragments));
-        console.log('pets ', JSON.stringify(pets));
-
-
-        let coins = await Caller.send('inventoryGet').then((e) => e.coin[1080]);
-        console.log('Монеты: ' + coins);
-
-        let shopSlots = null;
-        let boughtAllHeroes = false;
-
-        while (coins >= 12) {
-            try {
-                //Получить состояние магазина
-                if (!shopSlots) {
-                    shopSlots = await Caller.send([{ name: 'shopGet', args: { shopId: shopId } }]).then((e) => Object.values(e.slots));
-                }
-                //Если куплены все герои, питомци, и нет задания на трату монет, выйти и заменить героев для покупки
-                if (boughtAllHeroes && pets.length == 0 && !spendCoins ) {
-                    return true;
-                }
-
-                //Если куплены все герои, питомци, и есть задание на трату монет
-                if (boughtAllHeroes && pets.length == 0 && spendCoins ) {
-                    console.log('%cТратим монеты ', 'color: red; font-weight: bold;');
-                    for (let slot of shopSlots) {
-                        if (coins >= slot.cost.coin[1080]) {
-                            await Caller.send({ name: 'shopBuy', args: { cost: {}, reward: {}, shopId: shopId, slot: slot.id } });
-                            coins -= slot.cost.coin[1080];
-                        }
-                    }
-                }
-                //Купить героев
-                if (!boughtAllHeroes) {
-                    for (let slot of shopSlots) {
-                        //Пропустить скрытые лоты и питомцев
-                        if (slot.reward.invasionFragmentHeroRand || slot.reward.invasionFragmentPet) {
-                            continue;
-                        }
-                        //Покупки героев, когда собираем героев
-                        if (heroIds.length <= 3) {
-                            for (let t = 0; t < heroIds.length; t++) {
-                                if (slot.reward.invasionFragmentHero?.[heroIds[t]] && heroFragments[t] < 7) {
-                                    if (coins >= slot.cost.coin[1080]) {
-                                        let shopBuy = await Caller.send({ name: 'shopBuy', args: { cost: {}, reward: {}, shopId: shopId, slot: slot.id } });
-                                        console.log('%cКуплен герой ', 'color: green; font-weight: bold;');
-                                        coins -= slot.cost.coin[1080];
-                                        heroFragments[t] += slot.reward.invasionFragmentHero?.[heroIds[t]];
-
-                                        //Если c первым героем есть другой
-                                        for (let i = t+1; i < heroIds.length; i++) {
-                                            if (slot.reward.invasionFragmentHero?.[heroIds[i]]) {
-                                                console.log('%cВторой герой в комплекте ', 'color: green; font-weight: bold;');
-                                                heroFragments[i] += slot.reward.invasionFragmentHero?.[heroIds[i]];
-                                                break;
-                                            }
-                                        }
-                                    } else {
-                                        await Caller.send({ name: 'shop_pinSlot', args: { shopId: shopId, slotId: slot.id } });
-                                    }
-                                    break;
-                                }
-                            }
-                        }
-
-                        //Покупки героев, когда проходим миссии
-                        if (heroIds.length > 3) {
-                            //Если 2 героя в одном слоте
-                            if (Object.values(slot.reward.invasionFragmentHero).length >= 2) {
-                                for (let t = 0; t < heroIds.length; t++) {
-                                    let boughtSlot = false;
-                                    if (slot.reward.invasionFragmentHero?.[heroIds[t]] && heroFragments[t] < 7) {
-                                        //Если c первым героем есть другой
-                                        for (let i = t+1; i < heroIds.length; i++) {
-                                            if (slot.reward.invasionFragmentHero?.[heroIds[i]]) {
-                                                if (coins >= slot.cost.coin[1080]) {
-                                                    console.log('%cДва героя по цене троих! Выгодно. Покупаем. ', 'color: green; font-weight: bold;');
-                                                    let shopBuy = await Caller.send({ name: 'shopBuy', args: { cost: {}, reward: {}, shopId: shopId, slot: slot.id } });
-                                                    heroFragments[t] += slot.reward.invasionFragmentHero?.[heroIds[t]];
-                                                    heroFragments[i] += slot.reward.invasionFragmentHero?.[heroIds[i]];
-                                                    coins -= slot.cost.coin[1080];
-                                                } else {
-                                                    await Caller.send({ name: 'shop_pinSlot', args: { shopId: shopId, slotId: slot.id } });
-                                                }
-                                                boughtSlot = true;
-                                                break;
-                                            }
-                                        }
-                                    }
-                                    if (boughtSlot) {
-                                        break;
-                                    }
-                                }
-                            }
-                            //Если 1 герой в слоте
-                            if (Object.values(slot.reward.invasionFragmentHero).length == 1) {
-                                for (let t = 0; t < heroIds.length; t++) {
-                                    if (slot.reward.invasionFragmentHero?.[heroIds[t]] && heroFragments[t] < 7) {
-                                        if (coins >= slot.cost.coin[1080]) {
-                                            let shopBuy = await Caller.send({ name: 'shopBuy', args: { cost: {}, reward: {}, shopId: shopId, slot: slot.id } });
-                                            console.log('%cКуплен герой ', 'color: green; font-weight: bold;');
-                                            coins -= slot.cost.coin[1080];
-                                            heroFragments[t] += slot.reward.invasionFragmentHero?.[heroIds[t]];
-                                        } else {
-                                            await Caller.send({ name: 'shop_pinSlot', args: { shopId: shopId, slotId: slot.id } });
-                                        }
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    //Куплены все герои или нет
-                    for (let fragments of heroFragments) {
-                        if (fragments < 7) {
-                            boughtAllHeroes = false;
-                            break;
-                        }
-                        boughtAllHeroes = true;
-                    }
-                }
-
-                //Купить питомцев
-                if (pets.length > 0) {
-                    for (let slot of shopSlots) {
-                        //Пропустить скрытые лоты и героев
-                        if (slot.reward.invasionFragmentHeroRand || slot.reward.invasionFragmentHero) {
-                            continue;
-                        }
-                        for (let s = 0; s < pets.length; s++) {
-                            if (slot.reward.invasionFragmentPet?.[pets[s]] ) {
-                                if (coins >= slot.cost.coin[1080]) {
-                                    let shopBuy = await Caller.send({ name: 'shopBuy', args: { cost: {}, reward: {}, shopId: shopId, slot: slot.id } });
-                                    console.log('%cКуплен питомец ', 'color: green; font-weight: bold;');
-                                    coins -= slot.cost.coin[1080];
-                                    pets.splice(pets.indexOf(pets[s]), 1)
-                                } else {
-                                    await Caller.send({ name: 'shop_pinSlot', args: { shopId: shopId, slotId: slot.id } });
-                                }
-                                break;
-                            }
-                        }
-                        if (pets.length == 0) {
-                            break;
-                        }
-                    }
-                }
-            } catch (e) {
-                console.log('%cПроизошла ошибка в магазине героев', 'color: red; font-weight: bold;');
-                console.error(e);
-                coins = await Caller.send('inventoryGet').then((e) => e.coin[1080]);
-            }
-
-            //Обновить магазин
-            if (coins >= 15) {
-                try {
-                    shopSlots = await Caller.send([{ name: 'shopRefresh', args: { shopId: shopId } }]).then((e) => Object.values(e.slots));
-                    coins -= 3;
-                    console.log('Обновили магазин. Осталось монет: ' + coins);
-                } catch (e) {
-                    shopSlots = await Caller.send([{ name: 'shopRefresh', args: { shopId: shopId } }]).then((e) => Object.values(e.slots));
-                    coins = await Caller.send('inventoryGet').then((e) => e.coin[1080]);
-                }
-            } else {
-                break;
-            }
-        }
-        return false;
-    }*/
-
-    async function buyHeroesAndPets2 (missionNumber, lives, heroIds, pets, spendCoins = false) {
+    async function buyHeroesAndPets (missionNumber, lives, heroIds, pets, spendCoins = false) {
         //let chapters = Object.values(lib.data.invasion.chapter).filter((e) => e.invasionId === invasionInfoId);
         let titanOrHero = 'hero';
         let shopPinSlot = false;
@@ -2862,8 +2439,7 @@
             chekPets
         );
         if (!answer) {
-            await returnToNewCharacterMenu();
-            return;
+            return 'cancel';
         }
         const taskList = popup.getCheckBoxes();
         for (let pet of taskList) {
@@ -3011,6 +2587,370 @@
             return false;
         } catch (e) {
             return true;
+        }
+    }
+    //****************************************************************************************************
+    //****************************************************************************************************
+    //****************************************************************************************************
+    //****************************************************************************************************
+    async function attackArchdemon() {
+        //Получить состояние на карте
+        let invasionInfo = await Caller.send('invasion_getInfo');
+        let farmedChapters = invasionInfo.farmedChapters.sort();
+        let buffAmount = invasionInfo.buffAmount;
+        //let chapters = Object.values(lib.data.invasion.chapter).filter((e) => e.invasionId === invasionInfoId);
+        let titanOrHero = 'hero';
+        let missionRaid = false;
+        console.log('invasionInfoId ', JSON.stringify(invasionInfoId));
+
+        if (farmedChapters.length == 0){
+            confShow(I18N('NHR_NO_CHAPTER'));
+        }
+
+        //Получить id главы для атаки
+        let savedChapter = getSaveVal('savedChapter', 0);
+        let chapterId = 0;
+        let chapterNumber = 0;
+        let completedChapters = [];
+        let counter = 1;
+        for (let chapter of farmedChapters) {
+            completedChapters.push({
+                name:chapter,
+                label: I18N('NHR_CHAPTER', {chapterNumber: romanNumerals[counter]}),
+                checked: chapter == savedChapter,
+            });
+            counter ++;
+        }
+        let cycle = true;
+        while (cycle) {
+            let answer = await popup.confirm(
+                I18N('NHR_SELECT_CHAPTER'),
+                [
+                    { msg: I18N('NHR_NEXT'), result: true, color: 'green' },
+                    { msg: I18N('BTN_CANCEL'), result: false, isCancel: true, color: 'red' },
+                ],
+                completedChapters
+            );
+            if (!answer) {
+                await returnToNewCharacterMenu();
+                return;
+            }
+            const taskList = popup.getCheckBoxes();
+            chapterNumber = 0;
+            for (let chapter of taskList) {
+                chapterNumber++;
+                if (chapter.checked) {
+                    chapterId = Number(chapter.name);
+                    setSaveVal('savedChapter', chapterId);
+                    cycle = false;
+                    break;
+                }
+            }
+        }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+        //Получить id талисмана
+        let allTalismans = Object.values(lib.data.invasion.talismans).map(e => e.id)
+        let savedTalismanId = getSaveVal('savedTalismanId', 0);
+        let chekTalismans = [];
+        let talismanId = 0;
+
+        for (let talisman of allTalismans) {
+            chekTalismans.push({
+                name:talisman,
+                label: cheats.translate(`LIB_TALISMAN_NAME_${talisman}`),
+                checked: talisman == savedTalismanId,
+            });
+        }
+        cycle = true;
+        while (cycle) {
+            let answer = await popup.confirm(
+                I18N('NHR_SELECT_TALISMAN'),
+                [
+                    { msg: I18N('NHR_NEXT'), result: true, color: 'green' },
+                    { msg: I18N('BTN_CANCEL'), result: false, isCancel: true, color: 'red' },
+                ],
+                chekTalismans
+            );
+            if (!answer) {
+                await returnToNewCharacterMenu();
+                return;
+            }
+            const taskList = popup.getCheckBoxes();
+            for (let talisman of taskList) {
+                if (talisman.checked) {
+                    talismanId = Number(talisman.name);
+                    setSaveVal('savedTalismanId', talismanId);
+                    cycle = false;
+                    break;
+                }
+            }
+        }
+///////////////////////////////////////////////////////////////////////////////////////////////////
+        //Получить id питомцев
+        let allPets = Object.values(lib.data.pet).map(e => e.id)
+        let savedPetIds = getSaveVal('savedPetIds', []);
+        console.log(savedPetIds);
+        let chekPets = [];
+        let pets = [];
+        for (let pet of allPets) {
+            chekPets.push({
+                name:pet,
+                label: cheats.translate(`LIB_HERO_NAME_${pet}`),
+                checked: savedPetIds.includes(pet),
+            });
+        }
+        chekPets.sort((a, b) => a.label.localeCompare(b.label));
+        cycle = true;
+        while (cycle) {
+            let answer = await popup.confirm(
+                I18N('NHR_SELECT_PETS'),
+                [
+                    { msg: I18N('NHR_NEXT'), result: true, color: 'green' },
+                    { msg: I18N('BTN_CANCEL'), result: false, isCancel: true, color: 'red' },
+                ],
+                chekPets
+            );
+            if (!answer) {
+                await returnToNewCharacterMenu();
+                return;
+            }
+            const taskList = popup.getCheckBoxes();
+            for (let pet of taskList) {
+                if (pet.checked) {
+                    pets.push(Number(pet.name));
+                }
+            }
+            if (pets.length > 0) {
+                savedPetIds = [...pets];
+                setSaveVal('savedPetIds', savedPetIds);
+                cycle = false;
+            }
+        }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+        //Получить id атакующих героев
+        let teams = [[13,17,60,68,72], [59,40,48,52,68]];
+        let savedCommandForArchdemon = getSaveVal('savedCommandForArchdemon', '');
+        let savedCommand = [];
+        let teamExists = false;
+        if (savedCommandForArchdemon.length > 1) {
+            savedCommand = savedCommandForArchdemon.split(',').map(Number);
+            if (savedCommand.length != 5) {
+                savedCommand = savedCommandForArchdemon.split('-').map(Number);
+            }
+            teamExists = teams.some(arr => arr.every((val, i) => val === savedCommand[i]));
+        }
+
+        let heroIds = [];
+        cycle = true;
+        while (cycle) {
+            let message = I18N('NT_ENTER_HERO_IDS', { chapterNumber: romanNumerals[chapterNumber] });
+            let buttons = [];
+
+            buttons.push(
+                {
+                    msg: I18N('NHR_TEAM_HERO_N0'),
+                    placeholder: '1,2,3,4,5',
+                    isInput: true,
+                    color: 'green',
+                },
+            );
+            if (savedCommandForArchdemon.length > 1 && !teamExists) {
+                buttons.push(
+                    {
+                        msg: I18N('NHR_TEAM_HERO_MY_DARLING'),
+                        isInput: true,
+                        default: savedCommandForArchdemon,
+                        color: 'green',
+                    },
+                );
+            }
+            for (let team of teams){
+                buttons.push(
+                    {
+                        msg: team.map(e => cheats.translate(`LIB_HERO_NAME_${e}`)).join(', '),
+                        isInput: true,
+                        default: team,
+                        color: 'green',
+                    },
+                );
+
+            }
+            buttons.push(
+                {
+                    msg: I18N('NT_COMPLETE_CHAPTER_CANCEL'),
+                    result: false,
+                    isCancel: true,
+                    color: 'red',
+                },
+            );
+            let answer = await popup.confirm(message, buttons);
+
+            if (!answer) {
+                return false;
+            }
+            let result = answer.split(',');
+            if (result.length != 5) {
+                result = answer.split('-');
+            }
+            let team = [...new Set(result)];
+
+            if (team.length != 5) {
+                await popup.confirm(I18N('NHR_INCORRECT_TEAM'));
+                continue;
+            }
+            let wrongTeam = false;
+            for (let p in team) {
+                team[p] = +team[p].trim()
+                if (Number.isNaN(team[p])) {
+                    await popup.confirm(I18N('NHR_INCORRECT_TEAM'));
+                    wrongTeam = true;
+                    break;
+                }
+            }
+            if (wrongTeam) {
+                continue;
+            }
+
+            let allHeros = Object.values(lib.data.hero).filter(e => e.type === 'hero' && !e.roleExtended.includes('boss')).map(e => e.id);
+            //Исключаем Лариску и Черепах
+            allHeros = allHeros.filter((e) => e != 63 && e != 65);
+
+            let isIncluded = team.every(hero => allHeros.includes(hero));
+            if(!isIncluded) {
+                await popup.confirm(I18N('NHR_INCORRECT_TEAM'));
+                continue;
+            }
+            heroIds = team;
+            setSaveVal('savedCommandForArchdemon', answer);
+            cycle = false;
+        }
+        console.log(heroIds);
+/////////////////////////////////////////////////////////////////////////////////////////
+        setProgress(I18N('NT_LETS_START'), false);
+        await new Promise((e) => setTimeout(e, 3000));
+
+        //Активировать главу
+        let chapterInfo = await Caller.send({ name: 'invasion_setActiveChapter', args: { chapterId: chapterId } });
+
+        //Id миссии
+        let firstMissionId = chapterInfo.invasion.actions[0].payload.id;
+        let missionId = firstMissionId;
+        let lastMissionId = chapterInfo.invasion.actions[7].payload.id;
+        let missionNumber = 1;
+
+        //Жизни
+        let lives = chapterInfo.invasion.lives;
+        console.log('firstMissionId ' + firstMissionId);
+        console.log('missionId ' + missionId);
+        console.log('lives ' + lives);
+
+        let spendCoins = false;
+        while (lives > 0) {
+            //Купить героев
+            setProgress(I18N('NHR_SHOPPING'), false);
+            let result = await buyHeroesAndPets(missionNumber, lives, heroIds, pets, spendCoins);
+
+            //Текущая миссия босс или нет
+            let boss = false;
+
+            //Атаковать / не атаковать босса
+            if (missionId == lastMissionId) {
+                //Произвести атаку босса, если его ни разу не убили
+                boss = true;
+            }
+
+            //Получить атакующую команду
+            let have = await getAttackingTeam();
+            let heroes = have.heroes;
+            let havePets = have.other;
+            let allHeroes = have.allHeroes;
+            let pet;
+            let petsFavor = {};
+
+            const haveAllAttackingTeams = (arr, values) => {
+                return values.every(v => arr.includes(v));
+            };
+            if (haveAllAttackingTeams(allHeroes, heroIds)) {
+                heroes = heroIds;
+            }
+            console.log('allHeroes ', JSON.stringify(allHeroes));
+            console.log('heroes ', JSON.stringify(heroes));
+
+            if (havePets.length > 0) {
+                pet = havePets[0];
+                //Покровительство
+                const petLib = lib.getData('pet');
+                for (let heroId of heroes) {
+                    /** Поиск питомца для героя */
+                    for (let petId of havePets) {
+                        if (petLib[petId].favorHeroes.includes(heroId)) {
+                            petsFavor[heroId] = petId;
+                            havePets = havePets.filter((e) => e != petId);
+                            break;
+                        };
+                    }
+                }
+            }
+
+            //Проходим миссию
+            if (!boss) {
+                setProgress(I18N('NT_MISSION_PROGRESS', {missionNumber: missionNumber}), false);
+            } else {
+                setProgress(I18N('NT_MISSION_PROGRESS_BOSS'), false);
+            }
+            await new Promise((e) => setTimeout(e, 2000));
+
+            let error = await attackHeroMission(missionId, chapterId, heroes, pet, boss, petsFavor);
+            if (error) {
+                await popup.confirm(I18N('NEW_CHARACTER_SOMETHING_WENT_WRONG'));
+                return;
+            }
+
+            //Результат атаки
+            let invasionInfo = await Caller.send('invasion_getInfo');
+            lives = invasionInfo.lives;
+            if (lives == 0) {
+                setProgress('', true);
+                await popup.confirm(I18N('NHR_LIVES_ARE_OVER', { chapterNumber: romanNumerals[chapterNumber]}));
+                return;
+            }
+
+            //Результат атаки босса
+            if (boss) {
+                await popup.confirm(I18N('NHR_ARCHDEMON_IS_PREPARED'));
+                cheats.refreshGame();
+                return;
+            }
+
+            const talismans = Object.values(await Caller.send('invasion_rollTalismans'));
+            if (talismans.length > 0) {
+                if (talismans.includes(talismanId)){
+                    await Caller.send({name: "invasion_selectTalisman", args: {talismanId: talismanId}});
+                    setProgress(I18N('NHR_BOUGHT_TALISMAN'), false);
+                    await new Promise((e) => setTimeout(e, 2000));
+                } else {
+                    setProgress(I18N('NHR_NO_TALISMAN'), false);
+                    await new Promise((e) => setTimeout(e, 2000));
+                    //Сбросить главу
+                    await Caller.send('invasion_resetChapter');
+                    //Активировать главу
+                    await Caller.send({ name: 'invasion_setActiveChapter', args: { chapterId: chapterId } });
+                    //Получить информацию
+                    invasionInfo = await Caller.send('invasion_getInfo');
+                }
+            }
+
+            let missions = Object.values(invasionInfo.actions);
+            let nextMissionIndex = missions.findIndex(e => e.payload.wins === 0);
+            if (nextMissionIndex == -1) {
+                setProgress('', true);
+                await popup.confirm(I18N('NHR_LIVES_ARE_OVER', { chapterNumber: romanNumerals[chapterNumber]}));
+                return;
+            }
+            missionId = missions[nextMissionIndex].payload.id;
+            missionNumber = nextMissionIndex + 1;
         }
     }
 })();
