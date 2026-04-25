@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.45
+// @version          2.46
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -163,6 +163,9 @@
           If something goes wrong, just wait until the author deigns to wake up, reads every single message saying the script isn't working,
           scratches his ass, and finally fixes where he screwed up.`,
         NHR_ANY_OF_THE_TALISMANS: `<span style="color: LimeGreen;"> Oh wow, a choice? Eh, just take whatever they throw at you </span>`,
+        NHR_SELECT_TITAN_SPIRIT_SKILLS: `Choose
+          <br><span style="color: DeepSkyBlue;">Elemental</span> and <span style="color: LimeGreen;"> Primal </span>
+          <br>affinity skills`,
     };
 
     i18nLangData['en'] = Object.assign(i18nLangData['en'], i18nLangDataEn);
@@ -302,6 +305,9 @@
           Если что-то пойдет не так, просто дождитесь, пока афтор, тобишь я, соизволит проснуться, прочитает все до единого сообщения, что скрипт не работает.
           Почешет жопу, и наконец то исправит где накосячил.`,
         NHR_ANY_OF_THE_TALISMANS: `<span style="color: LimeGreen;"> Мне выбирать штоли? Неее. Что дадут — то и бери </span>`,
+        NHR_SELECT_TITAN_SPIRIT_SKILLS: `Выберите
+          <br><span style="color: DeepSkyBlue;">стихийный</span> и <span style="color: LimeGreen;"> первородный </span>
+          <br>навыки влияния тотема`,
     };
 
     i18nLangData['ru'] = Object.assign(i18nLangData['ru'], i18nLangDataRu);
@@ -322,7 +328,7 @@
         result: async function () {
             //getTeamButton2
             //await popup.confirm(I18N('NHR_WARNING_MESSAGE'));
-            //let talismanId = await chooseTalisman();
+            //let talismanId = await chooseTitanSpiritSkills();
             //console.log(talismanId);
             await onClickNewCharacterButton();
         },
@@ -705,9 +711,8 @@
         if (missionRaid == false) {
             for (let chapter of chapters) {
                 if (!farmedChapters.includes(chapter.id)) {
-//2022000024 первая глава
-//2022000025 вторая глава
-//if (chapter.id == 2022000025) {
+//if (chapter.id == 2022000024) { //первая глава
+//if (chapter.id == 2022000025) { //вторая глава
                     chapterId = chapter.id;
                     if (chapter.requirements?.invasionBuff) {
                         invasionBuff = chapter.requirements.invasionBuff;
@@ -952,12 +957,20 @@
 
         const elementalSkils = [4500,4502,4503,4509,4510,4511];
         const primalSkils = [4506,4507,4508,4514,4515];
-        let titanAttackingTeams = {heroes: [[4030,4031,4033,4042,4043], [4010,4012,4013,4042,4043]], titanSkilsIds: [4500, 4507]};
+        let titanAttackingTeams = {heroes: [[4030,4031,4033,4042,4043], [4010,4012,4013,4042,4043]], titanSkilsIds: [4502, 4506]};
 
         let titanOrHero = 'titan';
         let titanIds = titanAttackingTeams.heroes[0];
+        //Навыки тотемов, что необходимо собрать
+        let titanSkilsIds = titanAttackingTeams.titanSkilsIds;
 
         if (missionRaid == false) {
+            //Id тотемов, что необходимо собрать
+            titanSkilsIds = await chooseTitanSpiritSkills();
+            if (titanSkilsIds === 'cancel') {
+                return;
+            }
+            console.log('titanSkilsIds ', JSON.stringify(titanSkilsIds));
             //Id титанов, что необходимо собрать
             titanIds = await getTeamButton(titanAttackingTeams.heroes, chapterNumber, titanOrHero);
             if (titanIds === 'cancel') {
@@ -1000,8 +1013,6 @@
         console.log(titanIds);
         console.log('titanFragments ', JSON.stringify(titanFragments));
 
-        //Навыки тотемов, что необходимо собрать
-        let titanSkilsIds = titanAttackingTeams.titanSkilsIds;
 
         //Фрагменты навыков тотемов
         let titanSkilFragments = [];
@@ -1499,7 +1510,7 @@
             name: 0,
             label: I18N('NHR_ANY_OF_THE_TALISMANS'),
             //title: cheats.translate(`LIB_TALISMAN_NAME_${talisman}`),
-            radio: 'test',
+            radio: 'talisman',
             checked: savedTalismanId == 0,
         });
 
@@ -1508,7 +1519,7 @@
                 name: talisman,
                 label: cheats.translate(`LIB_TALISMAN_NAME_${talisman}`),
                 //title: cheats.translate(`LIB_TALISMAN_NAME_${talisman}`),
-                radio: 'test',
+                radio: 'talisman',
                 checked: talisman == savedTalismanId,
             });
         }
@@ -1575,6 +1586,59 @@
             }
         }
         return false;
+    }
+    async function chooseTitanSpiritSkills() {
+        //Получить id умений
+        const elemental = Object.values(lib.data.titanSpirit.skills).filter(e => e.element !== 'primal').map(e => e.id);
+        const primalIds = Object.values(lib.data.titanSpirit.skills).filter(e => e.element === 'primal').map(e => e.id);
+        let savedTitanSpiritSkillsIds = getSaveVal('savedTitanSpiritSkillsIds', []);
+        let chekTitanSpiritSkills = [];
+
+        for (let skillId of elemental) {
+            chekTitanSpiritSkills.push({
+                name: skillId,
+                label: `<span style="color: DeepSkyBlue;"> ${cheats.translate(`LIB_SKILL_${skillId}`)}</span>`,
+                radio: 'elemental',
+                checked: savedTitanSpiritSkillsIds.includes(skillId),
+            });
+        }
+        for (let skillId of primalIds) {
+            chekTitanSpiritSkills.push({
+                name: skillId,
+                label: `<span style="color: LimeGreen;"> ${cheats.translate(`LIB_SKILL_${skillId}`)}</span>`,
+                radio: 'primalIds',
+                checked: savedTitanSpiritSkillsIds.includes(skillId),
+            });
+        }
+        let cycle = true;
+        while (cycle) {
+            let answer = await popup.confirm(
+                I18N('NHR_SELECT_TITAN_SPIRIT_SKILLS'),
+                [
+                    { msg: I18N('NHR_NEXT'), result: true, color: 'green' },
+                    { msg: I18N('BTN_CANCEL'), result: false, isCancel: true, color: 'red' },
+                ],
+                chekTitanSpiritSkills
+            );
+            if (!answer) {
+                return 'cancel';
+            }
+            const taskList = popup.getCheckBoxes();
+            console.log(taskList);
+            let skillIds = [];
+            for (let skill of taskList) {
+                if (skill.checked) {
+                    skillIds.push(Number(skill.name));
+                }
+            }
+
+            if (skillIds.length > 0){
+                savedTitanSpiritSkillsIds = [...skillIds];
+                setSaveVal('savedTitanSpiritSkillsIds', savedTitanSpiritSkillsIds);
+                cycle = false;
+                return skillIds;
+            }
+        }
     }
 
     function compareVersions(version1, version2) {
