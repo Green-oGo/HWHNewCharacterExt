@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.46
+// @version          2.47
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -163,6 +163,7 @@
           If something goes wrong, just wait until the author deigns to wake up, reads every single message saying the script isn't working,
           scratches his ass, and finally fixes where he screwed up.`,
         NHR_ANY_OF_THE_TALISMANS: `<span style="color: LimeGreen;"> Oh wow, a choice? Eh, just take whatever they throw at you </span>`,
+        NHR_ANY_OF_THE_TALISMANS_TITLE: `If it needs explaining, it's not worth explaining`,
         NHR_SELECT_TITAN_SPIRIT_SKILLS: `Choose
           <br><span style="color: DeepSkyBlue;">Elemental</span> and <span style="color: LimeGreen;"> Primal </span>
           <br>affinity skills`,
@@ -305,6 +306,7 @@
           Если что-то пойдет не так, просто дождитесь, пока афтор, тобишь я, соизволит проснуться, прочитает все до единого сообщения, что скрипт не работает.
           Почешет жопу, и наконец то исправит где накосячил.`,
         NHR_ANY_OF_THE_TALISMANS: `<span style="color: LimeGreen;"> Мне выбирать штоли? Неее. Что дадут — то и бери </span>`,
+        NHR_ANY_OF_THE_TALISMANS_TITLE: `Если надо объяснять, то не надо объяснять`,
         NHR_SELECT_TITAN_SPIRIT_SKILLS: `Выберите
           <br><span style="color: DeepSkyBlue;">стихийный</span> и <span style="color: LimeGreen;"> первородный </span>
           <br>навыки влияния тотема`,
@@ -328,6 +330,7 @@
         result: async function () {
             //getTeamButton2
             //await popup.confirm(I18N('NHR_WARNING_MESSAGE'));
+            //let talismanId = await chooseTalisman();
             //let talismanId = await chooseTitanSpiritSkills();
             //console.log(talismanId);
             await onClickNewCharacterButton();
@@ -1490,37 +1493,33 @@
                 }
             }
         }
-        /*const result = await Caller.send('shopGetAll');
-        const shops = Object.values(result).filter(e => e.slots[1].cost?.coin);
-        for (let shop of shops){
-            if (shop.slots[1].cost.coin[1080]){
-                return shop.id;
-            }
-        }*/
         return false;
     }
 
     async function chooseTalisman() {
         //Получить id талисмана
-        let allTalismans = Object.values(lib.data.invasion.talismans).map(e => e.id)
+        let allTalismans = Object.values(lib.data.invasion.talismans);
+        let buffs = Object.values(lib.data.adventure.buff);
+
         let savedTalismanId = getSaveVal('savedTalismanId', 0);
         let chekTalismans = [];
 
         chekTalismans.push({
             name: 0,
             label: I18N('NHR_ANY_OF_THE_TALISMANS'),
-            //title: cheats.translate(`LIB_TALISMAN_NAME_${talisman}`),
-            radio: 'talisman',
+            title: I18N('NHR_ANY_OF_THE_TALISMANS_TITLE'),
+            radio: 'talismans',
             checked: savedTalismanId == 0,
         });
 
         for (let talisman of allTalismans) {
+
             chekTalismans.push({
                 name: talisman,
-                label: cheats.translate(`LIB_TALISMAN_NAME_${talisman}`),
-                //title: cheats.translate(`LIB_TALISMAN_NAME_${talisman}`),
-                radio: 'talisman',
-                checked: talisman == savedTalismanId,
+                label: cheats.translate(`LIB_TALISMAN_NAME_${talisman.id}`),
+                title: cheats.translate(`${buffs.find(e => e.id === talisman.effectConfig.buffId).localeId}_DESC`),
+                radio: 'talismans',
+                checked: talisman.id == savedTalismanId,
             });
         }
         let cycle = true;
