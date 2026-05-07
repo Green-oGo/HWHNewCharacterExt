@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.50
+// @version          2.52
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -558,29 +558,32 @@
                     await Caller.send(calls);
                 } catch (e) {}
             }
-
-            //Пройти II главу
+        }
+        let invasionInfo = await Caller.send('invasion_getInfo');
+        let farmedChapters = invasionInfo.farmedChapters;
+        //Пройти II главу
+        if(farmedChapters.length < 2){
             setProgress(I18N('NHR_COMPLETE_CHAPTER_N2'), false);
             await new Promise((e) => setTimeout(e, 2000));
             await secondHeroicChapterRaid();
             await new Promise((e) => setTimeout(e, 3000));
-
-
-            //Добрать бои (Выполнить рейды I главы)
-            let battlesWon = await areWinsComplete();
-            if (battlesWon > 0) {
-                //Выполнить рейды I главы
-                let numberOfRraids = Math.ceil((71-battlesWon)/7);
-                for (let i = 1; i <= numberOfRraids; i++) {
-                    setProgress(I18N('NHR_CHAPTER_N1_RAID', {raidNumber:i, numberOfRraids: numberOfRraids}), false);
-                    await new Promise((e) => setTimeout(e, 2000));
-                    await firstHeroicChapterRaid();
-                }
-            }
-
-            //Сбросить главу
-            await Caller.send('invasion_resetChapter');
         }
+
+        //Добрать бои (Выполнить рейды I главы)
+        let battlesWon = await areWinsComplete();
+        if (battlesWon > 0) {
+            //Выполнить рейды I главы
+            let numberOfRraids = Math.ceil((64-battlesWon)/7);
+            for (let i = 1; i <= numberOfRraids; i++) {
+                setProgress(I18N('NHR_CHAPTER_N1_RAID', {raidNumber:i, numberOfRraids: numberOfRraids}), false);
+                await new Promise((e) => setTimeout(e, 2000));
+                await firstHeroicChapterRaid();
+            }
+        }
+
+        //Сбросить главу
+        await Caller.send('invasion_resetChapter');
+
         setProgress('', true);
         await popup.confirm(I18N('NHR_TASKS_COMPLETED'));
 
@@ -2218,7 +2221,7 @@
             if (boughtAllHeroes && pets.length == 0 && spendCoins ) {
                 console.log('%cТратим монеты ', 'color: red; font-weight: bold;');
                 for (let slot of shopSlots) {
-                    if (coins.value >= slot.cost.coin[1080]) {
+                    if (coins.value >= slot.cost.coin[1080] && slot.bought == false) {
                         await Caller.send({ name: 'shopBuy', args: { shopId: shopId, slot: slot.id } });
                         coins.value -= slot.cost.coin[1080];
                     }
