@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.53
+// @version          2.54
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -80,7 +80,7 @@
           choose an attacking team or enter <span style="color: red;"> 5 </span> titan IDs using commas or dashes`,
         NT_ENTER_HERO_IDS:
           `To kick off the magic vibe in chapter <span style="color: LimeGreen; font-family: 'Times New Roman';"> {chapterNumber} </span>,
-          choose an attacking team or enter <span style="color: red;"> 5 </span> hero IDs using commas or dashes
+          choose an attacking team or enter <span style="color: red;"> 5 </span> hero IDs using commas or dashes <br>
           <span style="color: red;"> Heroes who failed the vibe check: </span><br>
           {nameMissingHeroes}<br>`,
 
@@ -344,8 +344,8 @@
         result: async function () {
             //getTeamButton2
             //await popup.confirm(I18N('NHR_WARNING_MESSAGE'));
-            //let talismanId = await chooseTalisman();
-            //let talismanId = await chooseTitanSpiritSkills();
+            //let shopId = 1088;
+            //let coins = {value: 100};
             //console.log(talismanId);
             //await buyRandomHeroes (2024, {value: 90}, 'hero');
             //await buyRandomHeroes (2023, {value: 90}, 'titan');
@@ -2222,12 +2222,17 @@
 
         //Фрагменты героев
         let heroFragments = new Array(heroIds.length).fill(0);
-
         for (let i = 0; i < heroFragments.length; i++) {
             if (allAvailableFragments[heroIds[i]]) {
                 heroFragments[i] = allAvailableFragments[heroIds[i]];
             }
         }
+
+        let heroesProgress = {};
+        heroIds.forEach(id => {
+            heroesProgress[id] = allAvailableFragments[id] || 0;
+        });
+        console.log('heroesProgress ', JSON.stringify(heroesProgress));
 
         //Продать героев
         if (missionNumber >= 4 && heroIds.length == 5) {
@@ -2276,9 +2281,12 @@
             //Купить героев
             if (!boughtAllHeroes) {
                 shopPinSlot = await buyHeroes (shopId, coins, heroIds, shopSlots, heroFragments);
-                //Куплены все герои или нет
+                //shopPinSlot = await buyItems (shopId, coins, shopSlots, heroesProgress, missionNumber);
+                //Куплены все герои
                 boughtAllHeroes = areAllFragmentsBought (heroFragments);
+                //boughtAllHeroes = Object.values(heroesProgress).every(fragments => fragments >= 7);
             }
+
             if (missionNumber == 1) {
                 console.log('%cЗашли закупиться героями для 1 миссии ', 'color: green; font-weight: bold;');
                 await buyRandomHeroes (shopId, coins, titanOrHero);
@@ -2570,6 +2578,63 @@
                                 break;
                             }
                         }
+                    }
+                }
+            }
+        } catch (e) {
+            console.log('%cПроизошла ошибка при покупке героя', 'color: red; font-weight: bold;');
+            console.error(e);
+        }
+        console.log("Вышли с закупки героев " + shopPinSlot);
+        return shopPinSlot;
+    }
+
+    async function buyItems (shopId, coins, shopSlots, itemsProgress, missionNumber) {
+        let shopPinSlot = false;
+        const fragmentSellPrice = 8;
+        console.log("Зашли в закупку героев " + shopPinSlot);
+        try {
+            for (let slot of shopSlots) {
+                //Пропустить скрытые лоты и питомцев
+                if (slot.reward.invasionFragmentHeroRand || slot.reward.invasionFragmentPet) {
+                    continue;
+                }
+                const lot = slot.reward.invasionFragmentHero;
+                const neededFragments = 7;
+                const hasNeededSlot = Object.entries(lot).some(([heroId]) => {
+                    const id = Number(heroId);
+                    const currentFragments = itemsProgress[id];
+                    return itemsProgress.hasOwnProperty(id) && currentFragments < neededFragments;
+                });
+                console.log("hasNeededSlot: " + hasNeededSlot + ' lot: ', JSON.stringify(lot) );
+
+                if (slot.pinned && !hasNeededSlot){
+                    await Caller.send({ name: 'shop_unpinSlot', args: { shopId: shopId, slotId: slot.id } });
+                }
+
+                if (hasNeededSlot) {
+                    if (coins.value >= slot.cost.coin[1080]) {
+                        await Caller.send({ name: 'shopBuy', args: { shopId: shopId, slot: slot.id } });
+                        console.log('%cКуплен лот в магазине', 'color: green; font-weight: bold;');
+                        coins.value -= slot.cost.coin[1080];
+
+                        for (const [heroId, amount] of Object.entries(lot)) {
+                            const id = Number(heroId);
+                            const currentFragments = itemsProgress[id];
+                            if (itemsProgress.hasOwnProperty(id) && currentFragments < neededFragments) {
+                                itemsProgress[id] += amount;
+                            } else {
+                                if (missionNumber >= 4) {
+                                    await Caller.send({name: "invasion_fragmentSell", args: {fragmentId: id, amount: amount}});
+                                    console.log('%cПродали что то ненужное id' + id, 'color: green; font-weight: bold;');
+                                    coins.value += fragmentSellPrice;
+                                }
+                            }
+                        }
+                    } else {
+                        await Caller.send({ name: 'shop_pinSlot', args: { shopId: shopId, slotId: slot.id } });
+                        console.log('%cНет деняг. Зарезервировали на потом', 'color: blue; font-weight: bold;');
+                        shopPinSlot = true;
                     }
                 }
             }
