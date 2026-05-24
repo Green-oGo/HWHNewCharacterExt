@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.56
+// @version          2.57
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -1505,7 +1505,8 @@
         });
 
         for (let talisman of allTalismans) {
-
+            //Исключаем талисман распродажи
+            if (talisman.id == 8009) continue;
             chekTalismans.push({
                 name: talisman.id,
                 label: cheats.translate(`LIB_TALISMAN_NAME_${talisman.id}`),
@@ -1540,7 +1541,8 @@
     }
 
     async function buyTalisman(talismanId = 0, missionRaid = false) {
-        const talismans = Object.values(await Caller.send('invasion_rollTalismans'));
+        //Исключаем талисман Распродажи
+        const talismans = Object.values(await Caller.send('invasion_rollTalismans')).filter(v => v !== 8009);
         console.log(talismans);
         console.log("talismanId " + talismanId);
         if (talismans.length === 0) return 0;
@@ -2894,7 +2896,8 @@
         //Получить состояние на карте
         let invasionInfo = await Caller.send('invasion_getInfo');
         console.log(invasionInfo);
-        let farmedChapters = invasionInfo.farmedChapters.sort();
+        let farmedChapters = invasionInfo.farmedChapters.map(Number).sort();
+        console.log(farmedChapters);
         let buffAmount = invasionInfo.buffAmount;
         let archdemon = true;
         let missionRaid = false;
