@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.55
+// @version          2.56
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -697,7 +697,7 @@
     async function completeChapter(missionRaid = false, titanOrHero = '', secondHeroicChapter = false) {
         //Получить состояние на карте
         let invasionInfo = await Caller.send('invasion_getInfo');
-        let farmedChapters = invasionInfo.farmedChapters;
+        let farmedChapters = invasionInfo.farmedChapters.map(Number);
         let buffAmount = invasionInfo.buffAmount;
         console.log('invasionInfoId ' + invasionInfoId);
         console.log('farmedChapters ', JSON.stringify(farmedChapters));
@@ -840,7 +840,6 @@
                 console.log('%cКонтрольная закупка перед боссом (продать ненужное, купить нужное)', 'color: green; font-weight: bold;');
                 await buyHeroesAndPets(missionNumber, lives, heroIds, pets);
             }
-
             //Текущая миссия босс или нет
             let boss = false;
 
@@ -2089,7 +2088,7 @@
         try {
             for (let slot of shopSlots) {
                 //Пропустить скрытые лоты и навыки тотемов
-                if (slot.reward.invasionFragmentTitanRand || slot.reward.invasionFragmentSkillRand || slot.reward.invasionFragmentSkill) {
+                if (slot.reward.invasionFragmentTitanRand || slot.reward.invasionFragmentSkillRand || slot.reward.invasionFragmentSkill || slot.bought) {
                     continue;
                 }
 
@@ -2149,7 +2148,7 @@
         try {
             for (let slot of shopSlots) {
                 //Пропустить скрытые лоты титанов
-                if (slot.reward.invasionFragmentTitanRand || slot.reward.invasionFragmentTitan) {
+                if (slot.reward.invasionFragmentTitanRand || slot.reward.invasionFragmentTitan || slot.bought) {
                     continue;
                 }
 
@@ -2278,7 +2277,7 @@
             //Если куплены все герои, питомци определить нужно ли тратить монеты
             if (boughtAllHeroes && pets.length == 0) {
                 let spendCoins = await shouldSpendCoins();
-                console.log('shouldSpendCoins ' + shouldSpendCoins);
+                console.log('shouldSpendCoins ' + spendCoins);
                 //Если нет задания на трату монет, выйти и заменить героев для покупки
                 if (!spendCoins ) {
                     return true;
@@ -2291,7 +2290,9 @@
                             coins.value -= slot.cost.coin[1080];
                         }
                     }
-                    shopSlots = await shopRefresh (shopId, coins);
+                    if (coins.value >= 3){
+                        shopSlots = await shopRefresh (shopId, coins);
+                    }
                 }
             }
             //Купить героев
@@ -2487,7 +2488,7 @@
         try {
             for (let slot of shopSlots) {
                 //Пропустить скрытые лоты и питомцев
-                if (slot.reward.invasionFragmentHeroRand || slot.reward.invasionFragmentPet) {
+                if (slot.reward.invasionFragmentHeroRand || slot.reward.invasionFragmentPet || slot.bought) {
                     continue;
                 }
                 if (slot.pinned){
@@ -2614,8 +2615,8 @@
         console.log("Зашли в закупку героев " + shopPinSlot);
         try {
             for (let slot of shopSlots) {
-                //Пропустить скрытые лоты и питомцев
-                if (slot.reward.invasionFragmentHeroRand || slot.reward.invasionFragmentPet) {
+                //Пропустить скрытые лоты и питомцев и уже купленный лот
+                if (slot.reward.invasionFragmentHeroRand || slot.reward.invasionFragmentPet || slot.bought) {
                     continue;
                 }
                 const lot = slot.reward.invasionFragmentHero;
@@ -2677,8 +2678,8 @@
         try {
             for (let slot of shopSlots) {
 
-                //Пропустить скрытые лоты и героев
-                if (slot.reward.invasionFragmentHeroRand || slot.reward.invasionFragmentHero) {
+                //Пропустить скрытые лоты и героев и купленный лот
+                if (slot.reward.invasionFragmentHeroRand || slot.reward.invasionFragmentHero || slot.bought) {
                     continue;
                 }
                 for (let s = 0; s < pets.length; s++) {
