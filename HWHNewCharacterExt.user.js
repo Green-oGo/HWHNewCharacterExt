@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.60
+// @version          2.61
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -77,10 +77,10 @@
 
         NT_ENTER_TITAN_IDS:
           `To kick off the magic vibe in chapter <span style="color: LimeGreen; font-family: 'Times New Roman';"> {chapterNumber} </span>,
-          choose an attacking team or enter <span style="color: red;"> 5 </span> titan IDs using commas or dashes`,
+          choose an attacking team or enter <span style="color: red;"> 5 </span> titan IDs using commas`,
         NT_ENTER_HERO_IDS:
           `To kick off the magic vibe in chapter <span style="color: LimeGreen; font-family: 'Times New Roman';"> {chapterNumber} </span>,
-          choose an attacking team or enter <span style="color: red;"> 5 </span> hero IDs using commas or dashes <br>
+          choose an attacking team or enter <span style="color: red;"> 5 </span> hero IDs using commas <br>
           <span style="color: red;"> Heroes who failed the vibe check: </span><br>
           {nameMissingHeroes}<br>`,
 
@@ -153,7 +153,7 @@
         NHR_ATTACK_ARCHDEMON: 'Attack the Archdemon',
         NHR_NO_CHAPTER: 'The Archdemon is unavailable. Complete at least one chapter.',
 
-        NHR_CHAPTER:`Chapter_ <span style= "font-family: 'Times New Roman';">{chapterNumber}</span>`,
+        NHR_CHAPTER:`Chapter`,
         NHR_SELECT_CHAPTER: 'Select a chapter',
         NHR_NEXT: 'Next',
         NHR_NO_TALISMAN: '<span style="color: Red;"> The required talisman is missing </span>',
@@ -174,6 +174,8 @@
           <br><span style="color: DeepSkyBlue;">Elemental</span> and <span style="color: LimeGreen;"> Primal </span>
           <br>affinity skills`,
         NHR_REMOVE_TUTORIAL_MESSAGES: `Activating 'Been there, done that' mode. See ya, tutorial!`,
+        NHR_SHOULD_SAVE_PETS: `<span style="color: LimeGreen;"> Save the fluffsters </span>`,
+        NHR_SHOULD_SAVE_PETS_TITLE: `Explain what 'save' or 'fluffsters' means?`,
     };
 
     i18nLangData['en'] = Object.assign(i18nLangData['en'], i18nLangDataEn);
@@ -221,7 +223,7 @@
           Необходимо: <span style="color: LimeGreen;"> {invasionBuff} </span>`,
         NT_ENTER_TITAN_IDS:
           `Для старта магического движняка в <span style="color: LimeGreen; font-family: 'Times New Roman';"> {chapterNumber} </span> главе
-          выберите атакующую команду или введите <span style="color: red;"> 5 </span> id титанов  через запятые или дефисы`,
+          выберите атакующую команду или введите <span style="color: red;"> 5 </span> id титанов  через запятые`,
 
         NT_ENTER_HERO_IDS:
           `Для старта магического движняка в <span style="color: LimeGreen; font-family: 'Times New Roman';"> {chapterNumber} </span> главе
@@ -323,6 +325,8 @@
           <br><span style="color: DeepSkyBlue;">стихийный</span> и <span style="color: LimeGreen;"> первородный </span>
           <br>навыки влияния тотема`,
         NHR_REMOVE_TUTORIAL_MESSAGES: `Активируем режим «Я уже всё знаю». До свидания, обучение!`,
+        NHR_SHOULD_SAVE_PETS: `<span style="color: LimeGreen;"> Запомнить пушистикоф </span>`,
+        NHR_SHOULD_SAVE_PETS_TITLE: `Подсказать что такое "запомнить" или "пушистикоф"?`,
     };
 
     i18nLangData['ru'] = Object.assign(i18nLangData['ru'], i18nLangDataRu);
@@ -718,8 +722,8 @@
         if (missionRaid == false) {
             for (let chapter of chapters) {
                 if (!farmedChapters.includes(chapter.id)) {
-//if (chapter.id == 2171000024) { //первая глава
-//if (chapter.id == 2171000025) { //вторая глава
+//if (chapter.id == 2192000024) { //первая глава
+//if (chapter.id == 2192000025) { //вторая глава
                     chapterId = chapter.id;
                     if (chapter.requirements?.invasionBuff) {
                         invasionBuff = chapter.requirements.invasionBuff;
@@ -802,11 +806,12 @@
             console.log('heroIds ', JSON.stringify(heroIds));
             console.log('teamIndex ', JSON.stringify(teamIndex));
             //Получить id питомцев
-            pets = await selectPets(heroAttackingTeams.pets?.[teamIndex] ?? null);
+            pets = await selectPets(heroAttackingTeams.pets?.[teamIndex] ?? []);
             if (pets === 'cancel'){
                 return;
             }
             console.log('pets ', JSON.stringify(pets));
+
             //Получить id талисмана
             talismanId = await chooseTalisman();
             if (talismanId === 'cancel'){
@@ -2710,24 +2715,33 @@
             coins.value = await Caller.send('inventoryGet').then((e) => e.coin[1080]);
         }
     }
-    async function selectPets(petTeam) {
-        console.log('Команда питомцев ', JSON.stringify(petTeam));
+    async function selectPets(petTeam, archdemon = false) {
+        console.log('Переданные питомцы ', JSON.stringify(petTeam));
         //Получить id питомцев
-        let allPets = Object.values(lib.data.pet).map(e => e.id)
+        let allPets = Object.values(lib.data.pet).map(e => e.id);
+        const shouldSavePetsId = 0;
 
-        let savedPetsToCompleteChapter = petTeam ?? getSaveVal('savedPetsToCompleteChapter', []);
+        let savedPets = getSaveVal( archdemon ? 'savedPetsForArchdemon' : 'savedPetsToCompleteChapter', []);
+        savedPets = savedPets.includes(shouldSavePetsId) ? savedPets : petTeam;
+        console.log('savedPets ', JSON.stringify(savedPets));
 
-        console.log('savedPetsToCompleteChapter ', JSON.stringify(savedPetsToCompleteChapter));
         let chekPets = [];
         let pets = [];
+
         for (let pet of allPets) {
             chekPets.push({
                 name:pet,
                 label: cheats.translate(`LIB_HERO_NAME_${pet}`),
-                checked: savedPetsToCompleteChapter.includes(pet),
+                checked: savedPets.includes(pet),
             });
         }
         chekPets.sort((a, b) => a.label.localeCompare(b.label));
+        chekPets.unshift({
+            name:shouldSavePetsId,
+            label: I18N('NHR_SHOULD_SAVE_PETS'),
+            title: I18N('NHR_SHOULD_SAVE_PETS_TITLE'),
+            checked: savedPets.includes(shouldSavePetsId),
+        });
 
         let answer = await popup.confirm(
             I18N('NHR_SELECT_PETS'),
@@ -2747,14 +2761,12 @@
             }
         }
         if (pets.length > 0) {
-            if (!petTeam){
-                savedPetsToCompleteChapter = [...pets];
-                setSaveVal('savedPetsToCompleteChapter', savedPetsToCompleteChapter);
-            }
-
+            setSaveVal(archdemon ? 'savedPetsForArchdemon' : 'savedPetsToCompleteChapter', [...pets]);
         }
+        pets = pets.filter(id => id !== shouldSavePetsId);
         return pets;
     }
+
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     async function attackTitanMission(missionId, chapterId, heroes, firstSpiritSkills, boss = false) {
         try {
@@ -2984,11 +2996,12 @@
         console.log('heroIds ', JSON.stringify(heroIds));
         console.log('teamIndex ', JSON.stringify(teamIndex));
         //Получить id питомцев
-        pets = await selectPets(heroAttackingTeams.pets?.[teamIndex] ?? null);
+        pets = await selectPets(heroAttackingTeams.pets?.[teamIndex] ?? [], archdemon);
         if (pets === 'cancel'){
             return returnToNewHeroMenu();
         }
         console.log('pets ', JSON.stringify(pets));
+
         //Получить id талисмана
         let talismanId = await chooseTalisman();
         if (talismanId === 'cancel'){
