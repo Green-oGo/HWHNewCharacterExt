@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.57
+// @version          2.58
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -553,7 +553,7 @@
     async function completeHerosTasks() {
         setProgress(I18N('NT_LETS_START'), false);
         await new Promise((e) => setTimeout(e, 3000));
-        let farmedChapters = await Caller.send('invasion_getInfo').then((e) => e.farmedChapters);
+        let farmedChapters = (await Caller.send('invasion_getInfo')).farmedChapters.map(Number);
         if (farmedChapters.length == 0) {
             //Убрать сообщения обучения
             setProgress(I18N('NHR_REMOVE_TUTORIAL_MESSAGES'), false);
@@ -598,7 +598,7 @@
     async function completeTitansTasks() {
         setProgress(I18N('NT_LETS_START'), false);
         await new Promise((e) => setTimeout(e, 3000));
-        let farmedChapters = await Caller.send('invasion_getInfo').then((e) => e.farmedChapters);
+        let farmedChapters = (await Caller.send('invasion_getInfo')).farmedChapters.map(Number);
         if (farmedChapters.length == 0) {
             //Убрать сообщения обучения
             setProgress(I18N('NHR_REMOVE_TUTORIAL_MESSAGES'), false);
@@ -913,7 +913,7 @@
                 if (missionRaid) {
                     return;
                 }
-                if (invasionInfo.farmedChapters.includes(chapterId)) {
+                if (invasionInfo.farmedChapters.map(Number).includes(chapterId)) {
                     await popup.confirm(I18N('NT_BOSS_WAS_KILLED', { chapterNumber: romanNumerals[chapterNumber]}));
                     //Сбросить главу
                     await Caller.send('invasion_resetChapter')
@@ -1063,7 +1063,7 @@
                 if (missionRaid) {
                     return;
                 }
-                if (invasionInfo.farmedChapters.includes(chapterId)) {
+                if (invasionInfo.farmedChapters.map(Number).includes(chapterId)) {
                     await popup.confirm(I18N('NT_BOSS_WAS_KILLED', { chapterNumber: romanNumerals[chapterNumber]}));
                     //Сбросить главу
                     await Caller.send('invasion_resetChapter')
@@ -1093,7 +1093,7 @@
     async function collectTitansAndTotemFragments() {
         //Получить состояние на карте
         let invasionInfo = await Caller.send('invasion_getInfo');
-        let farmedChapters = invasionInfo.farmedChapters;
+        let farmedChapters = invasionInfo.farmedChapters.map(Number);
         console.log('invasionInfoId ' + invasionInfoId);
         console.log('farmedChapters ', JSON.stringify(farmedChapters));
 
@@ -1204,7 +1204,7 @@
                 }
                 //Результат атаки
                 let invasionInfo = await Caller.send('invasion_getInfo');
-                farmedChapters = invasionInfo.farmedChapters;
+                farmedChapters = invasionInfo.farmedChapters.map(Number);
                 let missions = Object.values(invasionInfo.actions);
                 let nextMissionIndex = missions.findIndex(e => e.payload.wins === 0);
                 if (nextMissionIndex !== -1) {
@@ -1224,7 +1224,7 @@
     async function collectHeroes() {
         //Получить состояние на карте
         let invasionInfo = await Caller.send('invasion_getInfo');
-        let farmedChapters = invasionInfo.farmedChapters;
+        let farmedChapters = invasionInfo.farmedChapters.map(Number);
         console.log('invasionInfoId ' + invasionInfoId);
         console.log('farmedChapters ', JSON.stringify(farmedChapters));
 
@@ -1369,7 +1369,7 @@
                 }
                 //Результат атаки
                 let invasionInfo = await Caller.send('invasion_getInfo');
-                farmedChapters = invasionInfo.farmedChapters;
+                farmedChapters = invasionInfo.farmedChapters.map(Number);
                 let missions = Object.values(invasionInfo.actions);
                 let nextMissionIndex = missions.findIndex(e => e.payload.wins === 0);
                 if (nextMissionIndex !== -1) {
@@ -2897,7 +2897,6 @@
         let invasionInfo = await Caller.send('invasion_getInfo');
         console.log(invasionInfo);
         let farmedChapters = invasionInfo.farmedChapters.map(Number).sort();
-        console.log(farmedChapters);
         let buffAmount = invasionInfo.buffAmount;
         let archdemon = true;
         let missionRaid = false;
@@ -2910,7 +2909,17 @@
             return returnToNewHeroMenu();
         }
 
-        //Получить id главы для атаки
+        let chapters = Object.values(lib.data.invasion.chapter).filter((e) => e.invasionId === invasionInfoId);
+        for (let chapter of chapters) {
+            if (!farmedChapters.includes(chapter.id)) {
+                if (buffAmount >= chapter.requirements?.invasionBuff) {
+                    farmedChapters.push(chapter.id);
+                };
+                break;
+            }
+        }
+
+        //Выбрать id главы для атаки
         let savedChapter = getSaveVal('savedChapterForArchdemon', 0);
         let chapterId = 0;
         let chapterNumber = 0;
