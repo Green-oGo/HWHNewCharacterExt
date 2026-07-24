@@ -3,13 +3,13 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.61
+// @version          2.62
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
 // @author           ZingerY, Green
 // @license          Copyright Green
-// @icon             https://i.ibb.co/xtmhK7zS/icon.png
+// @icon             https://i.ibb.co/9k7g3wqW/icon.png
 // @match            https://www.hero-wars.com/*
 // @match            https://apps-1701433570146040.apps.fbsbx.com/*
 // @run-at           document-start
@@ -1508,10 +1508,10 @@
             radio: 'talismans',
             checked: savedTalismanId == 0,
         });
-
+        const excludedTalismans = [8005, 8009];
         for (let talisman of allTalismans) {
             //Исключаем талисман распродажи
-            if (talisman.id == 8009) continue;
+            if (excludedTalismans.includes(Number(talisman.id))) continue;
             chekTalismans.push({
                 name: talisman.id,
                 label: cheats.translate(`LIB_TALISMAN_NAME_${talisman.id}`),
