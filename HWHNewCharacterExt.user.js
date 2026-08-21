@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.65
+// @version          2.66
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -71,9 +71,8 @@
         NT_COMPLETE_CHAPTER_TITLE: 'Complete an available chapter',
         NT_ALL_CHAPTERS_COMPLETED: 'All chapters completed',
         NT_NOT_ENOUGH_BUFF:
-          `Not enough buff to complete Chapter <span style="color: LimeGreen; font-family: 'Times New Roman';"> {chapterNumber} </span>
-          You have: <span style="color: red;"> {buffAmount} </span> <br>
-          You need: <span style="color: LimeGreen;"> {invasionBuff} </span>`,
+          `Not enough buff to complete Chapter <span style="color: LimeGreen; font-family: 'Times New Roman';"> {chapterNumber} </span> <br>
+          Have - <span style="color: red;"> {buffAmount} </span> Need - <span style="color: LimeGreen;"> {invasionBuff} </span>`,
 
         NT_ENTER_TITAN_IDS:
           `To kick off the magic vibe in chapter <span style="color: LimeGreen; font-family: 'Times New Roman';"> {chapterNumber} </span>,
@@ -97,6 +96,7 @@
         NT_MISSION_PROGRESS_BOSS: 'Let\'s wipe <span style="color: LimeGreen;">the boss</span> as a team!',
         NT_GET_TITAN_IDS: 'Titan IDs',
         NT_GET_TITAN_IDS_TITLE: 'Get a list of titan IDs',
+        NT_GET_TITAN_IDS_MESSAGE: `<span style="color: White; font-size: 25px;"> Id - Name </span>`,
         NT_WATER_TITANS: 'Water Titans',
         NT_EARTH_TITANS: 'Earth Titans',
         NT_FIRE_TITANS: 'Fire Titans',
@@ -219,8 +219,7 @@
         NT_ALL_CHAPTERS_COMPLETED: 'Все главы пройдены',
         NT_NOT_ENOUGH_BUFF:
           `Недостаточно усиления для прохождения <span style="color: LimeGreen; font-family: 'Times New Roman';"> {chapterNumber} </span> главы <br>
-          У вас: <span style="color: red;"> {buffAmount} </span> <br>
-          Необходимо: <span style="color: LimeGreen;"> {invasionBuff} </span>`,
+          Имеем - <span style="color: red;"> {buffAmount} </span>  Необходимо - <span style="color: LimeGreen;"> {invasionBuff} </span>`,
         NT_ENTER_TITAN_IDS:
           `Для старта магического движняка в <span style="color: LimeGreen; font-family: 'Times New Roman';"> {chapterNumber} </span> главе
           выберите атакующую команду или введите <span style="color: red;"> 5 </span> id титанов  через запятые`,
@@ -243,6 +242,7 @@
         NT_MISSION_PROGRESS_BOSS: 'Пакуем <span style="color: LimeGreen;">босса</span> всем коллективом!',
         NT_GET_TITAN_IDS: 'Id титанов',
         NT_GET_TITAN_IDS_TITLE: 'Получить список Id титанов',
+        NT_GET_TITAN_IDS_MESSAGE: `<span style="color: White; font-size: 25px;"> Id - Имя </span>`,
         NT_WATER_TITANS: 'Титаны Воды',
         NT_EARTH_TITANS: 'Титаны Земли',
         NT_FIRE_TITANS: 'Титаны Огня',
@@ -1717,7 +1717,7 @@
                 'beforeend',
                 message
             );
-            popup.setMsgText(I18N('NHR_GET_HERO_IDS_MESSAGE'));
+            popup.setMsgText(I18N('NT_GET_TITAN_IDS_MESSAGE'));
             popup.addButton({ isClose: true }, () => {
                 complete(false);
                 popup.hide();
