@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.63
+// @version          2.65
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -702,7 +702,14 @@
         //Получить состояние на карте
         let invasionInfo = await Caller.send('invasion_getInfo');
         let farmedChapters = invasionInfo.farmedChapters.map(Number);
-        let buffAmount = invasionInfo.buffAmount;
+
+        const relicId = Object.values(lib.data.invasion.list).find((e) => e.id == invasionInfoId).settings.relicId;
+        console.log('relicId ' + relicId);
+        const relicLevel = (await Caller.send('workshop_getInfo')).relics.find((e) => e.id == relicId).level;
+        console.log('relicLevel ' + relicLevel);
+        let buffAmount = relicLevel <= 1 ? 0 : relicLevel * 10;
+
+        console.log(invasionInfo);
         console.log('invasionInfoId ' + invasionInfoId);
         console.log('farmedChapters ', JSON.stringify(farmedChapters));
         console.log('buffAmount ' + buffAmount);
@@ -712,7 +719,6 @@
         console.log(chapters);
         let chapterId = 0;
         let invasionBuff = 0;
-        //let titanOrHero = '';
         let chapterNumber = 0;
 
         if (chapters.length == farmedChapters.length) {
@@ -722,11 +728,12 @@
         if (missionRaid == false) {
             for (let chapter of chapters) {
                 if (!farmedChapters.includes(chapter.id)) {
-//if (chapter.id == 2192000024) { //первая глава
-//if (chapter.id == 2192000025) { //вторая глава
+//if (chapter.id == 2682000024) { //первая глава
+//if (chapter.id == 2682000025) { //вторая глава
+//if (chapter.id == 2682000026) { //третья глава
                     chapterId = chapter.id;
-                    if (chapter.requirements?.invasionBuff) {
-                        invasionBuff = chapter.requirements.invasionBuff;
+                    if (chapter.requirements?.invasionRelic) {
+                        invasionBuff = chapter.requirements.invasionRelic * 10;
                     }
                     titanOrHero = chapter.settings.unitType;
                     chapterNumber = chapters.indexOf(chapter)+1;
@@ -1592,6 +1599,10 @@
         const elemental = Object.values(lib.data.titanSpirit.skills).filter(e => e.element !== 'primal').map(e => e.id);
         const primalIds = Object.values(lib.data.titanSpirit.skills).filter(e => e.element === 'primal').map(e => e.id);
         let savedTitanSpiritSkillsIds = getSaveVal('savedTitanSpiritSkillsIds', []);
+        if (!Array.isArray(savedTitanSpiritSkillsIds)){
+            savedTitanSpiritSkillsIds = [];
+        }
+
         let chekTitanSpiritSkills = [];
 
         for (let skillId of elemental) {
@@ -2861,6 +2872,9 @@
         const shouldSavePetsId = 0;
 
         let savedPets = getSaveVal( archdemon ? 'savedPetsForArchdemon' : 'savedPetsToCompleteChapter', []);
+        if (!Array.isArray(savedPets)){
+            savedPets = [];
+        }
         savedPets = savedPets.includes(shouldSavePetsId) ? savedPets : petTeam;
         console.log('savedPets ', JSON.stringify(savedPets));
 
@@ -2928,6 +2942,7 @@
             if (!calcBattle.result.win) {
                 const cloneBattle = structuredClone(startBattle);
                 const bFix = new WinFixBattle(cloneBattle);
+                bFix.isGetTimer = false;
                 let result = await bFix.start(cloneBattle.endTime, Infinity);
                 if (result.result?.win) {
                     calcBattle.result = result.result;
@@ -2994,6 +3009,7 @@
             if (!calcBattle.result.win) {
                 const cloneBattle = structuredClone(startBattle);
                 const bFix = new WinFixBattle(cloneBattle);
+                bFix.isGetTimer = false;
                 let result = await bFix.start(cloneBattle.endTime, Infinity);
                 if (result.result?.win) {
                     calcBattle.result = result.result;
@@ -3048,7 +3064,13 @@
         let invasionInfo = await Caller.send('invasion_getInfo');
         console.log(invasionInfo);
         let farmedChapters = invasionInfo.farmedChapters.map(Number).sort();
-        let buffAmount = invasionInfo.buffAmount;
+
+        const relicId = Object.values(lib.data.invasion.list).find((e) => e.id == invasionInfoId).settings.relicId;
+        console.log('relicId ' + relicId);
+        const relicLevel = (await Caller.send('workshop_getInfo')).relics.find((e) => e.id == relicId).level;
+        console.log('relicLevel ' + relicLevel);
+        let buffAmount = relicLevel <= 1 ? 0 : relicLevel * 10;
+
         let archdemon = true;
         let missionRaid = false;
         let boughtTalisman = false;
@@ -3063,7 +3085,7 @@
         let chapters = Object.values(lib.data.invasion.chapter).filter((e) => e.invasionId === invasionInfoId);
         for (let chapter of chapters) {
             if (!farmedChapters.includes(chapter.id)) {
-                if (buffAmount >= chapter.requirements?.invasionBuff) {
+                if (buffAmount >= chapter.requirements.invasionRelic * 10) {
                     farmedChapters.push(chapter.id);
                 };
                 break;
