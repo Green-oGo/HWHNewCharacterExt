@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.62
+// @version          2.63
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -1895,7 +1895,7 @@
             return;
         }
 
-        let [invasionInfo, inventoryGet, workshopBuffInfo] = await Caller.send(['invasion_getInfo', 'inventoryGet', 'workshopBuff_getInfo']);
+        let [invasionInfo, inventoryGet, workshopBuffInfo] = await Caller.send(['invasion_getInfo', 'inventoryGet', 'workshop_getInfo']);
         let chapters = Object.values(lib.data.invasion.chapter).filter((e) => e.invasionId === invasionInfoId);
         let coins = chapters[0].completeReward.coin;
         let valorCoinId = 0;
@@ -1912,7 +1912,7 @@
         console.log('sapphireMedallionId ' + sapphireMedallionId);
         let valorCoins = inventoryGet.coin?.[valorCoinId] ?? 0;
         let grailId = Object.entries(lib.data.workshop.relic).find(([key, item]) => item.invasionId === invasionInfoId && item.effect?.type === "gachaReward_change")[0];
-        let grailLvl = workshopBuffInfo.find(e => e.id == grailId ).level;
+        let grailLvl = workshopBuffInfo.relics.find(e => e.id == grailId ).level;
         let exchangeValue = 2800 - grailLvl * 100;
         if (valorCoins < exchangeValue) {
             await popup.confirm(I18N('NHR_NOT_ENOUGH_COINS'));
@@ -2336,6 +2336,145 @@
         }
         return false;
     }
+
+    async function buyHeroesAndPets_2 (missionNumber, lives, heroIds, pets) {
+        //let heroIds = [13,17,60,68,72]
+        let titanOrHero = 'hero';
+        let shopPinSlot = false;
+        const canSellItems = missionNumber >= 4 || lives < 2;
+        let dots = 1;
+        setProgress(I18N('NHR_SHOPPING') + `${'.'.repeat(dots)}`, false);
+        dots = dots === 3 ? 1 : dots + 1;
+
+        //Получить id магазина
+        let shopId = getShopId(titanOrHero); //2020 Магазин
+        console.log('Зашли в магазин. Id магазина: ' + shopId);
+        console.log('heroIds ', JSON.stringify(heroIds));
+        console.log('pets ', JSON.stringify(pets));
+
+        //Имеющиеся фрагменты
+        let allAvailableFragments = (await Caller.send('invasion_getInfo')).fragments
+
+        //Фрагменты героев
+        let heroesProgress = {};
+        heroIds.forEach(id => {
+            heroesProgress[id] = allAvailableFragments[id] || 0;
+        });
+        console.log('heroesProgress ', JSON.stringify(heroesProgress));
+        //heroesProgress  {"13":0,"17":5,"60":0,"68":6,"72":7}
+
+        //Продать героев
+        if (canSellItems) {
+            //Продать героев
+            await sellHeroes_2 (heroIds, allAvailableFragments);
+        }
+
+        console.log('heroFragments ', JSON.stringify(heroFragments));
+//await new Promise((e) => setTimeout(e, 2000000));
+
+        let coins = {value: await Caller.send('inventoryGet').then((e) => e.coin[1080])};
+        console.log('Монеты: ' + coins.value);
+
+        let shopSlots = null;
+        let boughtAllHeroes = areAllFragmentsBought (heroFragments);
+        let purchaseNumber = 0;
+        while (coins.value >= 12) {
+            setProgress(I18N('NHR_SHOPPING') + `${'.'.repeat(dots)}`, false);
+            dots = dots === 3 ? 1 : dots + 1;
+            purchaseNumber++;
+            console.log('%cЗакупки ' + purchaseNumber, 'color: green; font-weight: bold;');
+            //Получить состояние магазина
+            if (!shopSlots) {
+                shopSlots = await Caller.send({ name: 'shopGet', args: { shopId: shopId } }).then((e) => Object.values(e.slots));
+            }
+
+            //Если куплены все герои, питомци определить нужно ли тратить монеты
+            if (boughtAllHeroes && pets.length == 0) {
+                let spendCoins = await shouldSpendCoins();
+                console.log('shouldSpendCoins ' + spendCoins);
+                //Если нет задания на трату монет, выйти и заменить героев для покупки
+                if (!spendCoins ) {
+                    return true;
+                }
+                console.log('%cВыполняем задание на трату монет', 'color: red; font-weight: bold;');
+                while (coins.value >= 12) {
+                    for (let slot of shopSlots) {
+                        if (coins.value >= slot.cost.coin[1080] && slot.bought == false) {
+                            await Caller.send({ name: 'shopBuy', args: { shopId: shopId, slot: slot.id } });
+                            coins.value -= slot.cost.coin[1080];
+                        }
+                    }
+                    if (coins.value >= 3){
+                        shopSlots = await shopRefresh (shopId, coins);
+                    }
+                }
+            }
+            //Купить героев
+            if (!boughtAllHeroes) {
+                shopPinSlot = await buyHeroes (shopId, coins, heroIds, shopSlots, heroFragments);
+                //shopPinSlot = await buyItems (shopId, coins, shopSlots, heroesProgress, canSellItems);
+                //Куплены все герои
+                boughtAllHeroes = areAllFragmentsBought (heroFragments);
+                //boughtAllHeroes = Object.values(heroesProgress).every(fragments => fragments >= 7);
+            }
+
+            if (missionNumber == 1) {
+                console.log('%cЗашли закупиться героями для 1 миссии ', 'color: green; font-weight: bold;');
+                await buyRandomHeroes (shopId, coins, titanOrHero);
+                return;
+            }
+
+            if (missionNumber > 1 && missionNumber < 4 && lives >=2 && purchaseNumber >= 2){
+                console.log('%cЗашли, чтобы пораньше выйти с закупок ', 'color: green; font-weight: bold;');
+                return false;
+            }
+
+            //Купить питомцев
+            if (pets.length > 0) {
+                await buyPets (shopId, coins, pets, shopSlots, boughtAllHeroes);
+            }
+            console.log("+++++ shopPinSlot " + shopPinSlot);
+            //Обновить магазин
+            if (coins.value >= 15 && !shopPinSlot) {
+                shopSlots = await shopRefresh (shopId, coins);
+            } else {
+                break;
+            }
+        }
+        return false;
+    }
+
+    async function sellHeroes_2 (heroIds, allAvailableFragments) {
+
+        /*console.log("Id нужных героев > 7---------------");
+        for (let i = 0; i < heroIds.length; i++) {
+            if (heroFragments[i] > 7){
+                console.log("Id " + heroIds[i] + " продали " + (heroFragments[i]-7));
+                await Caller.send({name: "invasion_fragmentSell", args: {fragmentId: heroIds[i], amount: heroFragments[i]-7}});
+            }
+        }
+
+        let maximumNumberOfHeroes = 5;
+        if (heroIds[0] >= 4500 ) {
+            maximumNumberOfHeroes = heroIds.length;
+        }
+        console.log("Id ненужных героев -------------");
+        if (allHeroes.length > maximumNumberOfHeroes) {
+            let counter = 0;
+            for (let i = allHeroes.length - 1; i >= 0; i--) {
+                if ((allHeroes.length - counter) == maximumNumberOfHeroes){
+                    break;
+                }
+                if (heroIds.includes(allHeroes[i])){
+                    continue;
+                }
+                console.log("Продали ненужного " + allHeroes[i]);
+                await Caller.send({name: "invasion_fragmentSell", args: {fragmentId: allHeroes[i], amount: allAvailableFragments[allHeroes[i]]}});
+                counter++;
+            }
+        }*/
+    }
+
     async function shopRefresh (shopId, coins) {
         try {
             let shopSlots = await Caller.send([{ name: 'shopRefresh', args: { shopId: shopId } }]).then((e) => Object.values(e.slots));
