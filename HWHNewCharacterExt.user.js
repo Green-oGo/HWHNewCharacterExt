@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.66
+// @version          2.67
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -730,7 +730,7 @@
                 if (!farmedChapters.includes(chapter.id)) {
 //if (chapter.id == 2682000024) { //первая глава
 //if (chapter.id == 2682000025) { //вторая глава
-//if (chapter.id == 2682000026) { //третья глава
+//if (chapter.id == 2682000028) { //третья глава
                     chapterId = chapter.id;
                     if (chapter.requirements?.invasionRelic) {
                         invasionBuff = chapter.requirements.invasionRelic * 10;
@@ -2941,8 +2941,12 @@
 
             if (!calcBattle.result.win) {
                 const cloneBattle = structuredClone(startBattle);
-                const bFix = new WinFixBattle(cloneBattle);
+                const bFix = new NewCharacterWinFixBattle(cloneBattle);
                 bFix.isGetTimer = false;
+                bFix.minTimer = 0;
+                bFix.maxTimer = 60;
+                bFix.startingNumberOfFixes = 30;
+
                 let result = await bFix.start(cloneBattle.endTime, Infinity);
                 if (result.result?.win) {
                     calcBattle.result = result.result;
@@ -3008,8 +3012,11 @@
 
             if (!calcBattle.result.win) {
                 const cloneBattle = structuredClone(startBattle);
-                const bFix = new WinFixBattle(cloneBattle);
+                const bFix = new NewCharacterWinFixBattle(cloneBattle);
                 bFix.isGetTimer = false;
+                bFix.minTimer = 0;
+                bFix.maxTimer = 30;
+                bFix.startingNumberOfFixes = 30;
                 let result = await bFix.start(cloneBattle.endTime, Infinity);
                 if (result.result?.win) {
                     calcBattle.result = result.result;
@@ -3284,6 +3291,55 @@
             }
             missionId = missions[nextMissionIndex].payload.id;
             missionNumber = nextMissionIndex + 1;
+        }
+    }
+
+    class NewCharacterWinFixBattle extends WinFixBattle {
+        minTimer = 0;
+        maxTimer = 20;
+        startingNumberOfFixes = 20;
+        battleTime;
+        divisionStep;
+        step;
+        stepСhangeСounter = 1;
+
+        randTimer() {
+            if (this.battleTime == this.minTimer) {
+                this.divisionStep = this.startingNumberOfFixes;
+                this.step = (this.maxTimer-this.minTimer) / this.divisionStep;
+                console.log("%cШаг " + this.stepСhangeСounter + " = " + this.step + " maxTimer = " + this.maxTimer, "color: red; font-weight: bold;");
+                this.battleTime += this.step;
+                return this.battleTime;
+            };
+            if (this.battleTime >= this.maxTimer) {
+                this.stepСhangeСounter++;
+                this.divisionStep *= 2;
+                this.step = (this.maxTimer-this.minTimer) / this.divisionStep;
+                console.log("%cШаг " + this.stepСhangeСounter + " = " + this.step + " maxTimer = " + this.maxTimer, "color: red; font-weight: bold;")
+                this.battleTime = this.minTimer + this.step;
+                return this.battleTime;
+            };
+
+            if (this.stepСhangeСounter == 1){
+                this.battleTime += this.step;
+                return this.battleTime;
+            }else{
+                this.battleTime += this.step*2;
+                return this.battleTime;
+            }
+        }
+        async start(endTime = Date.now() + 6e4, maxCount = 100) {
+            this.battleTime = this.minTimer;
+            this.stepСhangeСounter = 1;
+            //maxCount = 888;
+            this.endTime = endTime;
+            this.maxCount = maxCount;
+            this.init();
+            return await new Promise((resolve) => {
+                this.resolve = resolve;
+                this.count = 0;
+                this.loop();
+            });
         }
     }
 })();
