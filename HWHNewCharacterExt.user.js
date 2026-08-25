@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.67
+// @version          2.68
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -3331,7 +3331,7 @@
         async start(endTime = Date.now() + 6e4, maxCount = 100) {
             this.battleTime = this.minTimer;
             this.stepСhangeСounter = 1;
-            //maxCount = 888;
+            maxCount = 888;
             this.endTime = endTime;
             this.maxCount = maxCount;
             this.init();
