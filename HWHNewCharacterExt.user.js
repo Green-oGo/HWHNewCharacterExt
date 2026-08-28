@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.68
+// @version          2.69
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -102,11 +102,12 @@
         NT_FIRE_TITANS: 'Fire Titans',
         NT_LIGHT_TITANS: 'Light Titans',
         NT_DARK_TITANS: 'Dark Titans',
+        NT_DISTORTION_TITANS: 'Distortion Titans',
         NHR_NOTHING_HERE: 'There\'s nothing here yet. Please wait.',
         NHR_HERO_EVENT: '<span style="color: White; font-size: 35px;">Rise of a New Hero</span> <br>',
         NHR_COMPLETE_TASKS: 'Complete the tasks',
         NHR_COMPLETE_TASKS_TITLE: 'Complete event tasks: collect heroes, buy pets, spend coins',
-        NHR_TASKS_COMPLETED: 'The tasks have been completed',
+        NHR_TASKS_COMPLETED: '<span style="color: LimeGreen;"> The tasks have been completed </span>',
         NHR_LIVES_ARE_OVER: `Failed to complete chapter <span style="color: LimeGreen; font-family: 'Times New Roman';"> {chapterNumber} </span>. Lives are over. Try again`,
         NHR_SHOPPING: `Shopping, shopping, shopping`,
         NHR_NOTHING_HERE_1: 'What\'s this? Where is it? When? Booooooooooosss...',
@@ -248,11 +249,12 @@
         NT_FIRE_TITANS: 'Титаны Огня',
         NT_LIGHT_TITANS: 'Титаны Света',
         NT_DARK_TITANS: 'Титаны Тьмы',
+        NT_DISTORTION_TITANS: 'Титаны Искажения',
         NHR_NOTHING_HERE: 'Здесь пока ничего нет. Ожидайте',
         NHR_HERO_EVENT: '<span style="color: White; font-size: 35px;">Восхождение Нового Героя</span> <br>',
         NHR_COMPLETE_TASKS: 'Выполнить задания',
         NHR_COMPLETE_TASKS_TITLE: 'Выполнить задания ивента: собрать героев, купить питомцев, потратить монеты',
-        NHR_TASKS_COMPLETED: 'Задания выполнены',
+        NHR_TASKS_COMPLETED: '<span style="color: LimeGreen;"> Задания выполнены </span>',
         NHR_LIVES_ARE_OVER:
           `Дорогой дневник, мне не подобрать слов, чтобы описать боль и унижение, которые были получены при походе на босса <span style="color: LimeGreen; font-family: 'Times New Roman';"> {chapterNumber} </span> главы.
           Наши богатыри были втянуты в яростный бой, точнее не бой, а именно пиздилку, мочилово, где всё равнялось, даже морды с асфальтом.
@@ -728,9 +730,9 @@
         if (missionRaid == false) {
             for (let chapter of chapters) {
                 if (!farmedChapters.includes(chapter.id)) {
-//if (chapter.id == 2682000024) { //первая глава
-//if (chapter.id == 2682000025) { //вторая глава
-//if (chapter.id == 2682000028) { //третья глава
+//if (chapter.id == 2683000024) { //первая глава
+//if (chapter.id == 2683000025) { //вторая глава
+//if (chapter.id == 2683000026) { //третья глава
                     chapterId = chapter.id;
                     if (chapter.requirements?.invasionRelic) {
                         invasionBuff = chapter.requirements.invasionRelic * 10;
@@ -976,7 +978,7 @@
 
         const elementalSkils = [4500,4502,4503,4509,4510,4511];
         const primalSkils = [4506,4507,4508,4514,4515];
-        let titanAttackingTeams = {heroes: [[4030,4031,4033,4042,4043], [4010,4012,4013,4042,4043]], totemSkilsIds: [4502, 4506]};
+        let titanAttackingTeams = {heroes: [[4030,4031,4033,4042,4043], [4003,4004,4040,4043,4044], [4023,4024,4022,4043,4040]], totemSkilsIds: [4502, 4506]};
 
         let titanOrHero = 'titan';
         let titanIds = titanAttackingTeams.heroes[0];
@@ -1702,6 +1704,7 @@
         let earthTitans = Object.values(lib.data.hero).filter(e => e.type === 'titan' && e.id >= 4020 && e.id < 4030);
         let darknessTitans = Object.values(lib.data.hero).filter(e => e.type === 'titan' && e.id >= 4030 && e.id < 4040);
         let lightTitans = Object.values(lib.data.hero).filter(e => e.type === 'titan' && e.id >= 4040 && e.id < 4050);
+        let distortionTitans = Object.values(lib.data.hero).filter(e => e.type === 'titan' && e.id >= 4050 && e.id < 4060);
         let message = '';
         const heroIdsConsole = Object.values(lib.data.hero).filter(e => e.type === 'titan').map(e => `${e.id} - ` + cheats.translate(`LIB_HERO_NAME_${e.id}`)).join('\n');
         console.log(heroIdsConsole);
@@ -1710,7 +1713,8 @@
         message += `<div class="PopUp_text" style="color: red; text-align: center;">${I18N('NT_FIRE_TITANS')}</div>` + fireTitans.map((e) => `<div class="PopUp_text" style="text-align: left;">${e.id} - ` + cheats.translate(`LIB_HERO_NAME_${e.id}`) + '</div>').join('') + '<br>';
         message += `<div class="PopUp_text" style="color: Lime; text-align: center;">${I18N('NT_EARTH_TITANS')}</div>` + earthTitans.map((e) => `<div class="PopUp_text" style="text-align: left;">${e.id} - ` + cheats.translate(`LIB_HERO_NAME_${e.id}`) + '</div>').join('') + '<br>';
         message += `<div class="PopUp_text" style="color: SlateGray; text-align: center;">${I18N('NT_DARK_TITANS')}</div>` + darknessTitans.map((e) => `<div class="PopUp_text" style="text-align: left;">${e.id} - ` + cheats.translate(`LIB_HERO_NAME_${e.id}`) + '</div>').join('') + '<br>';
-        message += `<div class="PopUp_text" style="color: Yellow; text-align: center;">${I18N('NT_LIGHT_TITANS')}</div>` + lightTitans.map((e) => `<div class="PopUp_text" style="text-align: left;">${e.id} - ` + cheats.translate(`LIB_HERO_NAME_${e.id}`) + '</div>').join('');
+        message += `<div class="PopUp_text" style="color: Yellow; text-align: center;">${I18N('NT_LIGHT_TITANS')}</div>` + lightTitans.map((e) => `<div class="PopUp_text" style="text-align: left;">${e.id} - ` + cheats.translate(`LIB_HERO_NAME_${e.id}`) + '</div>').join('') + '<br>';
+        message += `<div class="PopUp_text" style="color: Magenta; text-align: center;">${I18N('NT_DISTORTION_TITANS')}</div>` + distortionTitans.map((e) => `<div class="PopUp_text" style="text-align: left;">${e.id} - ` + cheats.translate(`LIB_HERO_NAME_${e.id}`) + '</div>').join('');
 
         await popup.customPopup(async (complete) => {
             popup.custom.insertAdjacentHTML(
@@ -1804,9 +1808,10 @@
             for (let team of attackingTeams){
                 let msg = unitType === 'hero' ? `<span style="font-size: 16px;">${team.map(e => cheats.translate(`LIB_HERO_NAME_${e}`)).join(', ')}</span>`
                 :team.map((e, index) => {
-                    let color = e >= 4040 ? 'Yellow'
+                    let color = e >= 4050 ? 'Fuchsia'
+                              : e >= 4040 ? 'Yellow'
                               : e >= 4030 ? '#1A1A1A'
-                              : e >= 4020 ? 'Lime'
+                              : e >= 4020 ? 'DarkGreen'
                               : e >= 4010 ? 'red'
                               : e >= 4000 ? 'MediumBlue'
                               : '#FFFFFF';
