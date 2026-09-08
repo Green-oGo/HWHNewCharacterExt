@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.69
+// @version          2.70
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -3152,8 +3152,8 @@
         6003 - Мара	    6008 - Хорус
         6004 - Каин	    6009 - Векс*/
 
-        let heroAttackingTeams = {heroes: [[13,17,60,68,72], [59,40,48,52,68]],
-                                  pets: [[6000,6001,6003,6006,6002], [6007,6008,6001,6004,6005]]};
+        let heroAttackingTeams = {heroes: [[13,17,60,68,72], /*[59,40,48,52,68],*/ [13,17,46,50,72]],
+                                  pets: [[6000,6001,6003,6006,6002], /*[6007,6008,6001,6004,6005],*/[6002,6005,6006]]};
 
         let heroIds = heroAttackingTeams.heroes[0];
         let pets = heroAttackingTeams.pets[0];
