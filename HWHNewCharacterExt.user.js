@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.70
+// @version          2.71
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -11,6 +11,7 @@
 // @license          Copyright Green
 // @icon             https://i.ibb.co/9k7g3wqW/icon.png
 // @match            https://www.hero-wars.com/*
+// @match            https://www.hero-wars.cn/*
 // @match            https://apps-1701433570146040.apps.fbsbx.com/*
 // @run-at           document-start
 // @downloadURL https://github.com/Green-oGo/HWHNewCharacterExt/raw/refs/heads/main/HWHNewCharacterExt.user.js
