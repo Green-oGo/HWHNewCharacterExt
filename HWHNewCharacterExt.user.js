@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.71
+// @version          2.72
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -576,13 +576,13 @@
         }
 
         //Пройти II главу
-        if (farmedChapters.length <= 1) {
+        /*if (farmedChapters.length <= 1) {
             setProgress(I18N('NHR_COMPLETE_CHAPTER', { chapterNumber: romanNumerals[2]}), false);
             await new Promise((e) => setTimeout(e, 3000));
             await secondHeroicChapterRaid();
             setProgress(I18N('NT_LETS_CONTINUE'), false);
             await new Promise((e) => setTimeout(e, 3000));
-        }
+        }*/
 
         //Собрать героев
         await collectHeroes();
@@ -3286,6 +3286,11 @@
                 if (boughtTalisman === false){
                     invasionInfo = await resetChapter(chapterId);
                 }
+                /*
+                else {
+                    await popup.confirm("Купили талисман");
+                }
+                */
             }
 
             let missions = Object.values(invasionInfo.actions);
