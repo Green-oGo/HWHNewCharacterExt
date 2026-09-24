@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.72
+// @version          2.73
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -731,7 +731,7 @@
         if (missionRaid == false) {
             for (let chapter of chapters) {
                 if (!farmedChapters.includes(chapter.id)) {
-//if (chapter.id == 2683000024) { //первая глава
+//if (chapter.id == 2999000024) { //первая глава
 //if (chapter.id == 2683000025) { //вторая глава
 //if (chapter.id == 2683000026) { //третья глава
                     chapterId = chapter.id;
@@ -1556,11 +1556,20 @@
     }
 
     async function buyTalisman(talismanId = 0, missionRaid = false) {
-        //Исключаем талисман Распродажи
-        const talismans = Object.values(await Caller.send('invasion_rollTalismans')).filter(v => v !== 8009);
-        console.log(talismans);
+        const allTalismans = Object.values(await Caller.send('invasion_rollTalismans'));
+        console.log(allTalismans);
         console.log("talismanId " + talismanId);
+        let talismans = [];
+        for (let setOfTalismans of allTalismans){
+            //Исключаем талисман Распродажи
+            let tal = setOfTalismans.filter(v => v !== 8009);
+            if (tal.length != 0) {
+                talismans = tal;
+                break;
+            }
+        }
         if (talismans.length === 0) return 0;
+
         if (missionRaid || talismanId == 0){
             await Caller.send({name: "invasion_selectTalisman", args: {talismanId: talismans[0]}});
             if (!missionRaid){
