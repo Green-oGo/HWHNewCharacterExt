@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.73
+// @version          2.74
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -560,6 +560,7 @@
     async function completeHerosTasks() {
         setProgress(I18N('NT_LETS_START'), false);
         await new Promise((e) => setTimeout(e, 3000));
+        let chapters = Object.values(lib.data.invasion.chapter).filter((e) => e.invasionId === invasionInfoId && e?.isArchdemon !== true);
         let farmedChapters = (await Caller.send('invasion_getInfo')).farmedChapters.map(Number);
         if (farmedChapters.length == 0) {
             //Убрать сообщения обучения
@@ -576,13 +577,13 @@
         }
 
         //Пройти II главу
-        /*if (farmedChapters.length <= 1) {
+        if (farmedChapters.length <= 1 && chapters[1]?.requirements == null) {
             setProgress(I18N('NHR_COMPLETE_CHAPTER', { chapterNumber: romanNumerals[2]}), false);
             await new Promise((e) => setTimeout(e, 3000));
             await secondHeroicChapterRaid();
             setProgress(I18N('NT_LETS_CONTINUE'), false);
             await new Promise((e) => setTimeout(e, 3000));
-        }*/
+        }
 
         //Собрать героев
         await collectHeroes();
@@ -605,6 +606,7 @@
     async function completeTitansTasks() {
         setProgress(I18N('NT_LETS_START'), false);
         await new Promise((e) => setTimeout(e, 3000));
+        let chapters = Object.values(lib.data.invasion.chapter).filter((e) => e.invasionId === invasionInfoId && e?.isArchdemon !== true);
         let farmedChapters = (await Caller.send('invasion_getInfo')).farmedChapters.map(Number);
         if (farmedChapters.length == 0) {
             //Убрать сообщения обучения
@@ -621,7 +623,7 @@
         }
 
         //Пройти II главу
-        if (farmedChapters.length <= 1) {
+        if (farmedChapters.length <= 1 && chapters[1]?.requirements == null) {
             setProgress(I18N('NHR_COMPLETE_CHAPTER', { chapterNumber: romanNumerals[2]}), false);
             await new Promise((e) => setTimeout(e, 3000));
             await firstHeroicChapterRaid();
@@ -718,7 +720,7 @@
         console.log('buffAmount ' + buffAmount);
 
         //Получить id главы для атаки
-        let chapters = Object.values(lib.data.invasion.chapter).filter((e) => e.invasionId === invasionInfoId);
+        let chapters = Object.values(lib.data.invasion.chapter).filter((e) => e.invasionId === invasionInfoId && e?.isArchdemon !== true);
         console.log(chapters);
         let chapterId = 0;
         let invasionBuff = 0;
@@ -3085,33 +3087,42 @@
         //Получить состояние на карте
         let invasionInfo = await Caller.send('invasion_getInfo');
         console.log(invasionInfo);
-        let farmedChapters = invasionInfo.farmedChapters.map(Number).sort();
+        //let farmedChapters = invasionInfo.farmedChapters.map(Number).sort();
 
         const relicId = Object.values(lib.data.invasion.list).find((e) => e.id == invasionInfoId).settings.relicId;
         console.log('relicId ' + relicId);
         const relicLevel = (await Caller.send('workshop_getInfo')).relics.find((e) => e.id == relicId).level;
         console.log('relicLevel ' + relicLevel);
         let buffAmount = relicLevel <= 1 ? 0 : relicLevel * 10;
-
+        console.log(buffAmount);
         let archdemon = true;
         let missionRaid = false;
         let boughtTalisman = false;
         console.log('invasionInfoId ', JSON.stringify(invasionInfoId));
-        console.log('farmedChapters ', JSON.stringify(farmedChapters));
-        console.log('farmedChapters.length ', JSON.stringify(farmedChapters.length));
-        if (farmedChapters.length == 0){
+        //console.log('farmedChapters ', JSON.stringify(farmedChapters));
+        //console.log('farmedChapters.length ', JSON.stringify(farmedChapters.length));
+        /*if (farmedChapters.length == 0){
+            await popup.confirm(I18N('NHR_NO_CHAPTER'));
+            return returnToNewHeroMenu();
+        }*/
+
+        let abyssChapters = Object.values(lib.data.invasion.chapter).filter((e) => e.invasionId === invasionInfoId && e?.isArchdemon !== false);
+        if (abyssChapters[0]?.requirements != null) {
             await popup.confirm(I18N('NHR_NO_CHAPTER'));
             return returnToNewHeroMenu();
         }
 
-        let chapters = Object.values(lib.data.invasion.chapter).filter((e) => e.invasionId === invasionInfoId);
-        for (let chapter of chapters) {
-            if (!farmedChapters.includes(chapter.id)) {
-                if (buffAmount >= chapter.requirements.invasionRelic * 10) {
-                    farmedChapters.push(chapter.id);
-                };
-                break;
-            }
+        let chapters = [];
+        for (let chapter of abyssChapters) {
+            let invasionBuff = chapter.requirements?.invasionRelic ? chapter.requirements?.invasionRelic * 10 : 0;
+            console.log(invasionBuff);
+            /*if (buffAmount >= invasionBuff) {
+                chapters.push(chapter.id);
+            };*/
+            //Ограничить Главу Архидемона
+            if (invasionBuff == 0) {
+                chapters.push(chapter.id);
+            };
         }
 
         //Выбрать id главы для атаки
@@ -3120,7 +3131,7 @@
         let chapterNumber = 0;
         let completedChapters = [];
         let counter = 1;
-        for (let chapter of farmedChapters) {
+        for (let chapter of chapters) {
             completedChapters.push({
                 name:chapter,
                 label: I18N('NHR_CHAPTER') + `&nbsp<span style= "font-family: 'Times New Roman';">` + romanNumerals[counter] + `</span>`,
@@ -3164,6 +3175,7 @@
 
         let heroAttackingTeams = {heroes: [[13,17,60,68,72], /*[59,40,48,52,68],*/ [13,17,46,50,72]],
                                   pets: [[6000,6001,6003,6006,6002], /*[6007,6008,6001,6004,6005],*/[6002,6005,6006]]};
+        //61,72,17,46,13
 
         let heroIds = heroAttackingTeams.heroes[0];
         let pets = heroAttackingTeams.pets[0];
@@ -3204,7 +3216,7 @@
         //Id миссии
         let firstMissionId = chapterInfo.invasion.actions[0].payload.id;
         let missionId = firstMissionId;
-        let lastMissionId = chapterInfo.invasion.actions[7].payload.id;
+        let lastMissionId = chapterInfo.invasion.actions[chapterInfo.invasion.actions.length-1].payload.id;
         let missionNumber = 1;
 
         //Жизни
@@ -3221,7 +3233,6 @@
 
             //Атаковать / не атаковать босса
             if (missionId == lastMissionId) {
-                //Произвести атаку босса, если его ни разу не убили
                 boss = true;
             }
 
@@ -3259,6 +3270,13 @@
             }
 
             //Проходим миссию
+            //Выход перед Архидемоном
+            if (boss) {
+                await popup.confirm(I18N('NHR_ARCHDEMON_IS_PREPARED'));
+                cheats.refreshGame();
+                return;
+            }
+
             if (!boss) {
                 setProgress(I18N('NT_MISSION_PROGRESS', {missionNumber: missionNumber}), false);
             } else {
@@ -3278,13 +3296,6 @@
             if (lives == 0) {
                 setProgress('', true);
                 await popup.confirm(I18N('NHR_LIVES_ARE_OVER', { chapterNumber: romanNumerals[chapterNumber]}));
-                return;
-            }
-
-            //Результат атаки босса
-            if (boss) {
-                await popup.confirm(I18N('NHR_ARCHDEMON_IS_PREPARED'));
-                cheats.refreshGame();
                 return;
             }
 
