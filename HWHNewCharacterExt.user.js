@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.74
+// @version          2.75
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -178,6 +178,8 @@
         NHR_REMOVE_TUTORIAL_MESSAGES: `Activating 'Been there, done that' mode. See ya, tutorial!`,
         NHR_SHOULD_SAVE_PETS: `<span style="color: LimeGreen;"> Save the fluffsters </span>`,
         NHR_SHOULD_SAVE_PETS_TITLE: `Explain what 'save' or 'fluffsters' means?`,
+        NHR_BOUGHT_CAPITAL_TALISMAN: `<span style="color: LimeGreen;"> I am Guan Yin, and Guan Yin has done this. </span>
+        <br> The game will be restarted without your permission. The Capital Talisman has been purchased, so you're on your own from here`,
     };
 
     i18nLangData['en'] = Object.assign(i18nLangData['en'], i18nLangDataEn);
@@ -330,6 +332,8 @@
         NHR_REMOVE_TUTORIAL_MESSAGES: `Активируем режим «Я уже всё знаю». До свидания, обучение!`,
         NHR_SHOULD_SAVE_PETS: `<span style="color: LimeGreen;"> Запомнить пушистикоф </span>`,
         NHR_SHOULD_SAVE_PETS_TITLE: `Подсказать что такое "запомнить" или "пушистикоф"?`,
+        NHR_BOUGHT_CAPITAL_TALISMAN: `<span style="color: LimeGreen;"> Я — Гуаньинь! И Гуаньинь выполнила свою работу. </span>
+        <br> Игра будет перезагружена без вашего разрешения. Талисман капитала куплен, а дальше как нибудь сами`,
     };
 
     i18nLangData['ru'] = Object.assign(i18nLangData['ru'], i18nLangDataRu);
@@ -706,7 +710,10 @@
     async function completeChapter(missionRaid = false, titanOrHero = '', secondHeroicChapter = false) {
         //Получить состояние на карте
         let invasionInfo = await Caller.send('invasion_getInfo');
-        let farmedChapters = invasionInfo.farmedChapters.map(Number);
+        let chapters = Object.values(lib.data.invasion.chapter).filter((e) => e.invasionId === invasionInfoId && e?.isArchdemon !== true);
+        const chapterIds = new Set(chapters.map(c => c.id));
+        console.log(chapters);
+        let farmedChapters = invasionInfo.farmedChapters.map(Number).filter(id => chapterIds.has(id));
 
         const relicId = Object.values(lib.data.invasion.list).find((e) => e.id == invasionInfoId).settings.relicId;
         console.log('relicId ' + relicId);
@@ -719,9 +726,8 @@
         console.log('farmedChapters ', JSON.stringify(farmedChapters));
         console.log('buffAmount ' + buffAmount);
 
-        //Получить id главы для атаки
-        let chapters = Object.values(lib.data.invasion.chapter).filter((e) => e.invasionId === invasionInfoId && e?.isArchdemon !== true);
-        console.log(chapters);
+
+
         let chapterId = 0;
         let invasionBuff = 0;
         let chapterNumber = 0;
@@ -3173,9 +3179,8 @@
         6003 - Мара	    6008 - Хорус
         6004 - Каин	    6009 - Векс*/
 
-        let heroAttackingTeams = {heroes: [[13,17,60,68,72], /*[59,40,48,52,68],*/ [13,17,46,50,72]],
-                                  pets: [[6000,6001,6003,6006,6002], /*[6007,6008,6001,6004,6005],*/[6002,6005,6006]]};
-        //61,72,17,46,13
+        let heroAttackingTeams = {heroes: [[17,13,72,46,61], /*[59,40,48,52,68],*/ [13,17,46,50,72]],
+                                  pets: [[6002, 6006], /*[6007,6008,6001,6004,6005],*/[6002,6005,6006]]};
 
         let heroIds = heroAttackingTeams.heroes[0];
         let pets = heroAttackingTeams.pets[0];
@@ -3306,11 +3311,11 @@
                 if (boughtTalisman === false){
                     invasionInfo = await resetChapter(chapterId);
                 }
-                /*
-                else {
-                    await popup.confirm("Купили талисман");
+                if (boughtTalisman && talismanId == 8008){
+                    await popup.confirm(I18N('NHR_BOUGHT_CAPITAL_TALISMAN'));
+                    location.reload();
                 }
-                */
+
             }
 
             let missions = Object.values(invasionInfo.actions);
