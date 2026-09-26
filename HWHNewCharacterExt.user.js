@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.75
+// @version          2.76
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -130,7 +130,7 @@
         NHR_NOT_ENOUGH_COINS: '<span style="font-size: 30px;">Not enough coins</span><br> <span style="color: LimeGreen; font-size: 30px;">No money, no honey </span>',
         NHR_SPEND_VALOR_COINS_RESULT:
           `<span style="font-size: 30px;">Exchanged Valor Coin <span style="color: LimeGreen;">{numberOfExchanges}</span> times </span><br>
-          <span style="font-size: 30px;"> Result: <br><br>
+          <span style="font-size: 30px;"> Result: <br>
           Sapphire Medallion: <span style="color: LimeGreen;">{sapphireMedallion}</span> <br>
           Soul stones: <span style="color: LimeGreen;">{fragmentHero}</span>`,
         NHR_SPEND_VALOR_COINS_MESSAGE: 'Exchange all available Coins of Valor?',
@@ -283,7 +283,7 @@
         NHR_NOT_ENOUGH_COINS: '<span style="font-size: 30px;">Нэт Монэт</span><br> <span style="color: LimeGreen; font-size: 30px;">Ноу мани - ноу хани</span>',
         NHR_SPEND_VALOR_COINS_RESULT:
           `<span style="font-size: 30px;">Обменяли монеты доблести <span style="color: LimeGreen;">{numberOfExchanges}</span> раз </span><br>
-          <span style="font-size: 30px;"> Получили: <br><br>
+          <span style="font-size: 30px;"> Получили: <br>
           <span style="color: LimeGreen;">3</span> магнитoфoна,  <span style="color: LimeGreen;">3</span> кинoкамеры заграничных,
           <span style="color: LimeGreen;">3</span> пoртсигара отечественных, куртка замшевая - <span style="color: LimeGreen;">три</span> куртки,
           сапфировый медальон - <span style="color: LimeGreen;">{sapphireMedallion}</span>, камни души - <span style="color: LimeGreen;">{fragmentHero}</span>`,
@@ -1931,10 +1931,12 @@
 
         let [invasionInfo, inventoryGet, workshopBuffInfo] = await Caller.send(['invasion_getInfo', 'inventoryGet', 'workshop_getInfo']);
         let chapters = Object.values(lib.data.invasion.chapter).filter((e) => e.invasionId === invasionInfoId);
+        const abyssSealId = Object.values(lib.data.invasion.list).find((e) => e.id == invasionInfoId)?.settings?.abyssSealCoinId ?? 0;
         let coins = chapters[0].completeReward.coin;
         let valorCoinId = 0;
         let sapphireMedallionId = 0;
         for (let coin in coins) {
+            if (coin == abyssSealId) continue;
             if(coins[coin] > 10) {
                 valorCoinId = coin;
             }
@@ -3179,8 +3181,8 @@
         6003 - Мара	    6008 - Хорус
         6004 - Каин	    6009 - Векс*/
 
-        let heroAttackingTeams = {heroes: [[17,13,72,46,61], /*[59,40,48,52,68],*/ [13,17,46,50,72]],
-                                  pets: [[6002, 6006], /*[6007,6008,6001,6004,6005],*/[6002,6005,6006]]};
+        let heroAttackingTeams = {heroes: [[17,13,72,46,61], [13,17,46,50,72], [40,29,52,46,73]],
+                                  pets: [[6002, 6006], [6002,6005,6006], [6008, 6002, 6004, 6001]]};
 
         let heroIds = heroAttackingTeams.heroes[0];
         let pets = heroAttackingTeams.pets[0];
