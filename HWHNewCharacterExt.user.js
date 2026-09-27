@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.76
+// @version          2.77
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -180,6 +180,13 @@
         NHR_SHOULD_SAVE_PETS_TITLE: `Explain what 'save' or 'fluffsters' means?`,
         NHR_BOUGHT_CAPITAL_TALISMAN: `<span style="color: LimeGreen;"> I am Guan Yin, and Guan Yin has done this. </span>
         <br> The game will be restarted without your permission. The Capital Talisman has been purchased, so you're on your own from here`,
+        NHR_ABYSS_TOTAL: `{sealName}:`,
+        NHR_ABYSS_FREE: `<span style="color: LimeGreen;">Free</span>`,
+        NHR_ABYSS_COST: `Seals: <span style="color: {color};"> {seals} </span> / {cost}`,
+        NHR_ABYSS_NEED_RELIC: `Enhancement: <span style="color: red;"> {haveBuff} </span> / {needBuff}`,
+        NHR_NOT_ENOUGH_SEALS: `<span style="color: red;"> Not enough Abyss Seals </span>`,
+        NHR_ROLL_TALISMANS: `Talisman reroll #<span style="color: LimeGreen;">{rerollCounter}</span>`,
+        NHR_KEEP_ANY_TALISMAN: `The talisman we wanted never dropped. <span style="color: LimeGreen;"> Take what we can get </span>`,
     };
 
     i18nLangData['en'] = Object.assign(i18nLangData['en'], i18nLangDataEn);
@@ -334,13 +341,19 @@
         NHR_SHOULD_SAVE_PETS_TITLE: `Подсказать что такое "запомнить" или "пушистикоф"?`,
         NHR_BOUGHT_CAPITAL_TALISMAN: `<span style="color: LimeGreen;"> Я — Гуаньинь! И Гуаньинь выполнила свою работу. </span>
         <br> Игра будет перезагружена без вашего разрешения. Талисман капитала куплен, а дальше как нибудь сами`,
+        NHR_ABYSS_TOTAL: `{sealName}:`,
+        NHR_ABYSS_FREE: `<span style="color: LimeGreen;">Бесплатно</span>`,
+        NHR_ABYSS_COST: `Печати: <span style="color: {color};"> {seals} </span> / {cost}`,
+        NHR_ABYSS_NEED_RELIC: `Усиление: <span style="color: red;"> {haveBuff} </span> / {needBuff}`,
+        NHR_NOT_ENOUGH_SEALS: `<span style="color: red;"> Не хватает Печатей Бездны </span>`,
+        NHR_ROLL_TALISMANS: `Обновление талисманов №<span style="color: LimeGreen;">{rerollCounter}</span>`,
+        NHR_KEEP_ANY_TALISMAN: `Нужный талисман так и не выпал. <span style="color: LimeGreen;"> Берем чё дают </span>`,
     };
 
     i18nLangData['ru'] = Object.assign(i18nLangData['ru'], i18nLangDataRu);
 
     const romanNumerals = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
-    //let invasionInfoId = 0;
-    let invasionInfoId = 2192000034;
+    let invasionInfoId = 0;
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
     // Добавление кнопоки в окно Разное
@@ -1489,8 +1502,8 @@
     function getHeroIdsMissingInShop() {
         let allHeroIds = Object.values(lib.data.hero).filter(e => e.type === 'hero' && !e.roleExtended.includes('boss')).map(e => e.id);
         let heroIdsInShop = lib.data.invasion.list[invasionInfoId].attackUnitsPool.availableUnits.filter(n => n < 1000);
-        console.log(allHeroIds);
-        console.log(heroIdsInShop);
+        //console.log(allHeroIds);
+        //console.log(heroIdsInShop);
         let missingIds = allHeroIds.filter(id => !heroIdsInShop.includes(id));
         return missingIds;
     }
@@ -1576,28 +1589,28 @@
                 break;
             }
         }
-        if (talismans.length === 0) return 0;
+        if (talismans.length === 0) return false;
 
         if (missionRaid || talismanId == 0){
             await Caller.send({name: "invasion_selectTalisman", args: {talismanId: talismans[0]}});
             if (!missionRaid){
                 setProgress(I18N('NHR_BOUGHT_TALISMAN'), false);
-                await new Promise((e) => setTimeout(e, 2000));
+                await new Promise((e) => setTimeout(e, 1500));
             }
             return true;
         }
         if (talismans.includes(talismanId)){
             await Caller.send({name: "invasion_selectTalisman", args: {talismanId: talismanId}});
             setProgress(I18N('NHR_BOUGHT_TALISMAN'), false);
-            await new Promise((e) => setTimeout(e, 2000));
+            await new Promise((e) => setTimeout(e, 1500));
             return true;
         }
+        setProgress(I18N('NHR_NO_TALISMAN'), false);
+        await new Promise((e) => setTimeout(e, 1500));
         return false;
     }
 
     async function resetChapter(chapterId) {
-        setProgress(I18N('NHR_NO_TALISMAN'), false);
-        await new Promise((e) => setTimeout(e, 2000));
         //Сбросить главу
         await Caller.send('invasion_resetChapter');
         //Активировать главу
@@ -3114,7 +3127,7 @@
             return returnToNewHeroMenu();
         }*/
 
-        let abyssChapters = Object.values(lib.data.invasion.chapter).filter((e) => e.invasionId === invasionInfoId && e?.isArchdemon !== false);
+        /*let abyssChapters = Object.values(lib.data.invasion.chapter).filter((e) => e.invasionId === invasionInfoId && e?.isArchdemon !== false);
         if (abyssChapters[0]?.requirements != null) {
             await popup.confirm(I18N('NHR_NO_CHAPTER'));
             return returnToNewHeroMenu();
@@ -3124,16 +3137,23 @@
         for (let chapter of abyssChapters) {
             let invasionBuff = chapter.requirements?.invasionRelic ? chapter.requirements?.invasionRelic * 10 : 0;
             console.log(invasionBuff);
-            /*if (buffAmount >= invasionBuff) {
-                chapters.push(chapter.id);
-            };*/
+            //if (buffAmount >= invasionBuff) {
+              //  chapters.push(chapter.id);
+            //};
             //Ограничить Главу Архидемона
             if (invasionBuff == 0) {
                 chapters.push(chapter.id);
             };
         }
+        */
+        const selectedChapter = await chooseAbyssChapter(buffAmount, Number(relicLevel));
+        if (!selectedChapter) {
+            return returnToNewHeroMenu();
+        }
 
-        //Выбрать id главы для атаки
+        let chapterId = selectedChapter.chapterId;
+        let chapterNumber = selectedChapter.chapterNumber;
+        /*//Выбрать id главы для атаки
         let savedChapter = getSaveVal('savedChapterForArchdemon', 0);
         let chapterId = 0;
         let chapterNumber = 0;
@@ -3172,7 +3192,7 @@
                     break;
                 }
             }
-        }
+        }*/
 
         /*Питомцы
         6000 - Фенрис   6005 - Альбрус
@@ -3210,12 +3230,10 @@
             return returnToNewHeroMenu();
         }
         console.log('talismanId ', JSON.stringify(talismanId));
-        setProgress(I18N('NT_LETS_START'), false);
-        await new Promise((e) => setTimeout(e, 3000));
 
 /////////////////////////////////////////////////////////////////////////////////////////
         setProgress(I18N('NT_LETS_START'), false);
-        await new Promise((e) => setTimeout(e, 3000));
+        await new Promise((e) => setTimeout(e, 2000));
 
         //Активировать главу
         let chapterInfo = await Caller.send({ name: 'invasion_setActiveChapter', args: { chapterId: chapterId } });
@@ -3279,6 +3297,7 @@
             //Проходим миссию
             //Выход перед Архидемоном
             if (boss) {
+                setProgress('', true);
                 await popup.confirm(I18N('NHR_ARCHDEMON_IS_PREPARED'));
                 cheats.refreshGame();
                 return;
@@ -3307,17 +3326,13 @@
             }
 
             //Купить талисман
-            if (boughtTalisman === false){
-                boughtTalisman = await buyTalisman(talismanId, missionRaid);
-                //Перезапустить главу если нет нужного талисмана
-                if (boughtTalisman === false){
+            if (invasionInfo?.talismans?.length === 0) {
+                const talismanRerollsLeft = invasionInfo?.talismanRerollsLeft ?? 0;
+                const shouldResetChapter = await manageTalisman(talismanRerollsLeft, talismanId, missionRaid, chapterId);
+                //Сбрасываем главу если не купили талисман
+                if (shouldResetChapter){
                     invasionInfo = await resetChapter(chapterId);
                 }
-                if (boughtTalisman && talismanId == 8008){
-                    await popup.confirm(I18N('NHR_BOUGHT_CAPITAL_TALISMAN'));
-                    location.reload();
-                }
-
             }
 
             let missions = Object.values(invasionInfo.actions);
@@ -3331,6 +3346,224 @@
             missionNumber = nextMissionIndex + 1;
         }
     }
+
+    function getChapterSealCost(chapterId) {
+        const sealId = getAbyssSealId();
+        return Number(lib.data.invasion.chapter[chapterId]?.startCost?.coin?.[sealId] ?? 0);
+    }
+
+    async function manageTalisman(talismanRerollsLeft, talismanId, missionRaid, chapterId) {
+        let shouldResetChapter = false;
+        let boughtTalisman = await buyTalisman(talismanId, missionRaid);
+        if (!boughtTalisman) {
+            const sealCost = getChapterSealCost(chapterId);
+
+            //При нулевой стоимости
+            if (!sealCost) {
+                shouldResetChapter = true;
+                return shouldResetChapter;
+            }
+
+            for (let reroll = 1; reroll <= talismanRerollsLeft; reroll++) {
+                setProgress(I18N('NHR_ROLL_TALISMANS', {rerollCounter: reroll}), false);
+                await new Promise((e) => setTimeout(e, 2000));
+                await Caller.send('invasion_rollTalismans');
+
+                boughtTalisman = await buyTalisman(talismanId, missionRaid);
+                await new Promise((e) => setTimeout(e, 2000));
+                if (boughtTalisman) break;
+            }
+
+            // Берем чё дали
+            if (!boughtTalisman) {
+                setProgress(I18N('NHR_KEEP_ANY_TALISMAN'), false);
+                await new Promise((e) => setTimeout(e, 2000));
+                boughtTalisman = await buyTalisman(0, missionRaid);
+            }
+        }
+
+        //Если куплен талисман Капитала
+        if (boughtTalisman && talismanId == 8008) {
+            await popup.confirm(I18N('NHR_BOUGHT_CAPITAL_TALISMAN'));
+            location.reload();
+        }
+        return shouldResetChapter;
+    }
+
+
+
+    //Выбор главы
+    async function chooseAbyssChapter(buffAmount, relicLevel) {
+        const chapters = Object.values(lib.data.invasion.chapter).filter((e) => e.invasionId === invasionInfoId && e?.isArchdemon !== false);
+        if (!chapters.length) {
+            await popup.confirm(I18N('NHR_NO_ABYSS_CHAPTER'));
+            return 0;
+        }
+        const sealId = getAbyssSealId();
+        const inventory = await Caller.send('inventoryGet');
+        const seals = Number(inventory?.coin?.[sealId] ?? 0);
+        const savedChapter = getSaveVal('savedChapterForArchdemon', 0);
+        console.log('Печатей Бездны ' + seals);
+
+        let chekChapters = [];
+        let available = {};
+        for (let i = 0; i < chapters.length; i++) {
+            const chapter = chapters[i];
+            const cost = Number(chapter.startCost?.coin?.[sealId] ?? 0);
+            const needLevel = Number(chapter.requirements?.invasionRelic ?? 0);
+            const needBuff = needLevel * 10;
+            const attempts = cost > 0 ? Math.floor(seals / cost) : 0;
+            available[chapter.id] = buffAmount >= needBuff && (cost === 0 || attempts > 0);
+            //Показываем и цену, и требование Амулета: заблокировать может любое из двух
+            let costText = cost > 0
+                ? I18N('NHR_ABYSS_COST', { color: seals >= cost ? 'green' : 'red', seals, cost: getSealsHtml(cost, 'currentcolor')})
+                : I18N('NHR_ABYSS_FREE');
+            if (buffAmount < needBuff) {
+                costText += '<br>' + I18N('NHR_ABYSS_NEED_RELIC', { needBuff, haveBuff: relicLevel * 10});
+            }
+            chekChapters.push({
+                name: chapter.id,
+                //Цену заворачиваем в span: метка это inline-flex, и <br> в ней сам по себе не переносит
+                label: getChapterTitle(chapter, i + 1) + `&nbsp&mdash;&nbsp<span>` + costText + `</span>`,
+                radio: 'chapters',
+                checked: chapter.id == savedChapter,
+            });
+        }
+        //Недоступную главу по умолчанию не отмечаем
+        const firstAvailable = chekChapters.find((e) => available[e.name]);
+        if (!chekChapters.some((e) => e.checked && available[e.name])) {
+            chekChapters.forEach((e) => { e.checked = e === firstAvailable; });
+        }
+        if (!firstAvailable) {
+            await popup.confirm(I18N('NHR_NO_ABYSS_CHAPTER_AVAILABLE', { relicName: getAbyssRelicName(), sealName: getAbyssSealName() }));
+            return 0;
+        }
+
+        //Попап строит разметку сразу, поэтому промис ждём после вставки заголовка
+        let answer = popup.confirm(
+            I18N('NHR_SELECT_CHAPTER') + '<span style="font-size: 0.7em; vertical-align: super; margin-left: 3px;">&copy;</span> X-ntario',
+            [
+                { msg: I18N('NHR_NEXT'), result: true, color: 'green' },
+                { msg: I18N('BTN_CANCEL'), result: false, isCancel: true, color: 'red' },
+            ],
+            chekChapters
+        );
+        //Сколько печатей на руках - строкой над списком, в метку класть нельзя
+        removeAbyssHeaders();
+        const firstCheckbox = document.querySelector('.PopUp_checkbox.radio_chapters');
+        if (firstCheckbox) {
+            const header = document.createElement('div');
+            header.classList.add('PopUp_text', 'NHR_abyssHeader');
+            header.style.fontSize = '16px';
+            header.style.textAlign = 'left';
+            header.style.margin = '0px 0px 6px 0px';
+            header.innerHTML = I18N('NHR_ABYSS_TOTAL', {sealName: getAbyssSealName()}) + '&nbsp' + getSealsHtml(seals);
+            firstCheckbox.parentNode.before(header);
+        }
+        disableLockedChapters(available);
+        const isNext = await answer;
+        removeAbyssHeaders();
+        if (!isNext) {
+            return 0;
+        }
+
+        const taskList = popup.getCheckBoxes();
+        for (let i = 0; i < taskList.length; i++) {
+            if (!taskList[i].checked) continue;
+            const chapterId = Number(taskList[i].name);
+            if (!available[chapterId]) {
+                await popup.confirm(I18N('NHR_NOT_ENOUGH_SEALS'));
+                return 0;
+            }
+            setSaveVal('savedChapterForArchdemon', chapterId);
+            return { chapterId, chapterNumber: i + 1 };
+        }
+        return 0;
+    }
+
+    function removeAbyssHeaders() {
+        document.querySelectorAll('.NHR_abyssHeader').forEach((e) => e.remove());
+    }
+
+    //Недоступную главу гасим и не даём выбрать: отметка возвращается на последнюю доступную.
+    //Причин недоступности две - не хватает Амулета или печатей
+    function disableLockedChapters(available) {
+        const checkBoxes = [...document.querySelectorAll('.PopUp_checkbox.radio_chapters')];
+        const isAvailable = (cb) => !!available[Number(cb.dataset.name)];
+        let lastAvailable = checkBoxes.find((cb) => cb.checked && isAvailable(cb)) ?? checkBoxes.find(isAvailable);
+        for (const cb of checkBoxes) {
+            if (!isAvailable(cb) && cb.nextElementSibling) {
+                cb.nextElementSibling.style.opacity = '0.35';
+            }
+            cb.addEventListener('change', () => {
+                if (!cb.checked) {
+                    return;
+                }
+                if (isAvailable(cb)) {
+                    lastAvailable = cb;
+                    return;
+                }
+                checkBoxes.forEach((e) => { e.checked = e === lastAvailable; });
+            });
+        }
+    }
+
+    //У глав Бездны есть свои названия: Край Бездны, Сердце Бездны, Абсолютная Бездна
+    function getChapterTitle(chapter, chapterNumber) {
+        const romanNumber = `<span style= "font-family: 'Times New Roman';">` + romanNumerals[chapterNumber] + `</span>`;
+        try {
+            const title = chapter.clientData?.titleLocale ? cheats.translate(chapter.clientData.titleLocale) : '';
+            if (title && title !== chapter.clientData.titleLocale) {
+                return romanNumber + '&nbsp' + title;
+            }
+        } catch (e) {}
+        return I18N('NHR_CHAPTER') + '&nbsp' + romanNumber;
+    }
+    //Печати как в игре: значок, справа количество, в подсказке название и число.
+    //Без значка название выводим текстом, чтобы число не висело в воздухе
+    function getSealsHtml(count, color = 'LimeGreen') {
+        const sealTitle = getAbyssSealName();
+        if (!ABYSS_SEAL_ICON) {
+            return (sealTitle ? sealTitle + '&nbsp' : '') + `<span style="color: ${color};">${count}</span>`;
+        }
+        const hint = (sealTitle ? sealTitle + ': ' + count : String(count)).replace(/"/g, '&quot;');
+        return `<span style="color: ${color};" title="${hint}">${count}</span>` +
+        `&nbsp<img src="${ABYSS_SEAL_ICON}" title="${hint}" style="height: 22px; vertical-align: middle;">`;
+    }
+
+    //Название печати берём из игры, чтобы совпадало с языком клиента
+    function getAbyssSealName() {
+        const item = lib.data.inventoryItem?.coin?.[getAbyssSealId()];
+        try {
+            return item?.name_localeKey ? cheats.translate(item.name_localeKey) : '';
+        } catch (e) {
+            return '';
+        }
+    }
+
+    function getAbyssRelicName() {
+        const relicId = Object.values(lib.data.invasion.list).find((e) => e.id == invasionInfoId)?.settings?.relicId;
+        try {
+            const relic = lib.data.workshop?.relic?.[relicId];
+            return relic?.nameLocale ? cheats.translate(relic.nameLocale) : '';
+        } catch (e) {
+            return '';
+        }
+    }
+
+    function getAbyssSealId() {
+        return Object.values(lib.data.invasion.list).find((e) => e.id == invasionInfoId)?.settings?.abyssSealCoinId ?? 0;
+    }
+
+    //Сколько печатей стоит старт главы
+    function getChapterSealCost(chapterId) {
+        const sealId = getAbyssSealId();
+        return Number(lib.data.invasion.chapter[chapterId]?.startCost?.coin?.[sealId] ?? 0);
+    }
+    //Иконка Печати Бездны, 64x64. Вырезана из атласа quest_icons2 по координатам
+    //из quest_icons2.xml: <SubTexture name="seal_of_abyss" x="878" y="294" width="144" height="144"/>
+    const ABYSS_SEAL_ICON = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAQAElEQVR4Aex6B5idVZ3377zl9n7v9MmUTBKSSUjvIWECCZAoAY0BFQXRD0V81rqfu/qom2fF/fZxrbgWlBB0bRB6lARImSE9mcn03jJ97p3b+33r979h3UfUNEQe9tl955z71nPe8/v96znvcPgfvv0vAf/NFIC7ZfGHrRuWvb900aJNC5Yuva1qzZp7HCtWrBAJB6N6zeW/hQbU1dUJmzbtnPuuWz/5f7011z2yfOWN3992813fv3Hd1u/Prar+Xol3zRfq1n94YW3tLgMxcE1EvNMJYFs3fLS0wLHsc2tXrnvsvvvf948PPHjn/R/6yC0737try9add229/YEH7rrvA/fs/OL1i5Y+PnuW9741a7bZd+3axRMRV1XeyQRw27d8ZFHprOLv3rHz5i8/+Km7Nm7bvt617oYFrHZRJZs7rwoLauew62pruBUra933fvS9q9auWf0Nn7vi4VOnOp15rbkaBt6xBNx668dml8+q/tHdH9yxc8edN7uKi4pZLJpFa+swjje0YrB/ArmsDEFgcLpsEAUR7915e8Hi2rUPza5Y9sm2tnELcGVNeEcSUFf3kK3IW/BwXd3a9UuXL+QmxqJ4/KcH8NV/eAyPfOspPPmrI3jmyaN4dl8DOttHiAQBBUUuTE0mcMttG/iK8gWfLSmoWVFaesJIWnBZn/COI2D37t2coMnb586ZveOW2zbBPxVmv3ziJTQcOYdsLqVpeiYWTwTGRscvjHZ39UTPnOzUhgYm4fGYYLbyGB6JYP3GdS6vr/Q+SZJcQN1l/cE7joCnnqq3FHorvnTb9i3mSDjHTh7rQX//EASjIqXSwc7e/lPPHGrY851Xjzz+rcaWI79ubmke6Oma0FOpHGrmFkLVVFjsTr6svGqpKBYUA32Gy2nBO4qAvPQtzLxkQW11rc/n1v3TEdbZPgTRIGrJZLC1tfPIL5o7jj4TT4VPxlMzr3V0n/jlxETv/tELY8l4LAuXxwhFUZBKKczjKXKbRVep05m6rBm8owior6/n7O7CHfNrawzZjISJcT8kSYGU0yIjI+MNwcBEq8kkdrnd7t6CgoJ+QUC/pGk9kiyFcjmJBK1BVmSkkhJMRrPAOM5LhOQJuCTOS96g3t7uwvIvtFuty+0OB3I5nYWCEXJwDEznRJ9v1k3r1u78/IY1H/hcZeWNbpfLpcybNy/mtVfLZovRzPEaNF1HJp2BnJWQzeag62le07R3vg+oq91l27ThQ7eLuO5bmiYuSacy2uSEHyazgE03Lcb9D+yw//PDX1jyla/+/da73/fBBxbMnrtHkAoLBbmwyGgSVxYXF/osFhPi0TSSySx4gpxIRrWsnEplMpk8r5esb5sG5BOTDddtsK9Ycbvv9foB3+r57/HWFuyyWYo9H7pp0+Yff+nLn/27r+7+VIFgUBigYvOWdbhl21rcePMStmL1HL56dilfVTnP7HAWbyitrPqcxeb7YGVl6f0LF83lTSYTjh/vRN4SGM90/+RIPBkLRgm5QlWn+hfL20EAV1e3a055ycr/mL92c/+aFWuH1ixbf2H5omVDS9duGF5367Ihp9v5/wqLvcXpVIIVFxfh1m0r2YYba2nAOSiyDE3VEItmKCTG9GAoBFXijS5nyafnzVv08G3bN1tLy70IR3Po7J6ABiAcnFL8gf7mjJTIE5CjS/9FAB2/ofxNCKir2y3cuu5jnm03f6H2vTs+f6PPWfK5LTev37b7ax8v/KevfMz26c/cbXnwoV32T1B94MG7Cz5wzy7XrFmzOMYElkyoGB9NQFV4lJRSGGcaxsciGBmOUKITYYlEHJlMFosWLhbes3O7WFFVhEgkjpcPnMHURBIc/fX3d/j9M2P1sizHqqqqsgDeHgLqCHjdul1zitzRu2fPF760emF07w3V0/u3zx5/aG74uHPkVz9mp/c8wc4fOMZC/hQ0AqkqHNwuDwwGAzktDZKcAyMDyKSzBIyOweBym2Gx5sO5jkg4TARksGTJEhiNRvT3juLIoSZ0to9B0zhMjw+kBoebfj8TGh4EKQMR8LaYALvppgfLPLboRxYvsn3z9nVDP3zPyv6/v3fZmdUfqzlovdfxEha2PArzkX1Qp8cJLMnJoEMQeVhtFgLoRGlZEYqK8xLPIRgMEhidgGZJ+mGMDNO5KqO8wgePzwHG2MXk6Ozpdpw81obWpkEyFSIvG071DZ052D3Q8IrCZaeIgPjRo0dV2l+ycJe8c5U38lPPHVs/u77Ma3p4xy0DD9/77rY771h0zrml8ByqlH4Y0xoi3FokNn0Froe+h/kffQgr77gV82a74eCjsGkzsCAIn1fHnOtKUDbLDZfHTJKOYWo8Qp49i7ELM2htHiZpj2De/HKqFXTehXNn29FHGiDlZC0ZC0x3djQ8297x6nPkJAYgYZIg5JMD2l26vCkCdF1neeBraDUmF6u4qbSMfePud3W+f8ea5qLFvh5m4uNQjWYknRsQXfUtpLZ/C9Lmj4BfuhZTo5Noevo5TLz4G2RO/R7ZxgNI0j756n5gchwWkwEerx2ikUc0ksLAwCjC4TiCMzEMD03jtaNNqKgshoHuy3IWHK8qgfDQ2eaOg4+3dx96UZLiHRaLa5QgJ6lqjLFL2j/dJ4+R/73GunnzZl5OFH2kpmzusaoSZe9dq05uuLmiw2SNKVBihQjLtyNU+k1kVz8BZc4OcIWVGOxox4HH92L03HlkpiaRDQ0hG+iDPNUPBEbBp4NItx2FFp+hzE9BNpODIHBwOm3I0HE0kkA4FMfoqB/NTX1wOGwoLS2B2WJiOTk6MTbZ1ZjJJNvtds/w1q1bEySkywL/A+Rr1oDdu3dzLtP1H6pdtOiHX/nKJxd/8ZMfLltSfbegRj4KxfkItOWHYN/0M5jn7gKz2sGJHJrq69Fy4BCs5NiUiQG0H34Rz+zdh0e/uRc/+Ne9+OE3f4Yf/tv3yd6HIMpTEMUcrASQCTpJ2oDyslLYbA5MB0NIptMIRyI065tEMpdGUWkBX1hYVu4rLlUJ1HQ4HE4sXLhQv5Lk6dmL5ZoI2L17N3f2RHB5QUHpD+5+/05jRtaQsM2DuvJT4N/1dfAr7gK8FZBFETrHYDIa4R8YxuDJU1BnRnFo309xeN8eRIfbIMZjcPEMLhEwkipnJwP4+Xf2IBINIdTRgfGzr6HQnITHplMqrGJWeTGWLV1Mub6CVDYDSZGQSMlI5XhypN4Cu6HQ4XQ6OdBG48ynA3R05XKxwZUfe/2JV1/tKfZ5Cp54/z3vteWkFMwWBotFBrQUcqkQlGQCXE6FoIvgGEeeWUZgZBgTXU3oJlv32sLYtsmJu28rRN3KctRWeuE1iDBrOky6RiRFcO7Zl9H9459g6sCv0fGLHyHc8Czc8gRELgeH046NGzeCJkPIZ34ep0MP+iei/b0tzfHYaPj1UV7b71URQPbEts3ZZrSLnr9bvXp5jdtjhcNhgpb0Y6qrFR2HGtD89PPof+klTJ06jeT4KDial6eiUUx3dgGhcdywTMRn7y1B3Wo3nFYBFrMMLScTcTI48MgTZuUZDvzLI6h/4Tm0HDmExEAffOlpFMW7UWZJwGwCGGnW/AULUD17NoyipoemensHBhpfCYT945RLyMClkx6692eF+7Mrl7ggzC1fu3zl9Xes27TY6HJboY/3IXruGIaf+i0mHvsZxvbsRcePH0Xj3j3ofeUggl1dYOkUFCKjdlYS795sg8ukwKBpIAOBTglPOpogyfIQeQGczkhzABvPkTbQsT+JwdNtOF5/AsnENMpNKdRWmcCLDLzBRIseXhSUVrLqufNKy8urXGazLUFTZAnXuF0NAeyGG+6wGY3GnRs2rah0uk0s29+HSNMZxA6/gKrTB1Ex+BrKEx2w+puRPnsI/b9+Ai3PP4VAexs8XAbzKwW4aVZukFTwOYWI0RAdS0JJq/AWeVFcVUoen0jQGEQigtcBK42sUJMQGhhEc1MPcpkoKl052KkjTjRCNJhhMNtZYWllaXXVvDUlvjJPV1cXu0b8oNdcvgk5FGYzuVYuWbz0hoJCt1mIJ5Ds6Eas4zRKO8+jyBzC9be6sHSHCxt3uXDr+8yosvciRnH+tR9+G8nJrovgWUqBEslBS+YQHokj4ZdgtztRVjOLJFkAm90KkXEwUiXnD5rQwcd0zFFVBM60IEohkDcYsHRxKXieh8DJSCfCKCwq5MvKq9Z53YVLHQ6HFQDDNWzclZ7dv38/bxJta+bMm1NTUepj02dIJcPtKGg+hipvBsU3WGEp0skTM7gcHAp8HNZt9GDbVhVLTYMQJ0dgJm+tzejIhRnSAQI0kAHIe3sKfBTyRDDyF06bGcY8MFWnPUAeBgKZcwWly85oGFPdvVAtTsyptMFi0gAlhZnuM8iEAijwuIs8vuLlDofPW1cH/kqY/vj+lQhgTuN1pTVza5YWlbjtU68dgyM+jdyRpzHXE4FpAQ0+nUNeunpShhKVoIQk8HRsNwGrlgrYvsWAAhNDxq8gHdIw0JyALomwkEe3u5zIhGPQUhk4rWbYDQKMOhFAEcFM5iCQLM1QMItqqrMVUFOwWEWYDQyWXAY17S8j1XkYPkQ4t9O11SS6q+vriTtc/XYlAiDyzkUlxRUrnHYrywV6Mdp/GktzYfDLzQCB1yns6WkFLCaBi0jgwxJAlYUVOlfpWEVuhsCHZcSmc8jENcg0PnuhG+k4+YFUFmoijWwoCo7m/iJJ3UR+wMwYzBxH6q7Da9Sh+/2QozHoRI6BE+AyiXi3LYrl2RZY4xQBJZma5/ImIFD3/1WudHBJAnSdRoHdzOv1FdjtzhKNXm4UJci9jbDOT0F0M1A2AkaLFaAvNDotXmpJ5aKdK1EZckhBZkYjYBqpvopkUMHMeA7k12A0mSFReptLpBCfmkHwAmV1tP7HmAq3lcEh6gSeCKCIIFDYs5l5GCSZ1vqykGUZjK6TE0CRVUfZbIazoVi6c3Do1VB0POp2u3Vcw3ZJAvJ9rFix3yQatEKbXTRpiRnEIjOoUNMwLRTAK2nwFkYE0ICMAHMJ0MnDa2QGWigHhbRAjcnIk5EjzcgRKWqaxkbzf17WkfSHERufhpbIwECKQl2grELA+ju9WOzlLpJg4lQYeIBnOhw0JyCFoJAoISvloHMSvVtCuSWFQks4FI1FhyQpPeN0kqfF1W+XJSAX5byCoM+1WESek6IIjI3DXaJBW2GCYhbBSFqMaWBGGqWJCJDpxXEVWlQBEgr0uAwtLkGhKtExkzTkQ5ySTJP2yBDocQONIK/qFsZw3Rwriu0iSumix8JgEzRYaC5BvaNo7myIJiOGLsQgq3kCqH/wsPMxmj1GnC67RbBYLIlVqy5aGPV8dYVe/5cfZIzBaHG6zFZbBa06Q1QUmENBCNUp6LMlgOKx7iAIRg7aeApaexx6UCaHpiIPFOQbWFYFshqQ0cHomNdViExFPu21Uv8+t4ASj0jqDlgpeoU7AZgmvAAADfxJREFUkwifnEHaCLrGwUpEWE0GaLwBliWLwLsL0DcwDUaps6ZyUAw20p4cESVbyUzsum4QZmbAXjffv4zrT69yf3rhj84ZLzAj43g7KDQx8spWsnO+nAA5NOgWDrqVB7NQ1Sn/DGaBuIL8c5B0cmg6eEWHoAJGGqyJAFsowDtJrR28Cq9BQ41TgIfPwUoPWekeH5Ffd5I5IoDOrWaOlr14GCtqYF+2Ev20MJIIJaApKvkCHUmaMfJMgUmUOVHQTJqWERIJYhJXv12OgLzHZTpkJhPwlMyQdzxCCQO9DZyNtEBUwRkYGAHgRB3MoNA5YHCZYXRZqJpgdxrhcZpQ6DCi2Cai0AD4yKt7OAWIJmGmvkuNCsptRIpNJzIAi0GHywd4SjnArkNctwYh8h/NT7+IaNdZ0rIo0mRAgfI54CwCNACKpnEkeZ4+AzDadLp0VYXecPnnNE2nwpDWjFB1HoKHnhcEMLcKnRIS1cQAI0gTAIEig74EUHfZIXysGJatZpgXA9aCLJyWLLxMRtmDn0LxvfejrGYePDDDTqP3igDxBKsRsJDUHQUM9iIGo4/B4FAQafgdLnznn2HobwaXicOaDkFSefTYrkfKakZCMyjpDJMIuGY2UxzF1W/c5R5NJjKZdCodzckKNKOHJG0BL3JghFmjqbdK0tGsGnTKAFHEQ7vNDuM/vhuGum1gVtvF6+pyIm6dGSgVwLk5KB47+H95BNmDpyE0nIfvgS/CUVQFp8kEG5mT2ckg2ADNREQSGZYiDktrkthQ1IstWj3WBV5BLjpBUSKHABE4aFiAnGJIZVMsxiRJaWq6qBCXg/WGe9wbzv7kJJMKJ+OJ1FQml9UZzUWVmsVQEgZoug6ukAcrZARShurRoW+2g59PHTx7FOx7/wG80EaOMQLWlSCT0WCcayDtIQJ+8wNoE0MEwIi01YPQp7+I5DceociygSRuAucksl0axAU2iEQGoEIVFVirDfDcbMX1Nj/KHDw8djNCcOF4ZD2igRI4bB63xV1kAHBZTHT/DeVyD+uCpIRVGQPpbE6xel0o3vweyr+LkRkzQhNMECoM4Et4CDUCUKaAUfhjF1Jgw2QeIzpAqS9iGkA5gGYHeKcOuzGD3Eu/ITFpMBmNkBIygqVLELjvH5BedhPgMIMtMUO5rxT6UhnMRP2IGlSzAqFShbgiCRel0A4baaOmYSJajpxtqWvWrPIPlrpmzy4oKDC+AeEVTi5HABSHQglbIhwKhjMmqwml86qRc9yDxNi9iE+/C5F0GaRyA9S5DCjnoBP/uotBn88Dc6lrWuYHR+eKDtlmgOIWoVk5WBsPQkknwQkcZYUGpOJpTLBijK3/ONLly8CTE0R/AHpGBMubl536IL/AKPPTSetsTh4GMhcwHpQgQjDZYbIYCxRNLk6n01YADFe50Sgv+aQuUBYUDExPTU5OjY6MjSKhxKHM34KQ9T1I8B+FZvgMMto6oNgEzitArgH0jTqkWwzIbbVBXixCJdvXHAw6Ocx82ASpr0mbgE6Lm5qqQRRFCFQTyQwmxSL0L/8MsqNF0OjzmGYh/1JtAptrAVfCgSMy4mEejgI3eCP1Te11xiFFX4Qj0fB4KD4jpXSdvySiv3DjcgTQmvyAGouNdE9OjrUN9E+obe0juBBQEEgJmIhYEcYqqNqtNMsrJztlSNhmIVnwr1A27Ydc9zSkpV+GWuKBVkaSFDRwvA4uL01nDmoyhUwqR/FcplgvQFFkJNMZaFWr0H3DYzih/h/EVTdYntSFJNByEZyZQy6xAK6SMqRTKrXRIQpGIiClhUP+c4l0ZAZpIUs4dapXVS5LAPWgBRMTIb9/YiAYiKaGB8L0gSKLcCiDaCSDsSkNodRCZMcWYKL9TojmJ2Ce/wko3HI0vDiI4dYjUMtTYLN4Ag9wRtIQih6aVYRG6WyKpsHxWAKiUaDKY1ZFCYq8DphnL4C59kE08w8iFDOBc6rgrYzSag5c9Rbko0R7zwXICvkITUM6kQgGQtNdmUxqGnBkaNxXXbgrPKnb7fZsLDFxenB4cCjgT+jhYF5yCpGQvDgxmcpYcHZoHaYDH0Y6O+eiTf7bl3fD638ei+5ogXmJCkYAYNChUeTQKxjEhYXQzU5IlDHmcjIMtNJTWzsPPANe+f1+7PnJv+OFJ59D13Q1xuz3kaRVQFMw2liGwrrbMJM2YCwQJtMxQM5m9ZGR3rZAcKxLFvQAQFPOK4D649tXJKCoqEi5MN7WMj09dULX1XQqlUU0mkYuJyGdyyImcxQF1iCq2xGmT1l7HvstOFixaEkfScsJVlgGeF1AJX/RWaq1ClB9A9LMReEUYIynWWYch189jCce24Pzp5uBZAzbS5/BPUUPojb7KDiFYbLLCNOqe0m7ivC7lwfAMdIasqlEPDgzFbjQlEiGL/is1jgAjepVlysRgKamJoXW4FNDY80vtLY19QG6NhOIkA1K9Pkqi2Telmk9QFIz4DkD+Y1JKLqBvL0InVlJ0rPBUS6PhUbwiziwci9Srp3I5FRwjEyVlh1aW7vQ3tINqGTn1Pbm2lbcuL4dzgoeQrFABJmRVu6EpXI7jp2+gN7BSZhpTYGpWamrp/HkZHDohExLJsFg8JrUP88Sl/+5QtWrq6szsdhoWyQ2+dTQ8GDcYDCSL4gi/48JSfLAcVrZoYzxolaYKRfN0qrUUIcPUlAFY73gTCPQaB6gijay2/cjbltC17PgKEROTwUx0E/2LOWpFcB0EXNKRyFleNIwHZMXXPAPUZJU+S40dwdw8NVWCAYHeJ6pnZ2N/eMTvfWJdHAUyIYJh0r1msrVEIDGxkbF6XQmWjqOPDcw2PmkPzAt6yS5yMUPljEk4inShDT8/iA8Hi9EmwPtsY2YaqxGst0MZdQHfWYddP2TkH2fIEEzSqkZ4jR1a2xsg386DEkBMvTDGQ041bMRh1s3o6X7NlwY2oGUcQsa2yN4/sVTyMkm3eEo0Af6u/zDoz2/n5wZOw9gGnXIS59UCte0XRUBjDH94x//eNZk4gId/fW/aO88++RMKKiKgkmPE3i/P4QA1a7uPlRVzUZBoQfZ4rUYzN6PiPpPkISvA+avgfc8BJOvAiYzj8BMFC8fPInh4Qmoqg6J5hs5muYmslnMKBvRm9iBGdP74DcuwsHWMF4+MYqsbERJSTkb6GtLt7WffnZoouMY8TZGiKOoxzVLH7RxVK+q7N69W1u2bFlC01KDPUMnn+jpO//8tH9KMRjMSJFjnJmJYGx0Ch3t3SgqLIDB6EBYryLRLEdEXA3Jdh10gx1xWg06cOA0nnnqKEaGpgm8BoUSGkVVoFBIy2tBz+QEuiencKipAwfOD6JlKAqdt2BWWaXe3dWUa2o5tHdooqU+l0sPAM4ZAkAGBJ3211yumoB8z/X19cqqVatCmUywa2Dw7GM9PU0vTk1N5Sxmh07jR4ZWiYPhEE7S1+C+nh4k43FkUxL5igTa6GPKz3/+HL6++zEcr29DNJLMdwmNQGuaCk3XoDMdmqYjRiTNJNKYpPWCWFZBSWkFvF4PmlvORs42vvzvo/621wCJvKZvEvCnqaM3BZ7a4ZoIyDfIk5BOr56JpabaTjW/8siZ84d/0tvfFTFZrJposNBABJIkEAiEiIhG/OIXL+B73/4N9jz6Ek681oM4LZ9LOY2AqpRFKqQBKi6Ch04+gpozegvHQWU8jDYnFsxfpomcQW1uPD7W1PrSd0enO09QuOiWJIwAwTyL1AhvertmAl5/U72yYMGCGUpfe/uHTv2yue2Vb5w7d6wpHo+mXC6fLnAGgADkJBVZqhKpuEySVki6qq5Do+O81BVFIfVXoZD01TwBjNDzPMwWO8qLKjCnZLY23N2WOHfm5cPNHQ3fHp8eahIEoZPADwP4qyRP7S+WN0kA8vmBXFe3KkQrxoNTM70Hz7U9/+W+wbO/bjp7rFlKZ2Z8dq9sM9h1E2/WTaKJcnYBHKPX5QmgXIWWry6e8wTYZLTAYXfDbnPB7SxAdVmNkoyEQw1HXzzf2Prqnsbuwz+dSY6fE0XWmcvlRqntWwI+zwCNKL97czVvDrfcckvc5/NdYEzrbe85+ujp889+rbW5/vEzJ4+84p8cbhU5xW83GzN2s1V1WGy60+rSXTYP3HYfnDavbjd7dIfZqdnM1qzI6YHp8b7ul37386NNzYd/1dx7/LsDYx2/k5DsgkXpyWazlOsjxxg5izc35D9r9VcRkO9t37596uTkZKa2tnbaZDIN6Jzc2jdy+lfnew5850zr737QcOKFx4+/tv+3Lecbnuvvbzw6Mdp5yj/Z1zQ10ds+Ntp1dnig5XBb87H9xxuee7qh4clfnW7c/7P2vvof9Q2f3adJqRaA70Le3uOI0fvetLentn+x/NUE/GevOqXMcjgcplXEzLTT5xyk9fCOcGL86NBE45MdAw2Pn+048Nip5v2Pnjj7zM8aTu/b03D2mT3Hz+3be7zpuSfOtb+0t6P3tZ/3jXTsi6dnDokmrtniMHSVVvmGgO1Bekc+yVFp/5aXt4qAPwws75EV0oh0MpkMksqOk3kMGK3GTkFAi6pKJ0KJ0NFQLPBKOOo/GEtGjmSl+ElJ1ZtMNlOrz+fqqKio6Fu4cOHk5z//+eiFCxeywL488Hy/f3jHW7rn3tLe3tiZRqdynoxYLBZNpVKBTCYzRdfymdsw7SmJAUkYFM4yk3nCaDKTGBgYyDU1Ncn5xIue+ZuXvyUBfzz4vATzNU/KH2pesvn6h/P8/T9u87Ycv10E/M3A/LUd/38AAAD//8x6brgAAAAGSURBVAMAgdJHUyDQguIAAAAASUVORK5CYII=';
+
 
     class NewCharacterWinFixBattle extends WinFixBattle {
         minTimer = 0;
