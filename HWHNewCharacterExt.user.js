@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.78
+// @version          2.79
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -1590,11 +1590,14 @@
     }
 
     async function buyTalisman(talismanId = 0, missionRaid = false) {
-        const talismans = (await Caller.send('invasion_rollTalismans')).talismanIds.filter(v => v !== 8009);
+        //Исключаем талисман Распродажи
+        let talismans = (await Caller.send('invasion_rollTalismans')).talismanIds.filter(v => v !== 8009);
         console.log("talismanId " + talismanId);
         console.log("talismans " + talismans);
         if (talismans.length === 0) return false;
         if (missionRaid || talismanId == 0){
+            //Исключаем талисман Капитала
+            talismans = talismans.filter(v => v !== 8008);
             await Caller.send({name: "invasion_selectTalisman", args: {talismanId: talismans[0]}});
             if (!missionRaid){
                 setProgress(I18N('NHR_BOUGHT_TALISMAN'), false);
