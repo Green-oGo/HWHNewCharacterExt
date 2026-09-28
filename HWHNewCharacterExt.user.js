@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.79
+// @version          2.80
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -3302,8 +3302,6 @@
             for (let reroll = 1; reroll <= talismanRerollsLeft; reroll++) {
                 setProgress(I18N('NHR_ROLL_TALISMANS', {rerollCounter: reroll}), false);
                 await new Promise((e) => setTimeout(e, 2000));
-                await Caller.send('invasion_rollTalismans');
-
                 boughtTalisman = await buyTalisman(talismanId, missionRaid);
                 await new Promise((e) => setTimeout(e, 2000));
                 if (boughtTalisman) break;
