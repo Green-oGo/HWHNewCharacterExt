@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.80
+// @version          2.81
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -18,10 +18,20 @@
 // @updateURL https://github.com/Green-oGo/HWHNewCharacterExt/raw/refs/heads/main/HWHNewCharacterExt.user.js
 // ==/UserScript==
 
-(function () {
-    if (!this.HWHClasses) {
-        console.log('%cObject for extension not found', 'color: red');
-        return;
+(async function () {
+    /** Ждём загрузки Хелпера */
+    await waitForHelper().then((found) => {
+        if (!found) {
+            console.log('%cObject for extension not found', 'color: red');
+            return;
+        }
+    });
+    async function waitForHelper(timeoutMs = 60000, stepMs = 200) {
+        for (let waited = 0; waited < timeoutMs; waited += stepMs) {
+            if (typeof HWHClasses !== 'undefined') return true;
+            await new Promise((r) => setTimeout(r, stepMs));
+        }
+        return typeof HWHClasses !== 'undefined';
     }
 
     console.log('%cStart Extension ' + GM_info.script.name + ', v' + GM_info.script.version + ' by ' + GM_info.script.author, 'color: red');
