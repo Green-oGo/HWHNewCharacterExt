@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.81
+// @version          2.82
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -169,9 +169,9 @@
         NHR_SELECT_CHAPTER: 'Select a chapter',
         NHR_NEXT: 'Next',
         NHR_NO_TALISMAN: '<span style="color: Red;"> The required talisman is missing </span>',
-        NHR_BOUGHT_TALISMAN: '<span style="color: LimeGreen;"> A talisman has been purchased</span>',
+        NHR_RECEIVED_EMBLEM: `Received: <span style="color: LimeGreen;"> {emblemName} </span>`,
         NHR_ARCHDEMON_IS_PREPARED: 'We tried our best. We did what we did. The game will be synced without your permission. Go to the chapter and attack the Archdemon.',
-        NHR_SELECT_TALISMAN: 'Choose a talisman',
+        NHR_SELECT_EMBLEM: 'Choose an emblem',
         NHR_SELECT_PETS: 'Select pets',
         NHR_SPEND_VALOR_COINS_PROGRESS: 'Eyes closed, deal sealed: <span style="color: LimeGreen;">{exchangeCounter}</span> / {maximumCounter}',
         NHR_SPEND_VALOR_COINS_PROGRESS_2: 'And throw in a little extra',
@@ -180,24 +180,25 @@
           You're using an untested version of the extension.
           If something goes wrong, just wait until the author deigns to wake up, reads every single message saying the script isn't working,
           scratches his ass, and finally fixes where he screwed up.`,
-        NHR_ANY_OF_THE_TALISMANS: `<span style="color: LimeGreen;"> Oh wow, a choice? <br> Eh, just take whatever </span>`,
-        NHR_ANY_OF_THE_TALISMANS_TITLE: `If it needs explaining, it's not worth explaining`,
+        NHR_ANY_OF_THE_EMBLEMS: `<span style="color: LimeGreen;"> Oh wow, a choice? <br> Eh, just take whatever </span>`,
+        NHR_ANY_OF_THE_EMBLEMS_TITLE: `If it needs explaining, it's not worth explaining`,
         NHR_SELECT_TITAN_SPIRIT_SKILLS: `Choose
           <br><span style="color: DeepSkyBlue;">Elemental</span> and <span style="color: LimeGreen;"> Primal </span>
           <br>affinity skills`,
         NHR_REMOVE_TUTORIAL_MESSAGES: `Activating 'Been there, done that' mode. See ya, tutorial!`,
         NHR_SHOULD_SAVE_PETS: `<span style="color: LimeGreen;"> Save the fluffsters </span>`,
         NHR_SHOULD_SAVE_PETS_TITLE: `Explain what 'save' or 'fluffsters' means?`,
-        NHR_BOUGHT_CAPITAL_TALISMAN: `<span style="color: LimeGreen;"> I am Guan Yin, and Guan Yin has done this. </span>
-        <br> The game will be restarted without your permission. The Capital Talisman has been purchased, so you're on your own from here`,
+        NHR_BOUGHT_CAPITAL_EMBLEM: `<span style="color: LimeGreen;"> I am Guan Yin, and Guan Yin has done this. </span>
+        <br> The game will be restarted without your permission. Capital Emblem obtained — you're on your own from here`,
         NHR_ABYSS_TOTAL: `{sealName}:`,
         NHR_ABYSS_FREE: `<span style="color: LimeGreen;">Free</span>`,
         NHR_ABYSS_COST: `Seals: <span style="color: {color};"> {seals} </span> / {cost}`,
         NHR_ABYSS_NEED_RELIC: `Enhancement: <span style="color: red;"> {haveBuff} </span> / {needBuff}`,
         NHR_NOT_ENOUGH_SEALS: `<span style="color: red;"> Not enough Abyss Seals </span>`,
-        NHR_ROLL_TALISMANS: `Talisman reroll #<span style="color: LimeGreen;">{rerollCounter}</span>`,
-        NHR_KEEP_ANY_TALISMAN: `The talisman we wanted never dropped. <span style="color: LimeGreen;"> Take what we can get </span>`,
-        NHR_RESET_CHAPTER: `Let's start over. This isn't working.`,
+        NHR_ROLL_EMBLEMS: `Emblem refresh #<span style="color: LimeGreen;">{rerollCounter}</span>. Let's see what we've got here.`,
+        NHR_KEEP_ANY_EMBLEM: `Didn't get the emblem we wanted. Oh well — <span style="color: LimeGreen;"> we'll take what we can get.</span>`,
+        NHR_RESET_CHAPTER: `<span style="color: red;"> The emblem we wanted isn't here. </span> Starting over — and pretending that's exactly how it was meant to be.`,
+        NEW_CHARACTER_LOOP_PROTECTION: `Looks like we're stuck in Groundhog Day. Time to stop this before the alarm clock breaks.`,
     };
 
     i18nLangData['en'] = Object.assign(i18nLangData['en'], i18nLangDataEn);
@@ -331,9 +332,9 @@
         NHR_SELECT_CHAPTER: `Выберите главу`,
         NHR_NEXT: `Дальше`,
         NHR_NO_TALISMAN: `<span style="color: Red;"> Нет необходимого талисмана </span>`,
-        NHR_BOUGHT_TALISMAN:`<span style="color: LimeGreen;"> Купили талисман </span>`,
+        NHR_RECEIVED_EMBLEM:`Получили: <span style="color: LimeGreen;"> {emblemName} </span>`,
         NHR_ARCHDEMON_IS_PREPARED: `Старались, как могли. Сделали, что сделали. Игра будет синхронизирована без вашего разрешения. Зайдите в главу, и атакуйте Архидемона`,
-        NHR_SELECT_TALISMAN: `Выберите талисман`,
+        NHR_SELECT_EMBLEM: `Выберите эмблему`,
         NHR_SELECT_PETS: `Выберите питомцев`,
         NHR_SPEND_VALOR_COINS_PROGRESS: 'Меняю, не глядя: <span style="color: LimeGreen;">{exchangeCounter}</span> / {maximumCounter}',
         NHR_SPEND_VALOR_COINS_PROGRESS_2: 'Ну, и на помидорчики',
@@ -342,24 +343,25 @@
           Вы используете не протестированную версию расширения.
           Если что-то пойдет не так, просто дождитесь, пока афтор, тобишь я, соизволит проснуться, прочитает все до единого сообщения, что скрипт не работает.
           Почешет жопу, и наконец то исправит где накосячил.`,
-        NHR_ANY_OF_THE_TALISMANS: `<span style="color: LimeGreen;"> Мне выбирать штоли? <br> Неее. Что дадут — то и бери </span>`,
-        NHR_ANY_OF_THE_TALISMANS_TITLE: `Если надо объяснять, то не надо объяснять`,
+        NHR_ANY_OF_THE_EMBLEMS: `<span style="color: LimeGreen;"> Мне выбирать штоли? <br> Неее. Что дадут — то и бери </span>`,
+        NHR_ANY_OF_THE_EMBLEMS_TITLE: `Если надо объяснять, то не надо объяснять`,
         NHR_SELECT_TITAN_SPIRIT_SKILLS: `Выберите
           <br><span style="color: DeepSkyBlue;">стихийный</span> и <span style="color: LimeGreen;"> первородный </span>
           <br>навыки влияния тотема`,
         NHR_REMOVE_TUTORIAL_MESSAGES: `Активируем режим «Я уже всё знаю». До свидания, обучение!`,
         NHR_SHOULD_SAVE_PETS: `<span style="color: LimeGreen;"> Запомнить пушистикоф </span>`,
         NHR_SHOULD_SAVE_PETS_TITLE: `Подсказать что такое "запомнить" или "пушистикоф"?`,
-        NHR_BOUGHT_CAPITAL_TALISMAN: `<span style="color: LimeGreen;"> Я — Гуаньинь! И Гуаньинь выполнила свою работу. </span>
-        <br> Игра будет перезагружена без вашего разрешения. Талисман капитала куплен, а дальше как нибудь сами`,
+        NHR_BOUGHT_CAPITAL_EMBLEM: `<span style="color: LimeGreen;"> Я — Гуаньинь! И Гуаньинь выполнила свою работу. </span>
+        <br> Игра будет перезагружена без вашего разрешения. Эмблему капитала получили, а дальше как нибудь сами`,
         NHR_ABYSS_TOTAL: `{sealName}:`,
         NHR_ABYSS_FREE: `<span style="color: LimeGreen;">Бесплатно</span>`,
         NHR_ABYSS_COST: `Печати: <span style="color: {color};"> {seals} </span> / {cost}`,
         NHR_ABYSS_NEED_RELIC: `Усиление: <span style="color: red;"> {haveBuff} </span> / {needBuff}`,
         NHR_NOT_ENOUGH_SEALS: `<span style="color: red;"> Не хватает Печатей Бездны </span>`,
-        NHR_ROLL_TALISMANS: `Обновление талисманов №<span style="color: LimeGreen;">{rerollCounter}</span>`,
-        NHR_KEEP_ANY_TALISMAN: `Нужный талисман так и не выпал. <span style="color: LimeGreen;"> Берем чё дают </span>`,
-        NHR_RESET_CHAPTER: `Давай по новой Миша. Все не то`,
+        NHR_ROLL_EMBLEMS: `Обновление эмблем №<span style="color: LimeGreen;">{rerollCounter}</span>. Ну-ка, что у нас тут нового?`,
+        NHR_KEEP_ANY_EMBLEM: `Нужную эмблему не дали. Ну и ладно — <span style="color: LimeGreen;"> берём чё дают.</span>`,
+        NHR_RESET_CHAPTER: `<span style="color: red;"> Нужной эмблемы нет. </span> Начинаем сначала — и делаем вид, что так и задумано.`,
+        NEW_CHARACTER_LOOP_PROTECTION: `Похоже, мы застряли в дне сурка. Пора это остановить, пока будильник не сломался.`,
     };
 
     i18nLangData['ru'] = Object.assign(i18nLangData['ru'], i18nLangDataRu);
@@ -382,7 +384,7 @@
             //await popup.confirm(I18N('NHR_WARNING_MESSAGE'));
             //let shopId = 1088;
             //let coins = {value: 100};
-            //console.log(talismanId);
+            //console.log(emblemId);
             //await buyRandomHeroes (2024, {value: 90}, 'hero');
             //await buyRandomHeroes (2023, {value: 90}, 'titan');
             //let r = getHeroIdsMissingInShop();
@@ -541,7 +543,7 @@
                 },
                 color: 'blue',
             },
-            {
+            /*{
                 get msg() {
                     return I18N('NHR_GET_HERO_IDS');
                 },
@@ -552,7 +554,7 @@
                     getAllHeroIDs();
                 },
                 color: 'pink',
-            },
+            },*/
             {
                 get msg() {
                     return I18N('NT_GET_TITAN_IDS');
@@ -666,9 +668,9 @@
         await new Promise((e) => setTimeout(e, 3000));
 
         //Собрать героев и питомцев
-        await collectHeroes();
-        setProgress(`${I18N('NT_HEROES_COLLECTED')} ${I18N('NHR_MAKE_OTHER_TASKS')}`, false);
-        await new Promise((e) => setTimeout(e, 3000));
+        //await collectHeroes();
+        //setProgress(`${I18N('NT_HEROES_COLLECTED')} ${I18N('NHR_MAKE_OTHER_TASKS')}`, false);
+        //await new Promise((e) => setTimeout(e, 3000));
 
         //Добрать бои (Выполнить рейды I главы)
         await performRaidsIfNeeded(firstTitanChapterRaid);
@@ -751,8 +753,6 @@
         console.log('farmedChapters ', JSON.stringify(farmedChapters));
         console.log('buffAmount ' + buffAmount);
 
-
-
         let chapterId = 0;
         let invasionBuff = 0;
         let chapterNumber = 0;
@@ -764,10 +764,10 @@
         if (missionRaid == false) {
             for (let chapter of chapters) {
                 if (!farmedChapters.includes(chapter.id)) {
-//if (chapter.id == 2999000024) { //первая глава
-//if (chapter.id == 2683000025) { //вторая глава
-//if (chapter.id == 2683000026) { //третья глава
-//if (chapter.id == 2999000027) { //четвертая глава
+//if (chapter.id == 3031000024) { //первая глава
+//if (chapter.id == 3031000025) { //вторая глава
+//if (chapter.id == 3031000026) { //третья глава
+//if (chapter.id == 3031000027) { //четвертая глава
                     chapterId = chapter.id;
                     if (chapter.requirements?.invasionRelic) {
                         invasionBuff = chapter.requirements.invasionRelic * 10;
@@ -832,7 +832,7 @@
         let titanOrHero = 'hero';
         let heroIds = heroAttackingTeams.heroes[0];
         let pets = heroAttackingTeams.pets[0];
-        let talismanId = 0;
+        let emblemId = 0;
         console.log('Герои для рейдов ', JSON.stringify(heroIds));
         console.log('Питомци для рейдов ', JSON.stringify(pets));
 
@@ -855,12 +855,12 @@
             }
             console.log('pets ', JSON.stringify(pets));
 
-            //Получить id талисмана
-            talismanId = await chooseTalisman();
-            if (talismanId === 'cancel'){
+            //Выбрать эмблему
+            emblemId = await selectEmblem();
+            if (emblemId === 'cancel'){
                 return;
             }
-            console.log('talismanId ', JSON.stringify(talismanId));
+            console.log('emblemId ', JSON.stringify(emblemId));
             setProgress(I18N('NT_LETS_START'), false);
             await new Promise((e) => setTimeout(e, 3000));
         }
@@ -881,7 +881,13 @@
         console.log('lives ' + lives);
         console.log(heroIds);
 
+        let attempt = 1;
         while (lives > 0) {
+            if (attempt == 25){
+                await popup.confirm(I18N('NEW_CHARACTER_LOOP_PROTECTION'));
+                return;
+            }
+            attempt++;
             //Купить героев
             await buyHeroesAndPets(missionNumber, lives, heroIds, pets);
             if (missionNumber == 8) {
@@ -971,12 +977,12 @@
                 return;
             }
 
-            //Купить талисман
-            if (invasionInfo?.talismans?.length === 0) {
-                const talismanRerollsLeft = invasionInfo?.talismanRerollsLeft ?? 0;
-                console.log('talismanRerollsLeft: ' + talismanRerollsLeft);
-                const shouldResetChapter = await manageTalisman(talismanRerollsLeft, talismanId, missionRaid, chapterId);
-                //Сбрасываем главу если не купили талисман
+            //Получить эмблему
+            if (invasionInfo?.emblems?.length === 0) {
+                const emblemRerollsLeft = invasionInfo?.emblemRerollsLeft ?? 0;
+                console.log('emblemRerollsLeft: ' + emblemRerollsLeft);
+                const shouldResetChapter = await manageEmblem(emblemRerollsLeft, emblemId, missionRaid, chapterId);
+                //Сбрасываем главу если не получили нужную эмблему
                 if (shouldResetChapter){
                     setProgress(I18N('NHR_RESET_CHAPTER'), false);
                     await new Promise((e) => setTimeout(e, 1000));
@@ -1055,8 +1061,13 @@
         console.log('firstMissionId ' + firstMissionId);
         console.log('missionId ' + missionId);
         console.log('lives ' + lives);
-
+        let attempt = 1;
         while (lives > 0) {
+            if (attempt == 25){
+                await popup.confirm(I18N('NEW_CHARACTER_LOOP_PROTECTION'));
+                return;
+            }
+            attempt++;
             //Купить титанов и фрагменты тотемов
             await buyTitansAndTotemSkils (missionNumber, lives, titanIds, totemSkilsIds);
             if (missionNumber == 8) {
@@ -1125,6 +1136,14 @@
                 return;
             }
 
+            //Получить случайную эмблему
+            if (invasionInfo?.emblems?.length === 0) {
+                const emblemId = 0;
+                const emblemRerollsLeft = invasionInfo?.emblemRerollsLeft ?? 0;
+                console.log('emblemRerollsLeft: ' + emblemRerollsLeft);
+                const shouldResetChapter = await manageEmblem(emblemRerollsLeft, emblemId, missionRaid, chapterId);
+            }
+
             let missions = Object.values(invasionInfo.actions);
             let nextMissionIndex = missions.findIndex(e => e.payload.wins === 0);
             if (nextMissionIndex !== -1) {
@@ -1154,7 +1173,11 @@
         let chapterId = getChapterId(chapters, 'titan');
         console.log('chapterId ' + chapterId);
 
-        for (let attempt = 1; attempt <= 15; attempt++) {
+        for (let attempt = 1; attempt <= 11; attempt++) {
+            if (attempt == 10){
+                await popup.confirm(I18N('NEW_CHARACTER_LOOP_PROTECTION'));
+                return;
+            }
             //Титаны, что необходимо собрать
             let titanIdsToBuy = await getTitanIdsToBuy();
 
@@ -1254,8 +1277,18 @@
                 if (boss == true) {
                     break;
                 }
+
+                //Получить случайную эмблему
+                if (invasionInfo?.emblems?.length === 0) {
+                    const emblemId = 0;
+                    const missionRaid = true;
+                    const emblemRerollsLeft = invasionInfo?.emblemRerollsLeft ?? 0;
+                    console.log('emblemRerollsLeft: ' + emblemRerollsLeft);
+                    const shouldResetChapter = await manageEmblem(emblemRerollsLeft, emblemId, missionRaid, chapterId);
+                }
+
                 //Результат атаки
-                let invasionInfo = await Caller.send('invasion_getInfo');
+                invasionInfo = await Caller.send('invasion_getInfo');
                 farmedChapters = invasionInfo.farmedChapters.map(Number);
                 let missions = Object.values(invasionInfo.actions);
                 let nextMissionIndex = missions.findIndex(e => e.payload.wins === 0);
@@ -1297,7 +1330,11 @@
             }
         }
 
-        for (let attempt = 1; attempt <= 15; attempt++) {
+        for (let attempt = 1; attempt <= 11; attempt++) {
+            if (attempt == 10){
+                await popup.confirm(I18N('NEW_CHARACTER_LOOP_PROTECTION'));
+                return;
+            }
             //Получить героев, которых нужно собрать
             let heroIdsToBuy = await getHeroIdsToBuy();
             if (heroIdsToBuy.length == 0) {
@@ -1412,22 +1449,18 @@
                 if (boss == true) {
                     break;
                 }
-                //Купить талисман
-                if (invasionInfo?.talismans?.length === 0) {
-                    let talismanId = 0;
-                    let missionRaid = true;
-                    const talismanRerollsLeft = invasionInfo?.talismanRerollsLeft ?? 0;
-                    console.log('talismanRerollsLeft: ' + talismanRerollsLeft);
-                    const shouldResetChapter = await manageTalisman(talismanRerollsLeft, talismanId, missionRaid, chapterId);
-                    //Сбрасываем главу если не купили талисман
-                    if (shouldResetChapter){
-                        setProgress(I18N('NHR_RESET_CHAPTER'), false);
-                        await new Promise((e) => setTimeout(e, 1000));
-                        invasionInfo = await resetChapter(chapterId);
-                    }
+
+                //Получить случайную эмблему
+                if (invasionInfo?.emblems?.length === 0) {
+                    const emblemId = 0;
+                    const missionRaid = true;
+                    const emblemRerollsLeft = invasionInfo?.emblemRerollsLeft ?? 0;
+                    console.log('emblemRerollsLeft: ' + emblemRerollsLeft);
+                    const shouldResetChapter = await manageEmblem(emblemRerollsLeft, emblemId, missionRaid, chapterId);
                 }
+
                 //Результат атаки
-                let invasionInfo = await Caller.send('invasion_getInfo');
+                invasionInfo = await Caller.send('invasion_getInfo');
                 farmedChapters = invasionInfo.farmedChapters.map(Number);
                 let missions = Object.values(invasionInfo.actions);
                 let nextMissionIndex = missions.findIndex(e => e.payload.wins === 0);
@@ -1547,83 +1580,80 @@
         return false;
     }
 
-    async function chooseTalisman() {
-        //Получить id талисмана
-        let allTalismans = Object.values(lib.data.invasion.talismans);
+    async function selectEmblem() {
+        let allEmblems = Object.values(lib.data.invasion.emblems);
         let buffs = Object.values(lib.data.adventure.buff);
 
-        let savedTalismanId = getSaveVal('savedTalismanId', 0);
-        let chekTalismans = [];
+        let savedSelectedEmblemId = getSaveVal('NC_savedSelectedEmblemId', 0);
+        let chekEmblems = [];
 
-        chekTalismans.push({
+        chekEmblems.push({
             name: 0,
-            label: I18N('NHR_ANY_OF_THE_TALISMANS'),
-            title: I18N('NHR_ANY_OF_THE_TALISMANS_TITLE'),
-            radio: 'talismans',
-            checked: savedTalismanId == 0,
+            label: I18N('NHR_ANY_OF_THE_EMBLEMS'),
+            title: I18N('NHR_ANY_OF_THE_EMBLEMS_TITLE'),
+            radio: 'emblems',
+            checked: savedSelectedEmblemId == 0,
         });
-        const excludedTalismans = [8005, 8009];
-        for (let talisman of allTalismans) {
-            //Исключаем талисман распродажи
-            if (excludedTalismans.includes(Number(talisman.id))) continue;
-            chekTalismans.push({
-                name: talisman.id,
-                label: cheats.translate(`LIB_TALISMAN_NAME_${talisman.id}`),
-                title: cheats.translate(`${buffs.find(e => e.id === talisman.effectConfig.buffId).localeId}_DESC`),
-                radio: 'talismans',
-                checked: talisman.id == savedTalismanId,
+        //Список исключаемых эмблем
+        const excludedEmblems = [8005, 8009];
+        for (let emblem of allEmblems) {
+            if (excludedEmblems.includes(Number(emblem.id))) continue;
+            chekEmblems.push({
+                name: emblem.id,
+                label: cheats.translate(`LIB_EMBLEM_NAME_${emblem.id}`),
+                title: cheats.translate(`${buffs.find(e => e.id === emblem.effectConfig.buffId).localeId}_DESC`),
+                radio: 'emblems',
+                checked: emblem.id == savedSelectedEmblemId,
             });
         }
-        let cycle = true;
-        while (cycle) {
-            let answer = await popup.confirm(
-                I18N('NHR_SELECT_TALISMAN'),
-                [
-                    { msg: I18N('NHR_NEXT'), result: true, color: 'green' },
-                    { msg: I18N('BTN_CANCEL'), result: false, isCancel: true, color: 'red' },
-                ],
-                chekTalismans
-            );
-            if (!answer) {
-                return 'cancel';
-            }
-            const taskList = popup.getCheckBoxes();
-            for (let talisman of taskList) {
-                if (talisman.checked) {
-                    let talismanId = Number(talisman.name);
-                    setSaveVal('savedTalismanId', talismanId);
-                    cycle = false;
-                    return talismanId;
-                }
+        if (!chekEmblems.some(item => item.checked)) {
+            chekEmblems.find(item => item.name === 0).checked = true;
+        }
+
+        let answer = await popup.confirm(
+            I18N('NHR_SELECT_EMBLEM'),
+            [
+                { msg: I18N('NHR_NEXT'), result: true, color: 'green' },
+                { msg: I18N('BTN_CANCEL'), result: false, isCancel: true, color: 'red' },
+            ],
+            chekEmblems
+        );
+        if (!answer) {
+            return 'cancel';
+        }
+        const taskList = popup.getCheckBoxes();
+        for (let emblem of taskList) {
+            if (emblem.checked) {
+                let emblemId = Number(emblem.name);
+                setSaveVal('NC_savedSelectedEmblemId', emblemId);
+                return emblemId;
             }
         }
     }
 
-    async function buyTalisman(talismanId = 0, missionRaid = false) {
+    async function getEmblem(emblemId = 0, missionRaid = false) {
         //Исключаем талисман Распродажи
-        let talismans = (await Caller.send('invasion_rollTalismans')).talismanIds.filter(v => v !== 8009);
-        console.log("talismanId " + talismanId);
-        console.log("talismans " + talismans);
-        if (talismans.length === 0) return false;
-        if (missionRaid || talismanId == 0){
-            //Исключаем талисман Капитала
-            talismans = talismans.filter(v => v !== 8008);
-            await Caller.send({name: "invasion_selectTalisman", args: {talismanId: talismans[0]}});
-            if (!missionRaid){
-                setProgress(I18N('NHR_BOUGHT_TALISMAN'), false);
-                await new Promise((e) => setTimeout(e, 1000));
-            }
-            return true;
+        let emblems = (await Caller.send('invasion_rollEmblems')).emblemIds.filter(v => v !== 8009);
+        console.log("emblemId " + emblemId);
+        console.log("emblems " + emblems);
+        if (emblems.length === 0) return false;
+        const autoPick = missionRaid || emblemId == 0;
+        //Исключаем эмблему Капитала
+        if (autoPick) {
+            emblems = emblems.filter(v => v !== 8008);
         }
-        if (talismans.includes(talismanId)){
-            await Caller.send({name: "invasion_selectTalisman", args: {talismanId: talismanId}});
-            setProgress(I18N('NHR_BOUGHT_TALISMAN'), false);
-            await new Promise((e) => setTimeout(e, 1000));
-            return true;
+        const targetId = autoPick ? emblems[0] : emblemId;
+
+        if (!emblems.includes(targetId)) return false;
+
+        await Caller.send({name: "invasion_selectEmblem", args: {emblemId: targetId}});
+
+        if (!missionRaid) {
+            setProgress(I18N('NHR_RECEIVED_EMBLEM', {emblemName:cheats.translate(`LIB_EMBLEM_NAME_${targetId}`)}), false);
+            await new Promise(e => setTimeout(e, 1000));
         }
-        setProgress(I18N('NHR_NO_TALISMAN'), false);
-        await new Promise((e) => setTimeout(e, 1000));
-        return false;
+        console.log("Выбрали талисман ", targetId);
+        return true;
     }
 
     async function resetChapter(chapterId) {
@@ -3172,12 +3202,12 @@
         }
         console.log('pets ', JSON.stringify(pets));
 
-        //Получить id талисмана
-        let talismanId = await chooseTalisman();
-        if (talismanId === 'cancel'){
+        //Выбрать эмблему
+        let emblemId = await selectEmblem();
+        if (emblemId === 'cancel'){
             return returnToNewHeroMenu();
         }
-        console.log('talismanId ', JSON.stringify(talismanId));
+        console.log('emblemId ', JSON.stringify(emblemId));
 
 /////////////////////////////////////////////////////////////////////////////////////////
         setProgress(I18N('NT_LETS_START'), false);
@@ -3273,11 +3303,12 @@
                 return;
             }
 
-            //Купить талисман
-            if (invasionInfo?.talismans?.length === 0) {
-                const talismanRerollsLeft = invasionInfo?.talismanRerollsLeft ?? 0;
-                const shouldResetChapter = await manageTalisman(talismanRerollsLeft, talismanId, missionRaid, chapterId);
-                //Сбрасываем главу если не купили талисман
+            //Получить эмблему
+            if (invasionInfo?.emblems?.length === 0) {
+                const emblemRerollsLeft = invasionInfo?.emblemRerollsLeft ?? 0;
+                console.log('emblemRerollsLeft: ' + emblemRerollsLeft);
+                const shouldResetChapter = await manageEmblem(emblemRerollsLeft, emblemId, missionRaid, chapterId);
+                //Сбрасываем главу если не получили нужную эмблему
                 if (shouldResetChapter){
                     setProgress(I18N('NHR_RESET_CHAPTER'), false);
                     await new Promise((e) => setTimeout(e, 1000));
@@ -3297,37 +3328,36 @@
         }
     }
 
-    async function manageTalisman(talismanRerollsLeft, talismanId, missionRaid, chapterId) {
+    async function manageEmblem(emblemRerollsLeft, emblemId, missionRaid, chapterId) {
         let shouldResetChapter = false;
-        let boughtTalisman = await buyTalisman(talismanId, missionRaid);
-        if (!boughtTalisman) {
+        let isEmblemObtained = await getEmblem(emblemId, missionRaid);
+        if (!isEmblemObtained) {
             const sealCost = getChapterSealCost(chapterId);
-
             //При нулевой стоимости
             if (!sealCost) {
                 shouldResetChapter = true;
                 return shouldResetChapter;
             }
 
-            for (let reroll = 1; reroll <= talismanRerollsLeft; reroll++) {
-                setProgress(I18N('NHR_ROLL_TALISMANS', {rerollCounter: reroll}), false);
+            for (let reroll = 1; reroll <= emblemRerollsLeft; reroll++) {
+                setProgress(I18N('NHR_ROLL_EMBLEMS', {rerollCounter: reroll}), false);
                 await new Promise((e) => setTimeout(e, 2000));
-                boughtTalisman = await buyTalisman(talismanId, missionRaid);
+                isEmblemObtained = await getEmblem(emblemId, missionRaid);
                 await new Promise((e) => setTimeout(e, 2000));
-                if (boughtTalisman) break;
+                if (isEmblemObtained) break;
             }
 
             // Берем чё дали
-            if (!boughtTalisman) {
-                setProgress(I18N('NHR_KEEP_ANY_TALISMAN'), false);
+            if (!isEmblemObtained) {
+                setProgress(I18N('NHR_KEEP_ANY_EMBLEM'), false);
                 await new Promise((e) => setTimeout(e, 2000));
-                boughtTalisman = await buyTalisman(0, missionRaid);
+                isEmblemObtained = await getEmblem(0, missionRaid);
             }
         }
 
         //Если куплен талисман Капитала
-        if (boughtTalisman && talismanId == 8008) {
-            await popup.confirm(I18N('NHR_BOUGHT_CAPITAL_TALISMAN'));
+        if (isEmblemObtained && emblemId == 8008) {
+            await popup.confirm(I18N('NHR_BOUGHT_CAPITAL_EMBLEM'));
             location.reload();
         }
         return shouldResetChapter;
