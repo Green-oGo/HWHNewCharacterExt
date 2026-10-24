@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.82
+// @version          2.83
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -368,6 +368,8 @@
 
     const romanNumerals = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
     let invasionInfoId = 0;
+    const shopIdCache = { titan: null, hero: null };
+
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
     // Добавление кнопоки в окно Разное
@@ -1022,21 +1024,21 @@
 
         const elementalSkils = [4500,4502,4503,4509,4510,4511];
         const primalSkils = [4506,4507,4508,4514,4515];
-        let titanAttackingTeams = {heroes: [[4030,4031,4033,4042,4043], [4003,4004,4040,4043,4044], [4023,4024,4022,4043,4040]], totemSkilsIds: [4502, 4506]};
+        let titanAttackingTeams = {heroes: [[4030,4031,4033,4042,4043], [4003,4004,4040,4043,4044], [4023,4024,4022,4043,4040]], totemSkillIds: [4502, 4506]};
 
         let titanOrHero = 'titan';
         let titanIds = titanAttackingTeams.heroes[0];
         //Навыки тотемов, что необходимо собрать
-        let totemSkilsIds = titanAttackingTeams.totemSkilsIds;
+        let totemSkillIds = titanAttackingTeams.totemSkillIds;
 
         if (missionRaid == false) {
             //Id тотемов, что необходимо собрать
-            totemSkilsIds = await chooseTitanSpiritSkills();
-            if (totemSkilsIds === 'cancel') {
+            totemSkillIds = await chooseTitanSpiritSkills();
+            if (totemSkillIds === 'cancel') {
                 return;
             }
 
-            console.log('totemSkilsIds ', JSON.stringify(totemSkilsIds));
+            console.log('totemSkillIds ', JSON.stringify(totemSkillIds));
             //Id титанов, что необходимо собрать
             titanIds = await getTeamButton(titanAttackingTeams.heroes, chapterNumber);
             if (titanIds === 'cancel') {
@@ -1061,6 +1063,7 @@
         console.log('firstMissionId ' + firstMissionId);
         console.log('missionId ' + missionId);
         console.log('lives ' + lives);
+        let invasionInfo = await Caller.send('invasion_getInfo');
         let attempt = 1;
         while (lives > 0) {
             if (attempt == 25){
@@ -1069,11 +1072,11 @@
             }
             attempt++;
             //Купить титанов и фрагменты тотемов
-            await buyTitansAndTotemSkils (missionNumber, lives, titanIds, totemSkilsIds);
-            if (missionNumber == 8) {
-                console.log('%cКонтрольная закупка перед боссом (продать ненужное, купить нужное)', 'color: green; font-weight: bold;');
-                await buyTitansAndTotemSkils (missionNumber, lives, titanIds, totemSkilsIds);
-            }
+            const availableFragments = invasionInfo.fragments ?? {};
+            const titansProgress = getItemsProgress(titanIds, availableFragments);
+            const totemSkillsProgress = getItemsProgress(totemSkillIds, availableFragments);
+
+            let result = await buyTitansAndTotemSkills (missionNumber, lives, titansProgress, totemSkillsProgress, availableFragments);
             //Текущая миссия босс или нет
             let boss = false;
 
@@ -1104,13 +1107,17 @@
                 }
             }
             let firstSpiritSkills = Object.fromEntries(spiritSkills);
+            console.log('titansProgress ', JSON.stringify(titansProgress));
+            console.log('totemSkillsProgress ', JSON.stringify(totemSkillsProgress));
 
             //Проходим миссию
             if (!boss) {
                 setProgress(I18N('NT_MISSION_PROGRESS', {missionNumber: missionNumber}), false);
             } else {
+return;
                 setProgress(I18N('NT_MISSION_PROGRESS_BOSS'), false);
             }
+
             await new Promise((e) => setTimeout(e, 2000));
             let error = await attackTitanMission(missionId, chapterId, heroes, firstSpiritSkills, boss);
             if (error) {
@@ -1119,7 +1126,7 @@
             }
 
             //Результат атаки
-            let invasionInfo = await Caller.send('invasion_getInfo');
+            invasionInfo = await Caller.send('invasion_getInfo');
 
             //Результат атаки босса
             if (boss) {
@@ -1182,9 +1189,9 @@
             let titanIdsToBuy = await getTitanIdsToBuy();
 
             //Навыки тотемов, что необходимо собрать
-            let totemSkilsIdsToBuy = await getTitanSkillIdsToBuy();
+            let totemSkillsIdsToBuy = await getTitanSkillIdsToBuy();
 
-            if (titanIdsToBuy.length == 0 && totemSkilsIdsToBuy.length == 0) {
+            if (titanIdsToBuy.length == 0 && totemSkillsIdsToBuy.length == 0) {
                 setProgress('', true);
                 confShow(I18N('NT_TITANS_AND_TOTEM_SKILLS_COLLECTED'));
                 return;
@@ -1193,7 +1200,7 @@
             setProgress(
                 I18N('NT_COLLECT_TITANS_PROGRESS', { counter: titanIdsToBuy.length }) +
                 '<br>' +
-                I18N('NT_COLLECT_TOTEM_SKILLS_PROGRESS', { counter: totemSkilsIdsToBuy.length }),
+                I18N('NT_COLLECT_TOTEM_SKILLS_PROGRESS', { counter: totemSkillsIdsToBuy.length }),
                 false
             );
             await new Promise((e) => setTimeout(e, 3000));
@@ -1224,15 +1231,19 @@
             }
 
             //Id навыков тотемов, что необходимо собрать
-            let totemSkilsIdsLength = 2;
-            let totemSkilsIds = totemSkilsIdsToBuy.slice(0, totemSkilsIdsLength);
+            let totemSkillsIdsLength = 2;
+            let totemSkillIds = totemSkillsIdsToBuy.slice(0, totemSkillsIdsLength);
 
             console.log(titanIds);
-            console.log(totemSkilsIds);
+            console.log(totemSkillIds);
 
             while (lives > 0) {
                 //Купить титанов и фрагменты тотемов
-                let result = await buyTitansAndTotemSkils (missionNumber, lives, titanIds, totemSkilsIds);
+                const availableFragments = invasionInfo.fragments ?? {};
+                const titansProgress = getItemsProgress(titanIds, availableFragments);
+                const totemSkillsProgress = getItemsProgress(totemSkillIds, availableFragments);
+
+                let result = await buyTitansAndTotemSkills (missionNumber, lives, titansProgress, totemSkillsProgress, availableFragments);
 
                 //Выйти, если босс побежден и полностью собрали титанов и тотемы.
                 if (result && farmedChapters.includes(chapterId)) {
@@ -1257,7 +1268,7 @@
                 //Получить атакующую команду
                 let have = await getAttackingTeam();
                 let heroes = have.heroes;
-                let titanSkil = have.other;
+                let titanSkill = have.other;
                 let allHeroes = have.allHeroes;
                 let firstSpiritSkills = {};
 
@@ -1565,19 +1576,25 @@
     }
 
     function getShopId(titanOrHero) {
-        let shops = Object.values(lib.data.shop).filter(e => e.requirements?.invasion?.id === invasionInfoId);
-        if (shops.length == 1){
+        const shops = Object.values(lib.data.shop).filter(e => e.requirements?.invasion?.id === invasionInfoId);
+        if (shops.length === 1) {
             return shops[0].id;
         }
-        let chapters = Object.values(lib.data.invasion.chapter).filter((e) => e.invasionId === invasionInfoId);
-        if (chapters[0].settings?.stallShopId) {
-            for (let chapter of chapters) {
-                if (chapter.settings.unitType === titanOrHero) {
-                    return chapter.settings.stallShopId;
-                }
-            }
+
+        const chapters = Object.values(lib.data.invasion.chapter).filter((e) => e.invasionId === invasionInfoId);
+        if (chapters[0]?.settings?.stallShopId) {
+            const chapter = chapters.find(c => c.settings.unitType === titanOrHero);
+            return chapter?.settings.stallShopId ?? false;
         }
+
         return false;
+    }
+
+    function getCachedShopId(titanOrHero) {
+        if (shopIdCache[titanOrHero] == null) {
+            shopIdCache[titanOrHero] = getShopId(titanOrHero);
+        }
+        return shopIdCache[titanOrHero];
     }
 
     async function selectEmblem() {
@@ -1692,42 +1709,52 @@
                 checked: savedTitanSpiritSkillsIds.includes(skillId),
             });
         }
+
+        if (!chekTitanSpiritSkills.some(item => item.checked)) {
+            chekTitanSpiritSkills[0].checked = true;
+        }
+
+        let chekTitanPrimalSkills = [];
+
         for (let skillId of primalIds) {
-            chekTitanSpiritSkills.push({
+            chekTitanPrimalSkills.push({
                 name: skillId,
                 label: `<span style="color: LimeGreen;"> ${cheats.translate(`LIB_SKILL_${skillId}`)}</span>`,
                 radio: 'primalIds',
                 checked: savedTitanSpiritSkillsIds.includes(skillId),
             });
         }
-        let cycle = true;
-        while (cycle) {
-            let answer = await popup.confirm(
-                I18N('NHR_SELECT_TITAN_SPIRIT_SKILLS'),
-                [
-                    { msg: I18N('NHR_NEXT'), result: true, color: 'green' },
-                    { msg: I18N('BTN_CANCEL'), result: false, isCancel: true, color: 'red' },
-                ],
-                chekTitanSpiritSkills
-            );
-            if (!answer) {
-                return 'cancel';
-            }
-            const taskList = popup.getCheckBoxes();
-            console.log(taskList);
-            let skillIds = [];
-            for (let skill of taskList) {
-                if (skill.checked) {
-                    skillIds.push(Number(skill.name));
-                }
-            }
 
-            if (skillIds.length > 0){
-                savedTitanSpiritSkillsIds = [...skillIds];
-                setSaveVal('savedTitanSpiritSkillsIds', savedTitanSpiritSkillsIds);
-                cycle = false;
-                return skillIds;
+        if (!chekTitanPrimalSkills.some(item => item.checked)) {
+            chekTitanPrimalSkills[0].checked = true;
+        }
+
+        chekTitanSpiritSkills.push(...chekTitanPrimalSkills);
+
+        let answer = await popup.confirm(
+            I18N('NHR_SELECT_TITAN_SPIRIT_SKILLS'),
+            [
+                { msg: I18N('NHR_NEXT'), result: true, color: 'green' },
+                { msg: I18N('BTN_CANCEL'), result: false, isCancel: true, color: 'red' },
+            ],
+            chekTitanSpiritSkills
+        );
+        if (!answer) {
+            return 'cancel';
+        }
+        const taskList = popup.getCheckBoxes();
+        console.log(taskList);
+        let skillIds = [];
+        for (let skill of taskList) {
+            if (skill.checked) {
+                skillIds.push(Number(skill.name));
             }
+        }
+
+        if (skillIds.length > 0){
+            savedTitanSpiritSkillsIds = [...skillIds];
+            setSaveVal('savedTitanSpiritSkillsIds', savedTitanSpiritSkillsIds);
+            return skillIds;
         }
     }
 
@@ -2076,95 +2103,69 @@
         //returnToNewCharacterMenu();
     }
 
-    async function buyTitansAndTotemSkils (missionNumber, lives, titanIds, totemSkilsIds) {
+    async function buyTitansAndTotemSkills (missionNumber, lives, titansProgress, totemSkillsProgress, availableFragments) {
         let titanOrHero = 'titan';
         let shopPinSlot = false;
+        const canSellItems = missionNumber >= 4 || lives < 2;
         let dots = 1;
         setProgress(I18N('NHR_SHOPPING') + `${'.'.repeat(dots)}`, false);
         dots = dots === 3 ? 1 : dots + 1;
 
         //Получить id магазина
-        let shopId = getShopId(titanOrHero); //2023 Магазин
-        console.log('Зашли в магазин');
-        console.log('Id магазина ' + shopId);
-        console.log('titanIds ', JSON.stringify(titanIds));
-        console.log('totemSkilsIds ', JSON.stringify(totemSkilsIds));
+        const shopId = getCachedShopId(titanOrHero);
 
-        //Получить атакующую команду
-        let haveFragments = await getAttackingTeam();
-        let allTitans = haveFragments.allHeroes;
-        let allSkils = haveFragments.other;
-        let allAvailableFragments = haveFragments.allAvailableFragments;
+        console.log('Зашли в магазин. Id магазина ' + shopId);
+        console.log('titansProgress ', JSON.stringify(titansProgress));
+        console.log('totemSkillsProgress ', JSON.stringify(totemSkillsProgress));
 
-        //Фрагменты титанов
-        let titanFragments = new Array(titanIds.length).fill(0);
-        for (let i = 0; i < titanFragments.length; i++) {
-            if (allAvailableFragments[titanIds[i]]) {
-                titanFragments[i] = allAvailableFragments[titanIds[i]];
-            }
+        let shopSlots = null;
+        const requiredTitanFragments = 7;
+        const requiredTotemSkillFragments = 6;
+
+        let allTitansBought = areAllFragmentsBought_2(titansProgress, requiredTitanFragments);
+        let allTotemSkillsBought = areAllFragmentsBought_2(totemSkillsProgress, requiredTotemSkillFragments);
+        console.log('allTitansBought: ' + allTitansBought);
+        console.log('allTotemSkillsBought: ' + allTotemSkillsBought);
+
+        //Продать не нужные фрагменты
+        if (canSellItems) {
+            await sellItems (titansProgress, totemSkillsProgress, availableFragments);
         }
-        //Фрагменты тотемов
-        let totemSkilFragments = new Array(totemSkilsIds.length).fill(0);
-        for (let i = 0; i < totemSkilFragments.length; i++) {
-            if (allAvailableFragments[totemSkilsIds[i]]) {
-                totemSkilFragments[i] = allAvailableFragments[totemSkilsIds[i]];
-            }
-        }
-
-        //Продать титанов
-        if (missionNumber >= 2 || lives < 2) {
-            await sellHeroes (titanIds, titanFragments, allTitans, allAvailableFragments);
-        }
-        //Продать тотемы
-        /*if (missionNumber >= 5) {
-            await sellHeroes (totemSkilsIds, totemSkilFragments, allSkils, allAvailableFragments);
-        }*/
-
-        console.log('titanFragments ', JSON.stringify(titanFragments));
-        console.log('totemSkilFragments ', JSON.stringify(totemSkilFragments));
-//await new Promise((e) => setTimeout(e, 2000000));
 
         let coins = {value: await Caller.send('inventoryGet').then((e) => e.coin[1080])};
         console.log('Монеты: ' + coins.value);
 
-        let shopSlots = null;
-        let boughtAllTitans = areAllFragmentsBought (titanFragments);
-        let boughtAllTomemSkilFragments = areAllFragmentsBought (totemSkilFragments);
-        console.log('boughtAllTitans: ' + boughtAllTitans);
-        console.log('boughtAllTomemSkilFragments: ' + boughtAllTomemSkilFragments);
         let purchaseNumber = 0;
         while (coins.value >= 12) {
             setProgress(I18N('NHR_SHOPPING') + `${'.'.repeat(dots)}`, false);
             dots = dots === 3 ? 1 : dots + 1;
             purchaseNumber++;
-            console.log('%cЗакупки ' + purchaseNumber, 'color: green; font-weight: bold;');
+            console.log('%cПокупи №' + purchaseNumber, 'color: green; font-weight: bold;');
             //Получить состояние магазина
             if (!shopSlots) {
                 shopSlots = await Caller.send({ name: 'shopGet', args: { shopId: shopId } }).then((e) => Object.values(e.slots));
             }
             //Если куплены все что необходимо, выйти и заменить
-            if (boughtAllTitans && boughtAllTomemSkilFragments) {
+            if (allTitansBought && allTotemSkillsBought) {
                 return true;
             }
 
+            if (missionNumber == 1 && lives == 3) {
+                console.log('%cЗашли скупиться для 1 миссии ', 'color: green; font-weight: bold;');
+                await buyRandomHeroes (shopId, coins, titanOrHero)
+                return false;
+            }
+
             //Купить титанов
-            if (!boughtAllTitans) {
-                shopPinSlot = await buyTitans (shopId, coins, titanIds, shopSlots, titanFragments);
-                //Куплены все герои или нет
-                boughtAllTitans = areAllFragmentsBought (titanFragments)
+            if (!allTitansBought) {
+                shopPinSlot = await buyItems (shopId, coins, shopSlots, titansProgress, requiredTitanFragments, canSellItems);
+                allTitansBought = areAllFragmentsBought_2(titansProgress, requiredTitanFragments);
             }
 
             //Купить навыки тотемов
-            if (!boughtAllTomemSkilFragments) {
-                shopPinSlot = await buyTomemSkilFragments (shopId, coins, totemSkilsIds, shopSlots, totemSkilFragments);
-                //Куплены все навыки тотемов или нет
-                boughtAllTomemSkilFragments = areAllFragmentsBought (totemSkilFragments)
-            }
-
-            if (missionNumber == 1) {
-                console.log('%cЗашли закупиться для 1 миссии ', 'color: green; font-weight: bold;');
-                await buyRandomHeroes (shopId, coins, titanOrHero)
-                return false;
+            if (!allTotemSkillsBought) {
+                shopPinSlot = await buyItems (shopId, coins, shopSlots, totemSkillsProgress, requiredTotemSkillFragments, canSellItems);
+                allTotemSkillsBought = areAllFragmentsBought_2(totemSkillsProgress, requiredTotemSkillFragments);
             }
 
             console.log("shopPinSlot " + shopPinSlot);
@@ -2179,143 +2180,126 @@
         return false;
     }
 
+    async function buyItems(shopId, coins, shopSlots, itemsProgress, requiredItemFragments, canSellItems) {
+        let shopPinSlot = false;
+        const unitType = getUnitType(itemsProgress);
+
+        const fragmentSellReward = lib.data.invasion.list[invasionInfoId].settings.fragmentSellReward;
+        const fragmentSellPrice = fragmentSellReward[unitType]?.coin?.[1080] ?? 0;
+
+        const ownSlotFlagByUnitType = {
+            hero:        'invasionFragmentHero',
+            titan:       'invasionFragmentTitan',
+            spiritSkill: 'invasionFragmentSkill',
+            pet:         'invasionFragmentPet',
+        };
+
+        const ownSlotFlag = ownSlotFlagByUnitType[unitType] ?? null;
+
+        console.log("Просматриваем слоты. Закреплен слот: " + shopPinSlot);
+
+        try {
+            for (const slot of shopSlots) {
+                if (!slot.reward[ownSlotFlag] || slot.bought) {
+                    continue;
+                }
+
+                const hasNeededSlot = Object.entries(slot.reward[ownSlotFlag])
+                .some(([heroId]) => itemsProgress[heroId] < requiredItemFragments);
+
+                if (!hasNeededSlot) {
+                    if (slot.pinned) {
+                        await Caller.send({ name: 'shop_unpinSlot', args: { shopId, slotId: slot.id } });
+                    }
+                    continue;
+                }
+
+                if (coins.value >= slot.cost.coin[1080]) {
+                    await Caller.send({ name: 'shopBuy', args: { shopId, slot: slot.id } });
+                    console.log('%cКуплен лот в магазине', 'color: green; font-weight: bold;');
+                    coins.value -= slot.cost.coin[1080];
+
+                    for (const [heroId, amount] of Object.entries(slot.reward[ownSlotFlag])) {
+                        const id = Number(heroId);
+
+                        if (!Object.hasOwn(itemsProgress, id)) {
+                            if (canSellItems) {
+                                await Caller.send({ name: "invasion_fragmentSell", args: { fragmentId: id, amount } });
+                                coins.value += fragmentSellPrice * amount;
+                                console.log('%cПродали ненужного героя ' + id, 'color: green; font-weight: bold;');
+                            }
+                            continue;
+                        }
+
+                        itemsProgress[id] += amount;
+
+                        const excess = itemsProgress[id] - requiredItemFragments;
+                        if (excess > 0) {
+                            await Caller.send({ name: "invasion_fragmentSell", args: { fragmentId: id, amount: excess } });
+                            itemsProgress[id] = requiredItemFragments;
+                            coins.value += fragmentSellPrice * excess;
+                            console.log('%cПродали лишние части ' + id, 'color: green; font-weight: bold;');
+                        }
+                    }
+                } else {
+                    await Caller.send({ name: 'shop_pinSlot', args: { shopId, slotId: slot.id } });
+                    console.log('%cНет денег. Зарезервировали на потом', 'color: blue; font-weight: bold;');
+                    shopPinSlot = true;
+                }
+            }
+        } catch (e) {
+            console.log('%cПроизошла ошибка при покупке', 'color: red; font-weight: bold;');
+            console.error(e);
+        }
+
+        console.log("Вышли с закупки " + shopPinSlot);
+        return shopPinSlot;
+    }
+
+    function getUnitType(itemsProgress) {
+        const firstId = Array.isArray(itemsProgress)
+        ? itemsProgress[0]
+        : Number(Object.keys(itemsProgress)[0]);
+
+        if (firstId < 1000) return "hero";
+        if (firstId < 4500) return "titan";
+        if (firstId < 6000) return "spiritSkill";
+        return "pet";
+    }
+
+    async function sellItems(titansProgress, totemSkillsProgress, availableFragments) {
+        const knownIds = new Set([
+            ...Object.keys(titansProgress),
+            ...Object.keys(totemSkillsProgress),
+        ]);
+
+        for (const [fragmentId, amount] of Object.entries(availableFragments)) {
+            if (knownIds.has(fragmentId) || amount <= 0) continue;
+
+            await Caller.send({
+                name: "invasion_fragmentSell",
+                args: { fragmentId: Number(fragmentId), amount }
+            });
+            console.log("Продали ненужное: " + fragmentId);
+        }
+    }
+
+    function getItemsProgress(itemIds, availableFragments) {
+        const itemsProgress = {};
+        itemIds.forEach(id => {
+            itemsProgress[id] = availableFragments[id] || 0;
+        });
+        return itemsProgress;
+    }
+
     function areAllFragmentsBought (fragments) {
         let missingFragments = fragments.some(item => item < 7);
         return !missingFragments;
     }
 
-    async function buyTitans (shopId, coins, titanIds, shopSlots, titanFragments) {
-        let shopPinSlot = false;
-        console.log("Зашли в закупку титанов ");
-        try {
-            for (let slot of shopSlots) {
-                //Пропустить скрытые лоты и навыки тотемов
-                if (slot.reward.invasionFragmentTitanRand || slot.reward.invasionFragmentSkillRand || slot.reward.invasionFragmentSkill || slot.bought) {
-                    continue;
-                }
-
-                if (slot.pinned){
-                    let unpinSlot = false;
-                    let mas = Object.keys(slot.reward.invasionFragmentTitan);
-                    for (let id of mas){
-                        let numberOfFragments = titanFragments[titanIds.indexOf(id)];
-                        if(numberOfFragments > 6){
-                            unpinSlot = true;
-                            continue;
-                        }
-                        unpinSlot = false;
-                        break;
-                    }
-                    if(unpinSlot == true){
-                        await Caller.send({ name: 'shop_unpinSlot', args: { shopId: shopId, slotId: slot.id } });
-                    }
-                }
-
-                //Купить титанов
-                for (let t = 0; t < titanIds.length; t++) {
-                    if (slot.reward.invasionFragmentTitan?.[titanIds[t]] && titanFragments[t] < 7) {
-                        if (coins.value >= slot.cost.coin[1080]) {
-                            let shopBuy = await Caller.send({ name: 'shopBuy', args: { shopId: shopId, slot: slot.id } });
-                            console.log('%cКуплен титан ', 'color: green; font-weight: bold;');
-                            coins.value -= slot.cost.coin[1080];
-                            titanFragments[t] += slot.reward.invasionFragmentTitan?.[titanIds[t]];
-
-                            //Если c первым титаном есть другой
-                            for (let i = t+1; i < titanIds.length; i++) {
-                                if (slot.reward.invasionFragmentTitan?.[titanIds[i]]) {
-                                    console.log('%cВторой титан в комплекте ', 'color: green; font-weight: bold;');
-                                    titanFragments[i] += slot.reward.invasionFragmentTitan?.[titanIds[i]];
-                                    break;
-                                }
-                            }
-                        } else {
-                            await Caller.send({ name: 'shop_pinSlot', args: { shopId: shopId, slotId: slot.id } });
-                            shopPinSlot = true;
-                        }
-                        break;
-                    }
-                }
-            }
-        } catch (e) {
-            console.log('%cПроизошла ошибка при покупке титана', 'color: red; font-weight: bold;');
-            console.error(e);
-        }
-        console.log("Вышли с закупки титанов. Закрепили слот: " + shopPinSlot);
-        return shopPinSlot;
-    }
-
-    async function buyTomemSkilFragments (shopId, coins, totemSkilsIds, shopSlots, totemSkilFragments) {
-        let shopPinSlot = false;
-        console.log("Зашли в закупку фрагментов тотемов ");
-        try {
-            for (let slot of shopSlots) {
-                //Пропустить скрытые лоты титанов
-                if (slot.reward.invasionFragmentTitanRand || slot.reward.invasionFragmentTitan || slot.bought) {
-                    continue;
-                }
-
-                if (slot.pinned && !slot.reward.invasionFragmentSkillRand){
-                    let unpinSlot = false;
-                    let mas = Object.keys(slot.reward.invasionFragmentSkill);
-                    for (let id of mas){
-                        let numberOfFragments = totemSkilFragments[totemSkilsIds.indexOf(id)];
-                        if(numberOfFragments > 6){
-                            unpinSlot = true;
-                            continue;
-                        }
-                        unpinSlot = false;
-                        break;
-                    }
-                    if(unpinSlot == true){
-                        await Caller.send({ name: 'shop_unpinSlot', args: { shopId: shopId, slotId: slot.id } });
-                    }
-                }
-                //Купить случайные навыки тотема
-                if (slot.reward.invasionFragmentSkillRand) {
-                    if (coins.value >= slot.cost.coin[1080]) {
-                        let shopBuy = await Caller.send({ name: 'shopBuy', args: { shopId: shopId, slot: slot.id } });
-                        console.log('%cКуплена часть навыка тотема ', 'color: green; font-weight: bold;');
-                        let fragments = Object.keys(shopBuy.invasionFragmentSkill).map(Number);
-                        coins.value -= slot.cost.coin[1080];
-                        for (let fragmentId of fragments) {
-                            let index = totemSkilsIds.indexOf(fragmentId);
-                            if (index !== -1) {
-                                totemSkilFragments[index] += 1;
-                            } else {
-                                await Caller.send({name: "invasion_fragmentSell", args: {fragmentId: fragmentId, amount: 1}});
-                                coins.value += 6;
-                            }
-                        }
-                    } else {
-                        await Caller.send({ name: 'shop_pinSlot', args: { shopId: shopId, slotId: slot.id } });
-                        shopPinSlot = true;
-                    }
-                    continue;
-                }
-
-                //Купить навыки тотема
-                for (let s = 0; s < totemSkilsIds.length; s++) {
-                    if (slot.reward.invasionFragmentSkill?.[totemSkilsIds[s]] && totemSkilFragments[s] < 7) {
-                        if (coins.value >= slot.cost.coin[1080]) {
-                            let shopBuy = await Caller.send({ name: 'shopBuy', args: { shopId: shopId, slot: slot.id } });
-                            console.log('%cКуплена часть навыка тотема ', 'color: green; font-weight: bold;');
-                            coins.value -= slot.cost.coin[1080];
-                            totemSkilFragments[s] += slot.reward.invasionFragmentSkill?.[totemSkilsIds[s]];
-                        } else {
-                            await Caller.send({ name: 'shop_pinSlot', args: { shopId: shopId, slotId: slot.id } });
-                            shopPinSlot = true;
-                        }
-                        break;
-                    }
-                }
-            }
-        } catch (e) {
-            console.log('%cПроизошла ошибка при покупке навыка тотема', 'color: red; font-weight: bold;');
-            console.error(e);
-        }
-        console.log("Вышли с закупки навыков тотема. Закрепили слот: " + shopPinSlot);
-        return shopPinSlot;
-    }
+   function areAllFragmentsBought_2(fragments, requiredAmount) {
+       return Object.values(fragments).every(v => v >= requiredAmount);
+   }
 
     async function buyHeroesAndPets (missionNumber, lives, heroIds, pets) {
         let titanOrHero = 'hero';
@@ -2461,7 +2445,7 @@
         //Продать героев
         if (canSellItems) {
             //Продать героев
-            await sellHeroes_2 (heroIds, allAvailableFragments);
+            await sellItems (heroIds, allAvailableFragments);
         }
 
         console.log('heroFragments ', JSON.stringify(heroFragments));
@@ -2537,37 +2521,6 @@
             }
         }
         return false;
-    }
-
-    async function sellHeroes_2 (heroIds, allAvailableFragments) {
-
-        /*console.log("Id нужных героев > 7---------------");
-        for (let i = 0; i < heroIds.length; i++) {
-            if (heroFragments[i] > 7){
-                console.log("Id " + heroIds[i] + " продали " + (heroFragments[i]-7));
-                await Caller.send({name: "invasion_fragmentSell", args: {fragmentId: heroIds[i], amount: heroFragments[i]-7}});
-            }
-        }
-
-        let maximumNumberOfHeroes = 5;
-        if (heroIds[0] >= 4500 ) {
-            maximumNumberOfHeroes = heroIds.length;
-        }
-        console.log("Id ненужных героев -------------");
-        if (allHeroes.length > maximumNumberOfHeroes) {
-            let counter = 0;
-            for (let i = allHeroes.length - 1; i >= 0; i--) {
-                if ((allHeroes.length - counter) == maximumNumberOfHeroes){
-                    break;
-                }
-                if (heroIds.includes(allHeroes[i])){
-                    continue;
-                }
-                console.log("Продали ненужного " + allHeroes[i]);
-                await Caller.send({name: "invasion_fragmentSell", args: {fragmentId: allHeroes[i], amount: allAvailableFragments[allHeroes[i]]}});
-                counter++;
-            }
-        }*/
     }
 
     async function shopRefresh (shopId, coins) {
@@ -2845,74 +2798,6 @@
         }
         console.log("Вышли с закупки героев " + shopPinSlot);
         return shopPinSlot;
-    }
-
-    async function buyItems (shopId, coins, shopSlots, itemsProgress, canSellItems ) {
-        let shopPinSlot = false;
-        let unitType = getUnitType(itemsProgress);
-        let fragmentSellReward = lib.data.invasion.list[invasionInfoId].settings.fragmentSellReward
-        const fragmentSellPrice = fragmentSellReward[unitType].coin[1080];
-
-        console.log("Зашли в закупку героев " + shopPinSlot);
-        try {
-            for (let slot of shopSlots) {
-                //Пропустить скрытые лоты и питомцев и уже купленный лот
-                if (slot.reward.invasionFragmentHeroRand || slot.reward.invasionFragmentPet || slot.bought) {
-                    continue;
-                }
-                const lot = slot.reward.invasionFragmentHero;
-                const neededFragments = 7;
-                const hasNeededSlot = Object.entries(lot).some(([heroId]) => {
-                    const id = Number(heroId);
-                    const currentFragments = itemsProgress[id];
-                    return itemsProgress.hasOwnProperty(id) && currentFragments < neededFragments;
-                });
-                console.log("hasNeededSlot: " + hasNeededSlot + ' lot: ', JSON.stringify(lot) );
-
-                if (slot.pinned && !hasNeededSlot){
-                    await Caller.send({ name: 'shop_unpinSlot', args: { shopId: shopId, slotId: slot.id } });
-                }
-
-                if (hasNeededSlot) {
-                    if (coins.value >= slot.cost.coin[1080]) {
-                        await Caller.send({ name: 'shopBuy', args: { shopId: shopId, slot: slot.id } });
-                        console.log('%cКуплен лот в магазине', 'color: green; font-weight: bold;');
-                        coins.value -= slot.cost.coin[1080];
-
-                        for (const [heroId, amount] of Object.entries(lot)) {
-                            const id = Number(heroId);
-                            const currentFragments = itemsProgress[id];
-                            if (itemsProgress.hasOwnProperty(id) && currentFragments < neededFragments) {
-                                itemsProgress[id] += amount;
-                            } else {
-                                if (canSellItems) {
-                                    await Caller.send({name: "invasion_fragmentSell", args: {fragmentId: id, amount: amount}});
-                                    console.log('%cПродали что то ненужное id' + id, 'color: green; font-weight: bold;');
-                                    coins.value += fragmentSellPrice;
-                                }
-                            }
-                        }
-                    } else {
-                        await Caller.send({ name: 'shop_pinSlot', args: { shopId: shopId, slotId: slot.id } });
-                        console.log('%cНет деняг. Зарезервировали на потом', 'color: blue; font-weight: bold;');
-                        shopPinSlot = true;
-                    }
-                }
-            }
-        } catch (e) {
-            console.log('%cПроизошла ошибка при покупке героя', 'color: red; font-weight: bold;');
-            console.error(e);
-        }
-        console.log("Вышли с закупки героев " + shopPinSlot);
-        return shopPinSlot;
-    }
-
-    function getUnitType(data) {
-        const firstId = Array.isArray(data) ? data[0] : Number(Object.keys(data)[0]);
-        if (firstId < 1000) return "hero";
-        if (firstId < 4500) return "titan";
-        if (firstId < 6000) return "spiritSkill";
-        return "pet";
     }
 
     async function buyPets (shopId, coins, pets, shopSlots, boughtAllHeroes) {
