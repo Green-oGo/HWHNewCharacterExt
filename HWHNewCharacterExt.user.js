@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.85
+// @version          2.87
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -1556,7 +1556,13 @@
     }
 
     async function removeTutorialMessages_2() {
-        const resetTutorialData = Object.keys(Object.values(lib.data.invasion.list).find(e => e.id == invasionInfoId).settings.resetTutorialData);
+        const invasion = Object.values(lib.data.invasion.list).find(e => e.id == invasionInfoId);
+
+        const battlePassId = invasion?.clientData?.battlePassId ?? 0;
+        //console.log(battlePassId);
+        await Send({calls:[{name:"battlePass_setTutorial", args:{step: 1, id: battlePassId}, ident: "body"}]});
+
+        const resetTutorialData = Object.keys(invasion.settings.resetTutorialData);
         const chains = (Object.values(lib.data.tutorial.chain)).filter(chain => resetTutorialData.includes(chain.ident));
         //console.log(resetTutorialData);
         //console.log(chains);
