@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.83
+// @version          2.84
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -1114,7 +1114,6 @@
             if (!boss) {
                 setProgress(I18N('NT_MISSION_PROGRESS', {missionNumber: missionNumber}), false);
             } else {
-return;
                 setProgress(I18N('NT_MISSION_PROGRESS_BOSS'), false);
             }
 
