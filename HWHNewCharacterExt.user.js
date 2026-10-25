@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.84
+// @version          2.85
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -382,16 +382,6 @@
             return I18N('NEW_CHARACTER_TITLE');
         },
         result: async function () {
-            //getTeamButton2
-            //await popup.confirm(I18N('NHR_WARNING_MESSAGE'));
-            //let shopId = 1088;
-            //let coins = {value: 100};
-            //console.log(emblemId);
-            //await buyRandomHeroes (2024, {value: 90}, 'hero');
-            //await buyRandomHeroes (2023, {value: 90}, 'titan');
-            //let r = getHeroIdsMissingInShop();
-            //console.log(r);
-            //await attackArchdemon();
             await onClickNewCharacterButton();
         },
         color: 'pink',
@@ -402,7 +392,7 @@
             confShow(`${I18N('NT_OUTDATED_VERSION_OF_SCRIPT')}`);
             return;
         }
-        console.log(scriptInfo.version);
+        //console.log(scriptInfo.version);
         let invasionInfo = await Caller.send('invasion_getInfo');
         if (invasionInfo) {
             invasionInfoId = invasionInfo.id;
@@ -410,8 +400,8 @@
             let chapters = Object.values(lib.data.invasion.chapter).filter((e) => e.invasionId === invasionInfoId);
             const startDate = new Date((chapters[0].startDate).replace(' ', 'T') + 'Z');
             const todayDate = Date.now();
-            console.log(startDate);
-            console.log(todayDate);
+            //console.log(startDate);
+            //console.log(todayDate);
 
             if (todayDate < startDate) {
                 confShow(`${I18N('NEW_CHARACTER_NO_EVENT')}`);
@@ -599,7 +589,7 @@
             //Убрать сообщения обучения
             setProgress(I18N('NHR_REMOVE_TUTORIAL_MESSAGES'), false);
             await new Promise((e) => setTimeout(e, 3000));
-            await removeTutorialMessages();
+            await removeTutorialMessages_2();
 
             //Пройти I главу
             setProgress(I18N('NHR_COMPLETE_CHAPTER', { chapterNumber: romanNumerals[1]}), false);
@@ -645,7 +635,7 @@
             //Убрать сообщения обучения
             setProgress(I18N('NHR_REMOVE_TUTORIAL_MESSAGES'), false);
             await new Promise((e) => setTimeout(e, 3000));
-            await removeTutorialMessages();
+            await removeTutorialMessages_2();
 
             //Пройти I главу
             setProgress(I18N('NHR_COMPLETE_CHAPTER', { chapterNumber: romanNumerals[1]}), false);
@@ -882,7 +872,7 @@
         console.log('missionId ' + missionId);
         console.log('lives ' + lives);
         console.log(heroIds);
-
+        let invasionInfo = await Caller.send('invasion_getInfo');
         let attempt = 1;
         while (lives > 0) {
             if (attempt == 25){
@@ -962,7 +952,7 @@
             }
 
             //Результат атаки
-            let invasionInfo = await Caller.send('invasion_getInfo');
+            invasionInfo = await Caller.send('invasion_getInfo');
 
             //Результат атаки босса
             if (boss) {
@@ -1565,6 +1555,25 @@
         }
     }
 
+    async function removeTutorialMessages_2() {
+        const resetTutorialData = Object.keys(Object.values(lib.data.invasion.list).find(e => e.id == invasionInfoId).settings.resetTutorialData);
+        const chains = (Object.values(lib.data.tutorial.chain)).filter(chain => resetTutorialData.includes(chain.ident));
+        //console.log(resetTutorialData);
+        //console.log(chains);
+        const chainIds = chains.map(e => e.id);
+        //console.log(chainIds);
+        const tasks = (Object.values(lib.data.tutorial.task)).filter(task => chainIds.includes(task.chainId) && task.saveState != null);
+        //console.log(tasks);
+        const taskIds = tasks.map(e => e.id);
+
+        let calls = [];
+        for (let id of taskIds){
+            calls.push({name: 'tutorialSaveProgress', args: {taskId: id }});
+        }
+        const result = await Caller.send(calls);
+        console.log(result);
+    }
+
     function getHeroIdsMissingInShop() {
         let allHeroIds = Object.values(lib.data.hero).filter(e => e.type === 'hero' && !e.roleExtended.includes('boss')).map(e => e.id);
         let heroIdsInShop = lib.data.invasion.list[invasionInfoId].attackUnitsPool.availableUnits.filter(n => n < 1000);
@@ -2162,7 +2171,7 @@
             }
 
             //Купить навыки тотемов
-            if (!allTotemSkillsBought) {
+            if (!allTotemSkillsBought && (lives == 1 || missionNumber >= 4)) {
                 shopPinSlot = await buyItems (shopId, coins, shopSlots, totemSkillsProgress, requiredTotemSkillFragments, canSellItems);
                 allTotemSkillsBought = areAllFragmentsBought_2(totemSkillsProgress, requiredTotemSkillFragments);
             }
