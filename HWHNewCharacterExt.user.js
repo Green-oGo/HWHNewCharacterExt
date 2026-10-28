@@ -3,7 +3,7 @@
 // @name:en          HWHNewCharacterExt
 // @name:ru          HWHNewCharacterExt
 // @namespace        HWHNewCharacterExt
-// @version          2.90
+// @version          2.91
 // @description      Extension for HeroWarsHelper script
 // @description:en   Extension for HeroWarsHelper script
 // @description:ru   Расширение для скрипта HeroWarsHelper
@@ -2238,9 +2238,11 @@
                 shopSlots = await Caller.send({ name: 'shopGet', args: { shopId: shopId } }).then((e) => Object.values(e.slots));
             }
 
+            shopSlots.sort((a, b) => a.cost.coin[1080] - b.cost.coin[1080]);
+
             if (missionNumber === 1 && lives === 3) {
                 console.log('%cЗашли скупиться для 1 миссии ', 'color: green; font-weight: bold;');
-                await buyRandomHeroes(shopId, coins, shopType);
+                await buyRandomItems(shopId, coins, shopSlots, heroOrTitanProgress, availableFragments);
                 return false;
             }
 
@@ -2376,8 +2378,8 @@
         return shopPinSlot;
     }
 
-    function getUnitType(itemsProgress) {
-        const firstId = Array.isArray(itemsProgress) ? itemsProgress[0] : Number(Object.keys(itemsProgress)[0]);
+    function getUnitType(items) {
+        const firstId = Array.isArray(items) ? items[0] : Number(Object.keys(items)[0]);
 
         if (firstId < 1000) return 'hero';
         if (firstId < 4500) return 'titan';
@@ -2385,8 +2387,8 @@
         return 'pet';
     }
 
-    async function sellItems(titansProgress, totemSkillsProgress, availableFragments) {
-        const knownIds = new Set([...Object.keys(titansProgress), ...Object.keys(totemSkillsProgress)]);
+    async function sellItems(primaryProgress, secondaryProgress, availableFragments) {
+        const knownIds = new Set([...Object.keys(primaryProgress), ...Object.keys(secondaryProgress)]);
 
         for (const [fragmentId, amount] of Object.entries(availableFragments)) {
             if (knownIds.has(fragmentId) || amount <= 0) continue;
@@ -2424,106 +2426,85 @@
         }
     }
 
-    async function buyRandomHeroes(shopId, coins, titanOrHero) {
-        titanOrHero = titanOrHero.toLowerCase();
-        const isHero = titanOrHero === 'hero';
-        const discountedLotPrice = isHero ? 16 : 12;
-        const randomRewardPrice = isHero ? 18 : 14;
+    async function buyRandomItems(shopId, coins, shopSlots, itemsProgress, availableFragments) {
         try {
-            let shopSlots = await Caller.send({ name: 'shopGet', args: { shopId: shopId } }).then((e) => Object.values(e.slots));
-            let haveFragments = await getAttackingTeam();
-            let allHeroes = haveFragments.allHeroes;
-            let numberOfHeroes = allHeroes.length;
-            console.log('allHeroes ', JSON.stringify(allHeroes));
-            while (coins.value >= discountedLotPrice || numberOfHeroes < 5) {
-                //Купить лот с 1 героем со скидкой
-                /*for (let slot of shopSlots) {
-                    if (slot.cost.coin[1080] == 8 && slot.bought == false){
-                        if (coins.value >= slot.cost.coin[1080]) {
-                            await Caller.send({ name: 'shopBuy', args: { shopId: shopId, slot: slot.id } });
-                            coins.value -= slot.cost.coin[1080];
-                            if (!numberOfHeroes.includes(Number(Object.keys(slot.reward.invasionFragmentHero)[0]))){
-                                numberOfHeroes++;
-                                allHeroes.push(Number(Object.keys(slot.reward.invasionFragmentHero)[0]));
-                            }
-                        } else {
-                            return;
-                        }
-                    }
-                    if (numberOfHeroes >= 5) {
-                        return;
-                    }
-                }*/
+            const unitType = getUnitType(itemsProgress);
 
-                //Купить лот с 2 героями со скидкой
-                if (coins.value < discountedLotPrice) {
-                    return;
-                }
-                for (let slot of shopSlots) {
-                    let shouldSkipReward = isHero
-                    ? slot.reward.invasionFragmentHeroRand || slot.reward.invasionFragmentPet
-                    : slot.reward.invasionFragmentTitanRand || slot.reward.invasionFragmentSkillRand || slot.reward.invasionFragmentSkill;
+            const haveFragmentIds = Object.entries(availableFragments)
+            .filter(([, count]) => count > 0)
+            .map(([id]) => id);
 
-                    //Пропустить не нужные лоты (скрытые лоты, питомцев, купленные лоты)
-                    if (shouldSkipReward || slot.bought != false) {
-                        //if (slot.reward.invasionFragmentHeroRand || slot.reward.invasionFragmentPet || slot.bought != false ) {
+            const slotFlagsByUnitType = {
+                hero: { own: 'invasionFragmentHero', random: 'invasionFragmentHeroRand' },
+                titan: { own: 'invasionFragmentTitan', random: 'invasionFragmentTitanRand' },
+            };
+
+            const flags = slotFlagsByUnitType[unitType];
+
+            if (!flags) {
+                throw new Error(`buyRandomItems: неизвестный unitType "${unitType}"`);
+            }
+
+            const ownSlotFlag = flags.own;
+            const randomSlotFlag = flags.random;
+
+            console.log('Просматриваем слоты');
+            while (coins.value >= 18) {
+                for (const slot of shopSlots) {
+                    if (!slot.reward[ownSlotFlag] || slot.bought) {
                         continue;
                     }
-                    let invasionFragment = isHero ? slot.reward.invasionFragmentHero : slot.reward.invasionFragmentTitan;
-                    if (Object.keys(invasionFragment).length == 2 && slot.cost.coin[1080] == discountedLotPrice) {
-                        //if (Object.keys(slot.reward.invasionFragmentHero).length == 2 && slot.cost.coin[1080] == discountedLotPrice){
-                        if (coins.value >= slot.cost.coin[1080]) {
-                            console.log('%cДва ненужных героя по скидке. ', 'color: green; font-weight: bold;');
-                            await Caller.send({ name: 'shopBuy', args: { shopId: shopId, slot: slot.id } });
-                            coins.value -= slot.cost.coin[1080];
-                            let fragments = Object.keys(invasionFragment).map(Number);
-                            //let fragments = Object.keys(slot.reward.invasionFragmentHero).map(Number);
-                            console.log('Новые герои ', JSON.stringify(fragments));
-                            for (let fragmentId of fragments) {
-                                if (!allHeroes.includes(fragmentId)) {
-                                    numberOfHeroes++;
-                                    allHeroes.push(fragmentId);
-                                }
-                            }
-                            console.log('allHeroes ', JSON.stringify(allHeroes));
-                        }
+
+                    const hasNeededSlot = Object.keys(slot.reward[ownSlotFlag]).some((heroId) => Object.hasOwn(itemsProgress, heroId));
+
+                    if (!hasNeededSlot) {
+                        continue;
                     }
-                    if (numberOfHeroes >= 5) {
-                        return;
+
+                    if (coins.value >= slot.cost.coin[1080]) {
+                        await Caller.send({ name: 'shopBuy', args: { shopId, slot: slot.id } });
+                        console.log('%cКуплен лот в магазине', 'color: green; font-weight: bold;');
+                        coins.value -= slot.cost.coin[1080];
+                        slot.bought = true;
+
+                        for (const heroId of Object.keys(slot.reward[ownSlotFlag])) {
+                            if (!haveFragmentIds.includes(heroId)) {
+                                haveFragmentIds.push(heroId);
+                            }
+                        }
+                    } else {
+                        await Caller.send({ name: 'shop_pinSlot', args: { shopId, slotId: slot.id } });
+                        console.log('%cНет денег. Зарезервировали на потом', 'color: blue; font-weight: bold;');
                     }
                 }
 
-                //Куить лот с 2 рандомными героеями
-                if (coins.value < randomRewardPrice) {
-                    return;
-                }
-                for (let slot of shopSlots) {
-                    let invasionFragmentRand = isHero ? slot.reward.invasionFragmentHeroRand : slot.reward.invasionFragmentTitanRand;
-                    if (invasionFragmentRand && slot.bought == false) {
-                        if (coins.value >= slot.cost.coin[1080]) {
-                            console.log('%cДва случайных героя', 'color: green; font-weight: bold;');
-                            let shopBuy = await Caller.send({ name: 'shopBuy', args: { shopId: shopId, slot: slot.id } });
-                            coins.value -= slot.cost.coin[1080];
-                            let invasionFragment = isHero ? shopBuy.invasionFragmentHero : shopBuy.invasionFragmentTitan;
-                            let fragments = Object.keys(invasionFragment).map(Number);
-                            //let fragments = Object.keys(shopBuy.invasionFragmentHero).map(Number);
-                            console.log('Новые герои ', JSON.stringify(fragments));
-                            for (let fragmentId of fragments) {
-                                if (!allHeroes.includes(fragmentId)) {
-                                    numberOfHeroes++;
-                                    allHeroes.push(fragmentId);
-                                }
-                            }
-                            console.log('allHeroes ', JSON.stringify(allHeroes));
-                        }
+                if (haveFragmentIds.length >= 5) return;
+
+                for (const slot of shopSlots) {
+                    if (!slot.reward[randomSlotFlag] || slot.bought) {
+                        continue;
                     }
-                    if (numberOfHeroes >= 5) {
+
+                    if (coins.value >= slot.cost.coin[1080]) {
+                        await Caller.send({ name: 'shopBuy', args: { shopId, slot: slot.id } });
+                        console.log('%cКуплен случайный лот в магазине', 'color: green; font-weight: bold;');
+                        coins.value -= slot.cost.coin[1080];
+
+                        for (const heroId of Object.keys(slot.reward[randomSlotFlag])) {
+                            if (!haveFragmentIds.includes(heroId)) {
+                                haveFragmentIds.push(heroId);
+                            }
+                        }
+                    } else {
                         return;
                     }
+                    if (haveFragmentIds.length >= 5) return;
                 }
+
                 //Обновить магазин
-                if (coins.value >= discountedLotPrice + 3) {
+                if (coins.value >= 21) {
                     shopSlots = await shopRefresh(shopId, coins);
+                    shopSlots.sort((a, b) => a.cost.coin[1080] - b.cost.coin[1080]);
                 } else {
                     return;
                 }
